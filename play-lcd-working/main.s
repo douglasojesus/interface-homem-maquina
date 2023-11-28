@@ -27,6 +27,12 @@ _start:
 	init
     twoLine @ liga a segunda linah do display
 
+	@GPIOPinState b2
+	@cmp r1, b2
+	@clearDisplay
+	@beq loop
+	@b exit
+
     ldr r12, =palavra
     mov r10, #0
     

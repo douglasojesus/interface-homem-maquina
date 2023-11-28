@@ -152,6 +152,22 @@
     enable
 .endm
 
+@ move o cursor para o inicio da segunda linha
+.macro moveCursorSegundaLinha
+    GPIOPinLow RS
+
+    GPIOPinHigh d7
+    GPIOPinLow d6
+    GPIOPinHigh d5
+    GPIOPinLow d4
+    enable
+
+    GPIOPinLow d7
+    GPIOPinLow d5
+    enable
+
+.endm
+
 /*
 ======================================================
 	Manda o upper bits da coluna da matriz da tabela
