@@ -1,0 +1,13 @@
+nessa pasta está ate a parte que identificamos e escrevemos nas duas linhas do lcd
+identificvamos os botoes (3)
+a quantidade de caracteres escritos para cada linha
+
+
+falta: identificar o enderçõ base para poder acessar diretamente os dados da segunda linha
+
+
+obs: tendo loop e palavra, se criar um loop2 para exibir uma palavra2, da para trocar a palavra dependendo do botao que for acionado (estudar isso pois esta dando problema de tempo -> como trocar a palavra? acabar um loop e entrar no outro? -> qual o fluxo que segue?)
+
+ideia para conseguir fazer switch entre as palavras ("estados") do display: os botoes funcionam como contadores (direita +1 esquerda -1), e para cada indice desse contador será uma palavra/estado diferente a ser exibido
+
+

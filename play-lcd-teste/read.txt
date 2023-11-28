@@ -12,3 +12,9 @@ Falta identificar o endereço base para poder acessar diretamente os dados da se
 Observação: tendo loop e palavra, se criar um loop2 para exibir uma palavra2, dá para trocar a palavra dependendo do botão que for acionado (estudar isso, pois está dando problema de tempo -> como trocar a palavra? Acabar um loop e entrar no outro? -> Qual o fluxo que segue?)
 
 Ideia para conseguir fazer switch entre as palavras ("estados") do display: os botões funcionam como contadores (direita +1, esquerda -1), e para cada índice desse contador será uma palavra/estado diferente a ser exibida.
+
+Ideia de fazer switch em tela: criar uma função para imprimir na tela (pega a função writeCar e vai eprcorrer a string que quer imprimir) e automaticamente vai mudar para o próximo cursor. O botão seta para entrada (0 pula pra label que vai identificar a tela para switch). 
+
+Por que 80? -> Pegar o d7 a d0 (é um número de 8 bits) em binário. O 80 é 10100000. O RS tem que estar em 0 (padrão).
+
+ 
