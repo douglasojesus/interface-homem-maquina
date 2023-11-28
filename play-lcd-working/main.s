@@ -25,37 +25,31 @@ _start:
 	GPIOPinIn b3 @ botão mais a direita antes do espaço
 	setLCDPinsOut
 	init
-    twoLine @ liga a segunda linah do display
-
-	@GPIOPinState b2
-	@cmp r1, b2
-	@clearDisplay
-	@beq loop
-	@b exit
+    twoLine @ liga a segunda linha do display
 
     ldr r12, =palavra
     mov r10, #0
-    
-    @ botões são contadores, quando clica muda de indice/página
-    @ cada "página" contém uma palavra que define a tela do display atual
 
     inicio:
+		@ se botão b1 for acionado, há desvio para exibicao_lcd
+		@ se não, continua no estado inicial
         GPIOPinState b1
         CMP R1, #0 @ botão apertado
-        beq loop
+        beq exibicao_lcd 
         b inicio
     
-    loop:
+    exibicao_lcd:
         @ percorre a palavra letra por letra
         ldr r11, [r12, r10]
         WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
 
         add r10, r10, #1 @ incrementa o r10
         
-        @ verifica se ja atingiu o tamanho da palavra
-        cmp r10, #41
+        @ se ja atingiu o tamanho da palavra, vai para exit
+		@ se não, continua exibindo
+        CMP r10, #41
         beq EXIT
-        b loop
+        b exibicao_lcd
 
 
 	EXIT:
@@ -64,7 +58,7 @@ _start:
         clearDisplay
         nanoSleep time1s, timeZero
         mov r10, #0
-        b loop
+        b exibicao_lcd
         */
 		_end
 
