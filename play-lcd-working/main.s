@@ -20,9 +20,9 @@
 
 _start:
     MemoryMap
-	GPIOPinIn b1 @ botão do meio
-	GPIOPinIn b2 @ botão mais a direita antes do espaço
-	GPIOPinIn PA7 @ botão alongado
+	GPIOPinIn b1 @ botão alongado
+	GPIOPinIn b2 @ botão do meio
+	GPIOPinIn b3 @ botão mais a direita antes do espaço
 	setLCDPinsOut
 	init
     twoLine @ liga a segunda linah do display
@@ -111,7 +111,8 @@ _start:
 		.word 0x9
 		.word 0x10
     
-	PA7:
+	@ botão alongado
+	b1:
 		.word 0x0
 		.word 0x1C
 		.word 0x7
@@ -170,15 +171,15 @@ _start:
 	@RW
 	@GROUND
 
-	@PA10 - Reset
-	b1:
+	@ botão do meio
+	b2:
 		.word 0x4
 		.word 0x8
 		.word 0xA
 		.word 0x10
 
-	@PA20 - Play/Pause
-	b2:
+	@ botão da esquerda
+	b3:
 		.word 0x8
 		.word 0x10
 		.word 0x14
