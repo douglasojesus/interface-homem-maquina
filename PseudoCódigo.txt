@@ -1,0 +1,83 @@
+/*
+  Pseudo-código do módulo principal
+  Grupo 3: Douglas, Emanuel, Émerson, Gabriel
+*/
+
+VAR
+    estado: INTEIRO
+    comandoSelecionado: INTEIRO
+    enderecoSelecionado: INTEIRO
+    resultadoTemp: REAL
+    resultadoUmidade: REAL
+    opcaoSelecionada: INTEIRO
+
+INICIO
+    estado <- 0
+    opcaoSelecionada <- 1
+    enderecoSelecionado <- 1
+
+    REPETIR
+        CASO estado SEJA 0:
+            // Primeira Camada: Seleção de Comando
+            LIMPAR_LCD()
+            EXIBIR_OPCOES_CAMADA1(opcaoSelecionada)
+            ESPERAR_ENTRADA_BOTAO()
+
+            SE BOTAO_RIGHT_PRESSIONADO() ENTAO
+                //Não pode passar da tela 5
+                SE (opcaoSelecionada < 5) ENTAO 
+                    opcaoSelecionada <- (opcaoSelecionada + 1)
+
+            SENAO SE BOTAO_LEFT_PRESSIONADO() ENTAO
+                SE (opcaoSelecionada > 1)
+                    opcaoSelecionada <- (opcaoSelecionada - 1)
+
+            SENAO SE BOTAO_ENTER_PRESSIONADO() ENTAO
+                comandoSelecionado <- opcaoSelecionada
+                estado <- 1
+
+            FIM_SE
+
+        CASO estado SEJA 1:
+            // Segunda Camada: Seleção de Endereço
+            LIMPAR_LCD()
+            EXIBIR_OPCOES_CAMADA2(comandoSelecionado, enderecoSelecionado)
+            ESPERAR_ENTRADA_BOTAO()
+
+            SE BOTAO_RIGHT_PRESSIONADO() ENTAO
+                //Não pode passar da tela 32
+                SE (enderecoSelecionado < 32) ENTAO
+                    enderecoSelecionado <- (enderecoSelecionado + 1)
+
+            SENAO SE BOTAO_LEFT_PRESSIONADO() ENTAO
+                SE (enderecoSelecionado > 1) ENTAO
+                    enderecoSelecionado <- (enderecoSelecionado - 1)
+                //Volta para a camada de comando
+                SENAO SE (enderecoSelecionado == 1)
+                    estado <- 0
+                    opcaoSelecionada <- 1
+
+            SENAO SE BOTAO_ENTER_PRESSIONADO() ENTAO
+                estado <- 2
+                
+            FIM_SE
+
+        CASO estado SEJA 2:
+            // Terceira Camada: Exibição de Resultado
+            LIMPAR_LCD()
+            ENVIA_SOLICITACAO_UART_TX(comandoSelecionado, enderecoSelecionado)
+            RECEBE_SOLICITACAO_UART_RX(resultadoTemp, resultadoUmidade)
+            //As mensagens de erro também serão contabilizadas neste módulo
+            EXIBIR_RESULTADO(resultadoTemp, resultadoUmidade)
+            ESPERAR_ENTRADA_BOTAO()
+
+            SE BOTAO_ENTER_PRESSIONADO() ENTAO
+                estado <- 0
+
+            FIM_SE
+
+        FIM_ESCOLHA
+
+    ATÉ estado = -1
+
+FIM
