@@ -18,3 +18,23 @@ Ideia de fazer switch em tela: criar uma função para imprimir na tela (pega a 
 Por que 80? -> Pegar o d7 a d0 (é um número de 8 bits) em binário. O 80 é 10100000. O RS tem que estar em 0 (padrão).
 
  
+Atualização 29/11:
+
+Loop principal (espera): Aguarda a entrada dos botões.
+Verifica se o botão b1 foi pressionado (decrementa): Se R1 for igual a 0 (pressionado), decrementa R5.
+Verifica se o botão b3 foi pressionado (incrementa): Se R1 for igual a 0 (pressionado), incrementa R5.
+Verifica o valor de R5 e direciona para a exibição correspondente:
+Se R5 == 0, carrega a string temperatura_atual.
+Se R5 == 1, carrega a string umidade_atual.
+Se R5 == 2, carrega a string temperatura_cont.
+Se R5 == 3, carrega a string umidade_cont.
+Chama a função exibicao_lcd: Exibe a string carregada no LCD letra por letra.
+Retorna ao início do loop.
+Funções incrementa e decrementa: Limpa o display, incrementa ou decrementa R5 e retorna ao loop principal.
+Função exibicao_lcd: Exibe a string carregada em R12 no LCD letra por letra.
+Carrega a letra atual em R11.
+Escreve a letra no LCD usando a função WriteCharLCD.
+Incrementa R10 e compara com 20 (tamanho da palavra).
+Se atingiu o tamanho, retorna ao loop principal, senão continua exibindo.
+Funções carrega_temp_atual, carrega_umi_atual, carrega_temp_cont, carrega_umi_cont: Carregam o endereço da string correspondente em R12 e chamam a função exibicao_lcd.
+Seção .data: Definição das strings de texto.
