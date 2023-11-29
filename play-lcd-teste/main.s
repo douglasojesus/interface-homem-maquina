@@ -23,8 +23,6 @@ _start:
 	init
     twoLine @ liga a segunda linha do display
 
-	CarregaPalavraR12 palavra
-
 	MOV R5, #0 @R5 = 0 ("Temperatura Atual")
 	@ precisa fazer verificação. pois se r5 = 0, não pode decrementar.
 	@ e se r5 = 3, nao pode incrementar.
@@ -85,15 +83,19 @@ _start:
 
 	carrega_temp_atual:
 		LDR R12, =temperatura_atual
+		B exibicao_lcd
 
 	carrega_umi_atual:
 		LDR R12, =umidade_atual
+		B exibicao_lcd
 
 	carrega_temp_cont:
 		LDR R12, =temperatura_cont
+		B exibicao_lcd
 
 	carrega_umi_cont:
 		LDR R12, =umidade_cont
+		B exibicao_lcd
 
 	EXIT:
 		_end
