@@ -14,7 +14,6 @@
     SVC 0
 .endm
 
-
 _start:
     MemoryMap
 	GPIOPinIn b1 @ botão alongado
@@ -23,70 +22,88 @@ _start:
 	setLCDPinsOut
 	init
     twoLine @ liga a segunda linha do display
-    
 
-    ldr r12, =palavra
-	ldr r13, =palavra2
+	CarregaPalavraR12 palavra
+
+	MOV R5, #0 @R5 = 0 ("Temperatura Atual")
+	@ precisa fazer verificação. pois se r5 = 0, não pode decrementar.
+	@ e se r5 = 3, nao pode incrementar.
+
 
     inicio:
-		clearDisplay
-		moveCursorSegundaLinha
-		
-		@ r10 precisa receber 0 aqui para não haver segmentation fault devido as entradas em exibicao_lcd
-		mov r10, #0
+		@moveCursorSegundaLinha
+		MOV R10, #0
 
-		@ se botão b1 for acionado, há desvio para exibicao_lcd
-		@ se não, continua no estado inicial
+		@ só vai mudar de tela se um dos dois botões for acionado
+		@ se botão b1 for acionado, há desvio para decrementa
         GPIOPinState b1
         CMP R1, #0 @ botão apertado
-        beq exibicao_lcd 
+        BEQ decrementa 
 
-		GPIOPinState b2
-		CMP R1, #0
-		beq exibicao_lcd2
+		@ se botão b3 for acionado, há desvio para incrementa
+		GPIOPinState b3
+		CMP R1, #0 @ botão apertado
+		BEQ incrementa
+
+		@ se R5 == 0: temperatura atual
+		@ se R5 == 1: umidade atual
+		@ se R5 == 2: temperatura contínua
+		@ se R5 == 3: umidade contínua
+
+		CMP R5, #0 @ compara R5 com 0
+		BEQ carrega_temp_atual @ se R5 for igual a 0, desvia para carrega_temp_atual
+		CMP R5, #1 
+		BEQ carrega_umi_atual
+		CMP R5, #2
+		BEQ carrega_temp_cont
+		CMP R5, #3
+		BEQ carrega_umi_cont
+
+		exibicao_lcd
 
         b inicio
-    
+
+    incrementa:
+		clearDisplay
+		ADD R5, R5, #1
+		B inicio
+
+	decrementa:
+		clearDisplay
+		SUB R5, R5, #1
+		B inicio
+
     exibicao_lcd:
         @ percorre a palavra letra por letra
-        ldr r11, [r12, r10]
+        LDR R11, [R12, R10]
         WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
-
-        add r10, r10, #1 @ incrementa o r10
-        
-        @ se ja atingiu o tamanho da palavra, vai para exit
+        ADD R10, R10, #1 @ incrementa o r10
+        @ se ja atingiu o tamanho da palavra, vai para inicio
 		@ se não, continua exibindo
-        CMP r10, #11
-        beq EXIT
-        b exibicao_lcd
+        CMP R10, #20
+        BEQ inicio 	@ no inicio o texto não é limpado, por isso pode voltar
+        B exibicao_lcd
 
-	exibicao_lcd2:
-		@ percorre a palavra letra por letra
-		ldr r11, [r13, r10]
-		WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+	carrega_temp_atual:
+		LDR R12, =temperatura_atual
 
-		add r10, r10, #1 @ incrementa o r10
-		
-		@ se ja atingiu o tamanho da palavra, vai para exit
-		@ se não, continua exibindo
-		CMP r10, #7
-		beq EXIT
-		b exibicao_lcd2
+	carrega_umi_atual:
+		LDR R12, =umidade_atual
+
+	carrega_temp_cont:
+		LDR R12, =temperatura_cont
+
+	carrega_umi_cont:
+		LDR R12, =umidade_cont
 
 	EXIT:
-
-		GPIOPinState b3
-		CMP R1, #0
-		beq inicio
-
-		b EXIT
-
 		_end
 
 .data
-    palavra: .ascii "Temperatura\n" 
-	palavra2: .ascii "Umidade\n"
-
+    temperatura_atual: .ascii "Temperatura Atual   \n" 
+	umidade_atual: .ascii "Umidade Atual       \n"
+	temperatura_cont: .ascii "Temperatura Contínua\n" 
+	umidade_cont: .ascii "Umidade Contínua    \n"
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
