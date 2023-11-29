@@ -29,8 +29,7 @@ _start:
 	@ precisa fazer verificação. pois se r5 = 0, não pode decrementar.
 	@ e se r5 = 3, nao pode incrementar.
 
-
-    inicio:
+	espera:
 		@moveCursorSegundaLinha
 		MOV R10, #0
 
@@ -61,27 +60,27 @@ _start:
 
 		exibicao_lcd
 
-        b inicio
+        b espera
 
-    incrementa:
+	incrementa:
 		clearDisplay
 		ADD R5, R5, #1
-		B inicio
+		B espera
 
 	decrementa:
 		clearDisplay
 		SUB R5, R5, #1
-		B inicio
+		B espera
 
-    exibicao_lcd:
+	exibicao_lcd:
         @ percorre a palavra letra por letra
         LDR R11, [R12, R10]
         WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
         ADD R10, R10, #1 @ incrementa o r10
-        @ se ja atingiu o tamanho da palavra, vai para inicio
+        @ se ja atingiu o tamanho da palavra, vai para espera
 		@ se não, continua exibindo
         CMP R10, #20
-        BEQ inicio 	@ no inicio o texto não é limpado, por isso pode voltar
+        BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
         B exibicao_lcd
 
 	carrega_temp_atual:
