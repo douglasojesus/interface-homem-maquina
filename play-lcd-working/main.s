@@ -14,6 +14,7 @@
     SVC 0
 .endm
 
+
 _start:
     MemoryMap
 	GPIOPinIn b1 @ botão alongado
@@ -169,14 +170,14 @@ _start:
 		.word 0x8
 		.word 0x8
 		.word 0x12
-    .word 0x10
+    	.word 0x10
 
 	@PA2 - RS
 	RS:
 		.word 0x0
 		.word 0x8
 		.word 0x2
-    .word 0x10
+    	.word 0x10
 
 	@RW
 	@GROUND
