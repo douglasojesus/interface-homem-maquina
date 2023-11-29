@@ -1,10 +1,6 @@
-.equ VALUE, 30 @ Valor a ser contado
-.equ QTD_DIGITO, 2
-
 .include "gpio.s"
 .include "sleep.s"
 .include "lcd.s"
-.include "divisao.s"
 
 .global _start
 /*
@@ -26,16 +22,28 @@ _start:
 	setLCDPinsOut
 	init
     twoLine @ liga a segunda linha do display
+    
 
     ldr r12, =palavra
-    mov r10, #0
+	ldr r13, =palavra2
 
     inicio:
+		clearDisplay
+		moveCursorSegundaLinha
+		
+		@ r10 precisa receber 0 aqui para não haver segmentation fault devido as entradas em exibicao_lcd
+		mov r10, #0
+
 		@ se botão b1 for acionado, há desvio para exibicao_lcd
 		@ se não, continua no estado inicial
         GPIOPinState b1
         CMP R1, #0 @ botão apertado
         beq exibicao_lcd 
+
+		GPIOPinState b2
+		CMP R1, #0
+		beq exibicao_lcd2
+
         b inicio
     
     exibicao_lcd:
@@ -47,23 +55,38 @@ _start:
         
         @ se ja atingiu o tamanho da palavra, vai para exit
 		@ se não, continua exibindo
-        CMP r10, #41
+        CMP r10, #11
         beq EXIT
         b exibicao_lcd
 
+	exibicao_lcd2:
+		@ percorre a palavra letra por letra
+		ldr r11, [r13, r10]
+		WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+
+		add r10, r10, #1 @ incrementa o r10
+		
+		@ se ja atingiu o tamanho da palavra, vai para exit
+		@ se não, continua exibindo
+		CMP r10, #7
+		beq EXIT
+		b exibicao_lcd2
 
 	EXIT:
-        /*
-        nanoSleep time1s, timeZero
-        clearDisplay
-        nanoSleep time1s, timeZero
-        mov r10, #0
-        b exibicao_lcd
-        */
+
+		GPIOPinState b3
+		CMP R1, #0
+		beq inicio
+
+		b EXIT
+
 		_end
 
 .data
-    palavra: .ascii "Temperatura                             Z\n" 
+    palavra: .ascii "Temperatura\n" 
+	palavra2: .ascii "Umidade\n"
+
+
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
@@ -103,13 +126,6 @@ _start:
 		.word 0x4
 		.word 0x4
 		.word 0x9
-		.word 0x10
-    
-	@ botão alongado
-	b1:
-		.word 0x0
-		.word 0x1C
-		.word 0x7
 		.word 0x10
 	
 
@@ -165,6 +181,13 @@ _start:
 	@RW
 	@GROUND
 
+	@ botão alongado
+	b1:
+		.word 0x0
+		.word 0x1C
+		.word 0x7
+		.word 0x10
+
 	@ botão do meio
 	b2:
 		.word 0x4
@@ -178,4 +201,3 @@ _start:
 		.word 0x10
 		.word 0x14
 		.word 0x10
-

@@ -157,13 +157,13 @@
     GPIOPinLow RS
 
     GPIOPinHigh d7
-    GPIOPinLow d6
-    GPIOPinHigh d5
+    GPIOPinHigh d6
+    GPIOPinLow d5
     GPIOPinLow d4
     enable
 
     GPIOPinLow d7
-    GPIOPinLow d5
+    GPIOPinLow d6
     enable
 
 .endm
@@ -393,4 +393,3 @@
         CMP R0, #0
         BGT WHILE
 .endm
-
