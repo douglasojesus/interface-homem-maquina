@@ -6,7 +6,7 @@
         para o mapeamento dos GPIO |
 ======================================================
 */
-.macro MapeamentoMemoria
+.macro MemoryMap
     @sys_open
     LDR R0, =fileName @ R0 = nome do arquivo
     MOV R1, #2 @ O_RDWR (permissao de leitura e escrita pra arquivo)
@@ -35,7 +35,7 @@
         para entrada
 ======================================================
 */
-.macro GPIOPinEntrada pin
+.macro GPIOPinIn pin
     LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
 	LDR R1, [R0, #0]	@ offset do registrador de funcao do pino
 	LDR R2, [R0, #4]	@ offset do pino no registrador de funcao (LSB)
@@ -53,7 +53,7 @@
         para saida
 ======================================================
 */
-.macro GPIOPinSaida pin
+.macro GPIOPinOut pin
     LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
 	LDR R1, [R0, #0] 	@ offset do registrador de funcao do pino
 	LDR R2, [R0, #4]	@ offset do pino no registrador de funcao (LSB)
@@ -74,7 +74,7 @@
         para alto (1)
 ======================================================
 */
-.macro GPIOPinNivelAlto pin
+.macro GPIOPinHigh pin
 	LDR R0, =\pin @ carrega o endereco de ~pin~
 	LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -92,7 +92,7 @@
         para baixo (0)
 ======================================================
 */
-.macro GPIOPinNivelBaixo pin
+.macro GPIOPinLow pin
     LDR R0, =\pin
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
 	LDR R2, [R0, #8] @ offset do pino no registrador de dados
@@ -114,7 +114,7 @@
                 que representa o pino
 ======================================================
 */
-FGPIOPinNivelAlto:
+FGPIOPinHigh:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R5, [R8, R1] @ conteudo do registrador de dados
@@ -135,7 +135,7 @@ FGPIOPinNivelAlto:
                 que representa o pino
 ======================================================
 */
-FGPIOPinNivelBaixo:
+FGPIOPinLow:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R5, [R8, R1] @ conteudo do registrador de dados
@@ -153,7 +153,7 @@ FGPIOPinNivelBaixo:
         Devolve em R1 o estado do pino
 ======================================================
 */
-.macro GPIOPinEstado pin
+.macro GPIOPinState pin
 	LDR R0, =\pin
 	LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -177,20 +177,20 @@ FGPIOPinNivelBaixo:
             R7: offset do pino no registrador de dados
 ======================================================
 */
-GPIOPinSetAltoOuBaixo:
+GPIOPinTurn:
 	LDR R2, [R0, #12] @ offset do registrador de dados do pino
 	LDR R3, [R8, R2] @ conteudo do registrador de dados do pino
 	MOV R4, #1 @ mascara de bit
 	LSL R4, R7	@ desloca o bit para a posicao do pino no registrador de dados
     CMP R1, #1 @ compara se o valor passado em R1
-    BEQ pinAlto @ caso R1 seja igual a 1
-    BLT pinBaixo @ caso R1 nao seja menor que 1 (0)
+    BEQ pinHigh @ caso R1 seja igual a 1
+    BLT pinLow @ caso R1 nao seja menor que 1 (0)
 
-pinAlto:
+pinHigh:
     ORR R3, R4 @ insere o bit anteriormente deslocado no registrador de dados
     STR R3, [R8, R2] @ armazena o novo valor do registrador de dados na memoria
     BX LR
-pinBaixo:
+pinLow:
     BIC R3, R4 @ limpando o bit anterirmente deslocado no registrador de dados
     STR R3, [R8, R2] @ armazenando o novo valor do registrador de dados na memoria
     BX LR
@@ -208,7 +208,7 @@ pinBaixo:
         Devolve em R1 o estado do bit correspondente
 ======================================================
 */
-pegarBitEstado:
+getBitState:
 	MOV R5, #1 @ mascara de bit
 	LSL R4, R5, R2 @ desloca o bit para ~pos~
 	AND R4, R4, R9 @ leitura do bit
