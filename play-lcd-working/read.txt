@@ -18,3 +18,38 @@ Talvez seja melhor apenas:
     Valor
 
 A ideia de apresentar o nome da constante (Temperatura ou Umidade) pode ser interessante apenas no modo contínuo de exibição.
+
+Update sessão desenvolvimento 28/11:
+
+Nesta etapa conseguimos selecionar para exibir apenas na segunda linha (no caso atual, a tela é limpa e o cursor desce).
+
+Além disso, conseguimos um loop com if. Quando b1 é clicado ele vai para a tela de Temperatura. 
+Se b2 for acionado antes, vai para Umidade. b3 faz voltar para estado de inicio. 
+
+Código em Python que tenta representar a lógica acima:
+
+
+# b1, b2, b3 são entradas que só possuem valor True quando acionadas
+
+def temperatura():
+    while True:
+        if (b3):
+            return
+
+def umidade():
+    while True:
+        if (b3):
+            return
+
+def inicio():
+    while True:
+        if (b1):
+            temperatura()
+        if (b2):
+            umidade()
+
+inicio()
+
+
+
+
