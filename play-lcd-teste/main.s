@@ -26,9 +26,6 @@ _start:
 	MOV R13, #0 
 
 	espera:
-	
-		
-
 		MOV R10, #0
 
         GPIOPinEstado b1
@@ -39,13 +36,7 @@ _start:
 		CMP R1, #0
 		BEQ incrementa
 
-        @ se R13 == 0: situação sensor
-		@ se R13 == 1: temperatura atual
-		@ se R13 == 2: umidade atual
-		@ se R13 == 3: temperatura contínua
-		@ se R13 == 4: umidade contínua
-
-        /*CMP R13, #0 
+        CMP R13, #0 
 		BEQ carrega_situacao 
 
 		CMP R13, #1 
@@ -58,7 +49,7 @@ _start:
 		BEQ carrega_temp_cont
 		
 		CMP R13, #4
-		BEQ carrega_umi_cont*/
+		BEQ carrega_umi_cont
 
 		limparDisplay
 		EscreverLCD R13
@@ -67,27 +58,24 @@ _start:
 		
 	incrementa:
 		nanoSleep time5ms, timeZero
-		CMP R13, #4 @ verificar se R13 não é 4
-        BEQ espera @ se for 4, não incrementa
+		CMP R13, #4 
+        BEQ espera 
         ADD R13, R13, #1
         B espera
 
 	decrementa:
 		nanoSleep time5ms, timeZero
-		CMP R13, #0 @ verificar se R13 não é 0
-        BEQ espera @ se for 0, não decrementa
+		CMP R13, #0 
+        BEQ espera 
         SUB R13, R13, #1
         B espera
 	
 	exibicao_lcd:
-        @ percorre a palavra letra por letra
         LDR R11, [R12, R10]
-        EscreverCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
-        ADD R10, R10, #1 @ incrementa o r10
-        @ se ja atingiu o tamanho da palavra, vai para espera
-		@ se não, continua exibindo
+        EscreverCharLCD R11
+        ADD R10, R10, #1
         CMP R10, #14
-        BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
+        BEQ espera
         B exibicao_lcd
 
     carrega_situacao:
