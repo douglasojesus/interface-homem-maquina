@@ -1,0 +1,65 @@
+The document provides an overview of the UART (Universal Asynchronous Receiver/Transmitter) and its various features and functionalities.
+
+The UART is used for serial communication with peripheral devices, modems, or data sets. It allows data to be transmitted and received in serial form. The UART contains registers that control the character length, baud rate, parity generation/checking, and interrupt generation. It supports data lengths from five to eight bits, optional parity bit, and 1, 1 ½ or 2 stop bits.
+
+The UART operates in two modes: 16450 and 16550. In 16550 mode, transmit and receive operations are both buffered by FIFOs, while in 16450 mode, these FIFOs are disabled. The UART is compatible with industry-standard 16550 UARTs and supports various interrupt types for TX Buffer/FIFO, RX Buffer/FIFO, Modem Status, and Line Status conditions.
+
+The document also provides a pin list for the UART, which includes various input and output pins for transmitting and receiving serial data. It also lists the register names and their offsets for the UART controller. The registers include the UART Receive Buffer Register, UART Transmit Holding Register, UART Divisor Latch Low Register, UART Divisor Latch High Register, UART Interrupt Enable Register, UART Interrupt Identity Register, UART FIFO Control Register, UART Line Control Register, UART Modem Control Register, UART Line Status Register, UART Modem Status Register, UART Scratch Register, UART Status Register, UART Transmit FIFO Level Register, UART Receive FIFO Level Register, and UART Halt TX Register.
+
+The document provides a detailed description of each register and its bits, including their read/write permissions and default values. The registers control various aspects of the UART operation, such as data transmission and reception, error detection, flow control, and modem status.
+
+Overall, the document provides a comprehensive overview of the UART and its features, including its pin list and register descriptions. It serves as a useful reference for understanding and programming the UART for serial communication.
+
+The UART in Allwinner H3 is used for serial communication with peripherals, modems, or data sets. It allows data to be transmitted and received in serial form. The UART contains registers that control various aspects of its operation, such as character length, baud rate, parity generation/checking, and interrupt generation.
+
+To use the UART in Allwinner H3, you would need to program the appropriate registers to configure the desired settings. This can be done using assembly language, such as Lev V8 Assembly. Here are the steps to send and receive data using UART in Allwinner H3:
+
+1. Set the desired baud rate by writing the appropriate values to the Divisor Latch Low Register (UART_DLL) and Divisor Latch High Register (UART_DLH). The baud rate is calculated based on the serial clock frequency and the baud rate divisor.
+
+2. Configure the character length, parity, and stop bits by writing the appropriate values to the Line Control Register (LCR). This register also allows you to enable/disable the Divisor Latch Access Bit (DLAB) to access the DLL and DLH registers.
+
+3. Enable/disable interrupts for various conditions, such as TX Buffer/FIFO, RX Buffer/FIFO, Modem Status, and Line Status, by writing to the Interrupt Enable Register (IER).
+
+4. Write data to be transmitted to the Transmit Holding Register (THR). The UART will convert the data to serial form and transmit it.
+
+5. Read received data from the Receiver Buffer Register (RBR). The UART stores received data in this register, which can be read by the CPU.
+
+By following these steps and properly configuring the UART registers, you can send and receive data using UART in Allwinner H3. The specific assembly code for this would depend on the programming language and toolchain you are using.
+
+To perform the first task in Assembly Leg V8, which is to enable/disable the generation of Modem Status Interrupt, you would need to access and modify the appropriate register. Based on the provided information, the relevant register for this task is the Interrupt Enable Register (UART_IER).
+
+Here is an example of how you can enable/disable the Modem Status Interrupt using Assembly Leg V8:
+
+To enable the Modem Status Interrupt:
+
+1. Load the base address of the UART controller into a register (e.g., R0).
+
+2. Add the offset of the Interrupt Enable Register (UART_IER) to the base address.
+
+3. Write the value 1 to the appropriate bit (bit 3) of the UART_IER register to enable the Modem Status Interrupt.
+
+Example code:
+
+LDR R0, =UART_BASE_ADDRESS
+ADD R1, R0, #UART_IER_OFFSET
+LDR R2, [R1]
+ORR R2, R2, #0x08
+STR R2, [R1]
+
+To disable the Modem Status Interrupt:
+
+1. Load the base address of the UART controller into a register (e.g., R0).
+
+2. Add the offset of the Interrupt Enable Register (UART_IER) to the base address.
+
+3. Write the value 0 to the appropriate bit (bit 3) of the UART_IER register to disable the Modem Status Interrupt.
+
+Example code:
+
+LDR R0, =UART_BASE_ADDRESS
+ADD R1, R0, #UART_IER_OFFSET
+LDR R2, [R1]
+BIC R2, R2, #0x08
+STR R2, [R1]
+
+Please note that you would need to replace "UART_BASE_ADDRESS" and "UART_IER_OFFSET" with the actual base address and offset values from the documentation or your specific hardware configuration. Additionally, make sure to set up the necessary environment and initialize the UART controller before executing these instructions.
