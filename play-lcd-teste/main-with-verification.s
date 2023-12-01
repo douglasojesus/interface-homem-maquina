@@ -15,76 +15,78 @@
 .endm
 
 _start:
-    MemoryMap
-	GPIOPinIn b1 @ botão alongado
-	GPIOPinIn b2 @ botão do meio
-	GPIOPinIn b3 @ botão mais a direita antes do espaço
-	setLCDPinsOut
-	init
-    twoLine @ liga a segunda linha do display
+    MapeamentoMemoria
+	GPIOPinEntrada b1 @ botão alongado
+	GPIOPinEntrada b2 @ botão do meio
+	GPIOPinEntrada b3 @ botão mais a direita antes do espaço
+	setLCDPinsSaida
+	inicializacao
+    habilitarSegundaLinha @ liga a segunda linha do display
 
-	MOV R5, #0 @R5 = 0 ("Temperatura Atual")
-	@ precisa fazer verificação. pois se r5 = 0, não pode decrementar.
-	@ e se r5 = 4, nao pode incrementar.
+	MOV R13, #0 
 
 	espera:
-		@moveCursorSegundaLinha
+	
+		
+
 		MOV R10, #0
 
-		@ só vai mudar de tela se um dos dois botões for acionado
-		@ se botão b1 for acionado, há desvio para decrementa
-        GPIOPinState b1
-        CMP R1, #0 @ botão apertado
+        GPIOPinEstado b1
+        CMP R1, #0 
         BEQ decrementa 
 
-		@ se botão b3 for acionado, há desvio para incrementa
-		GPIOPinState b3
-		CMP R1, #0 @ botão apertado
+		GPIOPinEstado b3
+		CMP R1, #0
 		BEQ incrementa
 
-        @ se R5 == 0: situação sensor
-		@ se R5 == 1: temperatura atual
-		@ se R5 == 2: umidade atual
-		@ se R5 == 3: temperatura contínua
-		@ se R5 == 4: umidade contínua
+        @ se R13 == 0: situação sensor
+		@ se R13 == 1: temperatura atual
+		@ se R13 == 2: umidade atual
+		@ se R13 == 3: temperatura contínua
+		@ se R13 == 4: umidade contínua
 
-        CMP R5, #0 @ compara R5 com 0
-		BEQ carrega_situacao @ se R5 for igual a 0, desvia para carrega_temp_atual
-		CMP R5, #1 
+        /*CMP R13, #0 
+		BEQ carrega_situacao 
+
+		CMP R13, #1 
 		BEQ carrega_temp_atual 
-		CMP R5, #2 
+		
+		CMP R13, #2 
 		BEQ carrega_umi_atual
-		CMP R5, #3
+		
+		CMP R13, #3
 		BEQ carrega_temp_cont
-		CMP R5, #4
-		BEQ carrega_umi_cont
+		
+		CMP R13, #4
+		BEQ carrega_umi_cont*/
 
-		exibicao_lcd
+		limparDisplay
+		EscreverLCD R13
 
-        b espera
-
+		b espera
+		
 	incrementa:
-        clearDisplay
-		CMP R5, #4 @ verificar se R5 não é 4
+		nanoSleep time5ms, timeZero
+		CMP R13, #4 @ verificar se R13 não é 4
         BEQ espera @ se for 4, não incrementa
-        ADDI R5, R5, #1
+        ADD R13, R13, #1
         B espera
 
 	decrementa:
-        clearDisplay
-		CMP R5, #0 @ verificar se R5 não é 0
+		nanoSleep time5ms, timeZero
+		CMP R13, #0 @ verificar se R13 não é 0
         BEQ espera @ se for 0, não decrementa
-        SUBI R5, R5, #1
+        SUB R13, R13, #1
         B espera
-
+	
 	exibicao_lcd:
         @ percorre a palavra letra por letra
         LDR R11, [R12, R10]
-        WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+        EscreverCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
         ADD R10, R10, #1 @ incrementa o r10
         @ se ja atingiu o tamanho da palavra, vai para espera
 		@ se não, continua exibindo
-        CMP R10, #20
+        CMP R10, #14
         BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
         B exibicao_lcd
 
@@ -92,7 +94,7 @@ _start:
 		LDR R12, =situacao
 		B exibicao_lcd
 
-	carrega_temp_atual:
+	carrega_temp_atual:	
 		LDR R12, =temperatura_atual
 		B exibicao_lcd
 
@@ -113,10 +115,10 @@ _start:
 
 .data
     situacao: .ascii "Situacao Sens."
-    temperatura_atual: .ascii "Temp. Atual   \n" 
-	umidade_atual: .ascii "Umi. Atual    \n"
-	temperatura_cont: .ascii "Temp. Contínua\n" 
-	umidade_cont: .ascii "Umi. Contínua \n"
+    temperatura_atual: .ascii "Temp. Atual   " 
+	umidade_atual: .ascii "Umi. Atual    "
+	temperatura_cont: .ascii "Temp. Contínua" 
+	umidade_cont: .ascii "Umi. Contínua "
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
