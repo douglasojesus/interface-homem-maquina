@@ -6,7 +6,7 @@
         para o mapeamento dos GPIO |
 ======================================================
 */
-.macro MemoryMap
+.macro MapeamentoMemoria
     @sys_open
     LDR R0, =fileName @ R0 = nome do arquivo
     MOV R1, #2 @ O_RDWR (permissao de leitura e escrita pra arquivo)
@@ -35,10 +35,10 @@
         para entrada
 ======================================================
 */
-.macro GPIOPinIn pin
+.macro GPIOPinEntrada pin
     LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
-	LDR R1, [R0, #0]	@ offset do registrador de funcao do pino
-	LDR R2, [R0, #4]	@ offset do pino no registrador de funcao (LSB)
+    LDR R1, [R0, #0]    @ offset do registrador de funcao do pino
+    LDR R2, [R0, #4]    @ offset do pino no registrador de funcao (LSB)
     LDR R5, [R8, R1]     @ conteudo do registrador de dados do pino
     MOV R0, #0b111       @ mascara para limpar 3 bits
     LSL R0, R2           @ desloca @111 para posicao do pino no registrador de funcao
@@ -53,10 +53,10 @@
         para saida
 ======================================================
 */
-.macro GPIOPinOut pin
+.macro GPIOPinSaida pin
     LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
-	LDR R1, [R0, #0] 	@ offset do registrador de funcao do pino
-	LDR R2, [R0, #4]	@ offset do pino no registrador de funcao (LSB)
+    LDR R1, [R0, #0]    @ offset do registrador de funcao do pino
+    LDR R2, [R0, #4]    @ offset do pino no registrador de funcao (LSB)
     LDR R5, [R8, R1]     @ conteudo do registrador de dados do pino
     MOV R0, #0b111       @ mascara para limpar 3 bits
     LSL R0, R2           @ desloca @111 para posicao do pino no registrador
@@ -74,9 +74,9 @@
         para alto (1)
 ======================================================
 */
-.macro GPIOPinHigh pin
-	LDR R0, =\pin @ carrega o endereco de ~pin~
-	LDR R2, [R0, #8] @ offset do pino no registrador de dados
+.macro GPIOPinAlto pin
+    LDR R0, =\pin @ carrega o endereco de ~pin~
+    LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R5, [R8, R1] @ endereco base + registrador de dados
     MOV R4, #1 @ move 1 para R4
@@ -92,10 +92,10 @@
         para baixo (0)
 ======================================================
 */
-.macro GPIOPinLow pin
+.macro GPIOPinBaixo pin
     LDR R0, =\pin
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
-	LDR R2, [R0, #8] @ offset do pino no registrador de dados
+    LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R5, [R8, R1] @ endereco base + offset do registrador de dados
     MOV R4, #1 @ move 1 para R4
     LSL R4, R2@ desloca para R4 R4 R2 vezes
@@ -114,6 +114,7 @@
                 que representa o pino
 ======================================================
 */
+
 FGPIOPinHigh:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -153,9 +154,9 @@ FGPIOPinLow:
         Devolve em R1 o estado do pino
 ======================================================
 */
-.macro GPIOPinState pin
-	LDR R0, =\pin
-	LDR R2, [R0, #8] @ offset do pino no registrador de dados
+.macro GPIOPinEstado pin
+    LDR R0, =\pin
+    LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R3, [R8, R1] @ endereco base + registrador de dados
     MOV R4, #1 @ move 1 para R4
@@ -178,10 +179,10 @@ FGPIOPinLow:
 ======================================================
 */
 GPIOPinTurn:
-	LDR R2, [R0, #12] @ offset do registrador de dados do pino
-	LDR R3, [R8, R2] @ conteudo do registrador de dados do pino
-	MOV R4, #1 @ mascara de bit
-	LSL R4, R7	@ desloca o bit para a posicao do pino no registrador de dados
+    LDR R2, [R0, #12] @ offset do registrador de dados do pino
+    LDR R3, [R8, R2] @ conteudo do registrador de dados do pino
+    MOV R4, #1 @ mascara de bit
+    LSL R4, R7  @ desloca o bit para a posicao do pino no registrador de dados
     CMP R1, #1 @ compara se o valor passado em R1
     BEQ pinHigh @ caso R1 seja igual a 1
     BLT pinLow @ caso R1 nao seja menor que 1 (0)
@@ -208,9 +209,9 @@ pinLow:
         Devolve em R1 o estado do bit correspondente
 ======================================================
 */
-getBitState:
-	MOV R5, #1 @ mascara de bit
-	LSL R4, R5, R2 @ desloca o bit para ~pos~
-	AND R4, R4, R9 @ leitura do bit
-	LSR R1, R4, R2  @ desloca o valor lido tornando-o LSB
-	BX LR
+getBitEstado:
+    MOV R5, #1 @ mascara de bit
+    LSL R4, R5, R2 @ desloca o bit para ~pos~
+    AND R4, R4, R9 @ leitura do bit
+    LSR R1, R4, R2  @ desloca o valor lido tornando-o LSB
+    BX LR
