@@ -3,11 +3,7 @@
 .include "lcd.s"
 
 .global _start
-/*
-======================================================
-	syscall exit
-======================================================
-*/
+
 .macro _end
     MOV R0, #0
     MOV R7, #1
@@ -30,17 +26,17 @@ _start:
 
         GPIOPinEstado b1
         CMP R1, #0 
-        BEQ decrementa 
+        BEQ decrementa
 
 		GPIOPinEstado b3
 		CMP R1, #0
 		BEQ incrementa
 
         CMP R13, #0 
-		BEQ carrega_situacao 
+		BEQ carrega_situacao
 
 		CMP R13, #1 
-		BEQ carrega_temp_atual 
+		BEQ carrega_temp_atual
 		
 		CMP R13, #2 
 		BEQ carrega_umi_atual
@@ -51,13 +47,13 @@ _start:
 		CMP R13, #4
 		BEQ carrega_umi_cont
 
-		limparDisplay
 		EscreverLCD R13
 
 		b espera
 		
 	incrementa:
 		nanoSleep time5ms, timeZero
+		limparDisplay
 		CMP R13, #4 
         BEQ espera 
         ADD R13, R13, #1
@@ -65,6 +61,7 @@ _start:
 
 	decrementa:
 		nanoSleep time5ms, timeZero
+		limparDisplay
 		CMP R13, #0 
         BEQ espera 
         SUB R13, R13, #1
