@@ -25,7 +25,7 @@ _start:
 
 	MOV R5, #0 @R5 = 0 ("Temperatura Atual")
 	@ precisa fazer verificação. pois se r5 = 0, não pode decrementar.
-	@ e se r5 = 3, nao pode incrementar.
+	@ e se r5 = 4, nao pode incrementar.
 
 	espera:
 		@moveCursorSegundaLinha
@@ -42,18 +42,21 @@ _start:
 		CMP R1, #0 @ botão apertado
 		BEQ incrementa
 
-		@ se R5 == 0: temperatura atual
-		@ se R5 == 1: umidade atual
-		@ se R5 == 2: temperatura contínua
-		@ se R5 == 3: umidade contínua
+        @ se R5 == 0: situação sensor
+		@ se R5 == 1: temperatura atual
+		@ se R5 == 2: umidade atual
+		@ se R5 == 3: temperatura contínua
+		@ se R5 == 4: umidade contínua
 
-		CMP R5, #0 @ compara R5 com 0
-		BEQ carrega_temp_atual @ se R5 for igual a 0, desvia para carrega_temp_atual
+        CMP R5, #0 @ compara R5 com 0
+		BEQ carrega_situacao @ se R5 for igual a 0, desvia para carrega_temp_atual
 		CMP R5, #1 
+		BEQ carrega_temp_atual 
+		CMP R5, #2 
 		BEQ carrega_umi_atual
-		CMP R5, #2
-		BEQ carrega_temp_cont
 		CMP R5, #3
+		BEQ carrega_temp_cont
+		CMP R5, #4
 		BEQ carrega_umi_cont
 
 		exibicao_lcd
@@ -62,8 +65,8 @@ _start:
 
 	incrementa:
         clearDisplay
-		CMP R5, #3 @ verificar se R5 não é 3
-        BEQ espera @ se for 3, não incrementa
+		CMP R5, #4 @ verificar se R5 não é 4
+        BEQ espera @ se for 4, não incrementa
         ADDI R5, R5, #1
         B espera
 
@@ -85,6 +88,10 @@ _start:
         BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
         B exibicao_lcd
 
+    carrega_situacao:
+		LDR R12, =situacao
+		B exibicao_lcd
+
 	carrega_temp_atual:
 		LDR R12, =temperatura_atual
 		B exibicao_lcd
@@ -105,10 +112,11 @@ _start:
 		_end
 
 .data
-    temperatura_atual: .ascii "Temperatura Atual   \n" 
-	umidade_atual: .ascii "Umidade Atual       \n"
-	temperatura_cont: .ascii "Temperatura Contínua\n" 
-	umidade_cont: .ascii "Umidade Contínua    \n"
+    situacao: .ascii "Situacao Sens."
+    temperatura_atual: .ascii "Temp. Atual   \n" 
+	umidade_atual: .ascii "Umi. Atual    \n"
+	temperatura_cont: .ascii "Temp. Contínua\n" 
+	umidade_cont: .ascii "Umi. Contínua \n"
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
