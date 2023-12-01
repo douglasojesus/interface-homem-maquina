@@ -62,12 +62,12 @@ _start:
 
 	incrementa:
 		clearDisplay
-		ADD R5, R5, #1
+		ADDI R5, R5, #1
 		B espera
 
 	decrementa:
 		clearDisplay
-		SUB R5, R5, #1
+		SUBI R5, R5, #1
 		B espera
 
 	exibicao_lcd:
