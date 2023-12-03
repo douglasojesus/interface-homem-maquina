@@ -3,7 +3,11 @@
 .include "lcd.s"
 
 .global _start
-
+/*
+======================================================
+	syscall exit
+======================================================
+*/
 .macro _end
     MOV R0, #0
     MOV R7, #1
@@ -22,21 +26,30 @@ _start:
 	MOV R13, #0 
 
 	espera:
+	
+		
+
 		MOV R10, #0
 
         GPIOPinEstado b1
         CMP R1, #0 
-        BEQ decrementa
+        BEQ decrementa 
 
 		GPIOPinEstado b3
 		CMP R1, #0
 		BEQ incrementa
 
-        CMP R13, #0 
-		BEQ carrega_situacao
+        @ se R13 == 0: situação sensor
+		@ se R13 == 1: temperatura atual
+		@ se R13 == 2: umidade atual
+		@ se R13 == 3: temperatura contínua
+		@ se R13 == 4: umidade contínua
+
+        /*CMP R13, #0 
+		BEQ carrega_situacao 
 
 		CMP R13, #1 
-		BEQ carrega_temp_atual
+		BEQ carrega_temp_atual 
 		
 		CMP R13, #2 
 		BEQ carrega_umi_atual
@@ -45,34 +58,36 @@ _start:
 		BEQ carrega_temp_cont
 		
 		CMP R13, #4
-		BEQ carrega_umi_cont
+		BEQ carrega_umi_cont*/
 
+		limparDisplay
 		EscreverLCD R13
 
 		b espera
 		
 	incrementa:
 		nanoSleep time5ms, timeZero
-		limparDisplay
-		CMP R13, #4 
-        BEQ espera 
+		CMP R13, #4 @ verificar se R13 não é 4
+        BEQ espera @ se for 4, não incrementa
         ADD R13, R13, #1
         B espera
 
 	decrementa:
 		nanoSleep time5ms, timeZero
-		limparDisplay
-		CMP R13, #0 
-        BEQ espera 
+		CMP R13, #0 @ verificar se R13 não é 0
+        BEQ espera @ se for 0, não decrementa
         SUB R13, R13, #1
         B espera
 	
 	exibicao_lcd:
+        @ percorre a palavra letra por letra
         LDR R11, [R12, R10]
-        EscreverCharLCD R11
-        ADD R10, R10, #1
+        EscreverCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+        ADD R10, R10, #1 @ incrementa o r10
+        @ se ja atingiu o tamanho da palavra, vai para espera
+		@ se não, continua exibindo
         CMP R10, #14
-        BEQ espera
+        BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
         B exibicao_lcd
 
     carrega_situacao:

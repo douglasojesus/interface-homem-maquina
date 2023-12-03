@@ -14,79 +14,111 @@
     SVC 0
 .endm
 
-
 _start:
-    MemoryMap
-	GPIOPinIn b1 @ botão alongado
-	GPIOPinIn b2 @ botão do meio
-	GPIOPinIn b3 @ botão mais a direita antes do espaço
-	setLCDPinsOut
-	init
-    twoLine @ liga a segunda linha do display
-    
+    MapeamentoMemoria
+	GPIOPinEntrada b1 @ botão alongado
+	GPIOPinEntrada b2 @ botão do meio
+	GPIOPinEntrada b3 @ botão mais a direita antes do espaço
+	setLCDPinsSaida
+	inicializacao
+    habilitarSegundaLinha @ liga a segunda linha do display
 
-    ldr r12, =palavra
-	ldr r13, =palavra2
+	MOV R13, #0 
 
-    inicio:
-		clearDisplay
-		moveCursorSegundaLinha
+	espera:
+	
 		
-		@ r10 precisa receber 0 aqui para não haver segmentation fault devido as entradas em exibicao_lcd
-		mov r10, #0
 
-		@ se botão b1 for acionado, há desvio para exibicao_lcd
-		@ se não, continua no estado inicial
-        GPIOPinState b1
-        CMP R1, #0 @ botão apertado
-        beq exibicao_lcd 
+		MOV R10, #0
 
-		GPIOPinState b2
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ decrementa 
+
+		GPIOPinEstado b3
 		CMP R1, #0
-		beq exibicao_lcd2
+		BEQ incrementa
 
-        b inicio
-    
-    exibicao_lcd:
-        @ percorre a palavra letra por letra
-        ldr r11, [r12, r10]
-        WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+        @ se R13 == 0: situação sensor
+		@ se R13 == 1: temperatura atual
+		@ se R13 == 2: umidade atual
+		@ se R13 == 3: temperatura contínua
+		@ se R13 == 4: umidade contínua
 
-        add r10, r10, #1 @ incrementa o r10
-        
-        @ se ja atingiu o tamanho da palavra, vai para exit
-		@ se não, continua exibindo
-        CMP r10, #11
-        beq EXIT
-        b exibicao_lcd
+        /*CMP R13, #0 
+		BEQ carrega_situacao 
 
-	exibicao_lcd2:
-		@ percorre a palavra letra por letra
-		ldr r11, [r13, r10]
-		WriteCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
-
-		add r10, r10, #1 @ incrementa o r10
+		CMP R13, #1 
+		BEQ carrega_temp_atual 
 		
-		@ se ja atingiu o tamanho da palavra, vai para exit
+		CMP R13, #2 
+		BEQ carrega_umi_atual
+		
+		CMP R13, #3
+		BEQ carrega_temp_cont
+		
+		CMP R13, #4
+		BEQ carrega_umi_cont*/
+
+		limparDisplay
+		EscreverLCD R13
+
+		b espera
+		
+	incrementa:
+		nanoSleep time5ms, timeZero
+		CMP R13, #4 @ verificar se R13 não é 4
+        BEQ espera @ se for 4, não incrementa
+        ADD R13, R13, #1
+        B espera
+
+	decrementa:
+		nanoSleep time5ms, timeZero
+		CMP R13, #0 @ verificar se R13 não é 0
+        BEQ espera @ se for 0, não decrementa
+        SUB R13, R13, #1
+        B espera
+	
+	exibicao_lcd:
+        @ percorre a palavra letra por letra
+        LDR R11, [R12, R10]
+        EscreverCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
+        ADD R10, R10, #1 @ incrementa o r10
+        @ se ja atingiu o tamanho da palavra, vai para espera
 		@ se não, continua exibindo
-		CMP r10, #7
-		beq EXIT
-		b exibicao_lcd2
+        CMP R10, #14
+        BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
+        B exibicao_lcd
+
+    carrega_situacao:
+		LDR R12, =situacao
+		B exibicao_lcd
+
+	carrega_temp_atual:	
+		LDR R12, =temperatura_atual
+		B exibicao_lcd
+
+	carrega_umi_atual:
+		LDR R12, =umidade_atual
+		B exibicao_lcd
+
+	carrega_temp_cont:
+		LDR R12, =temperatura_cont
+		B exibicao_lcd
+
+	carrega_umi_cont:
+		LDR R12, =umidade_cont
+		B exibicao_lcd
 
 	EXIT:
-
-		GPIOPinState b3
-		CMP R1, #0
-		beq inicio
-
-		b EXIT
-
 		_end
 
 .data
-    palavra: .ascii "Temperatura\n" 
-	palavra2: .ascii "Umidade\n"
-
+    situacao: .ascii "Situacao Sens."
+    temperatura_atual: .ascii "Temp. Atual   " 
+	umidade_atual: .ascii "Umi. Atual    "
+	temperatura_cont: .ascii "Temp. Contínua" 
+	umidade_cont: .ascii "Umi. Contínua "
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
