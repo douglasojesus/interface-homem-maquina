@@ -17,11 +17,12 @@ _start:
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
     setLCDPinsSaida
     inicializacao
-    habilitarSegundaLinha
-    
-    MOV R13, #-1
-    MOV R14, #-1
+    habilitarSegundaLinha @ liga a segunda linha do display
 
+    MOV R13, #-1
+    MOV R3, #-1
+
+    @funcao para esperar que o usuario presione algum botao
     espera:
 
         MOV R10, #0
@@ -32,14 +33,40 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ escolhe_Sensor
+        BEQ macumba
 
         GPIOPinEstado b3
         CMP R1, #0
         BEQ incrementa
 
         b espera
-        
+    
+    macumba:
+        @ se botão ainda estiver pressionado, continua em escolher_sensor
+        GPIOPinEstado b2
+        CMP R1, #0 
+        BEQ macumba
+        b incrementa_sensor
+
+    @funcao para verificar 
+    escolher_sensor:
+        MOV R10, #0
+
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ decrementa_sensor
+
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ escolher_sensor
+
+        GPIOPinEstado b3
+        CMP R1, #0
+        BEQ incrementa_sensor
+
+        b escolher_sensor
+
+    @funcao que incrementa o numero da tela
     incrementa:
 
         CMP R13, #4 
@@ -52,6 +79,8 @@ _start:
 
         ADD R13, R13, #1
 
+        limparDisplay
+
         CMP R13, #0 
         BEQ carrega_situacao
 
@@ -69,6 +98,7 @@ _start:
 
         B espera
 
+    @funcao que decrementa o numero da tela
     decrementa:
 
         CMP R13, #0 
@@ -80,6 +110,8 @@ _start:
         
         SUB R13, R13, #1
 
+        limparDisplay
+
         CMP R13, #0 
         BEQ carrega_situacao
 
@@ -96,39 +128,21 @@ _start:
         BEQ carrega_umi_cont
 
         B espera
+    
+    @funcao que incrementa o numero do sensor
+    incrementa_sensor:
 
-@label para verificar qual botão foi selecionado no momento de escolher um sensor
-    escolhe_Sensor:
-        MOV R15, #0
-
-        MOV R10, #0
-
-        GPIOPinEstado b1
-        CMP R1, #0 
-        BEQ decrementa_Sensor
-
-        GPIOPinEstado b2
-        CMP R1, #0 
-        BEQ escolhe_Sensor @Função final
-
-        GPIOPinEstado b3
-        CMP R1, #0
-        BEQ incrementa_Sensor
-
-        b escolhe_Sensor
-
-@FUNÇÃO PARA INCREMENTAR O NUMERO DO SENSOR A SER UTILIZADO
-    incrementa_Sensor:
-
-        CMP R14, #31 
-        BEQ escolhe_Sensor
+        CMP R3, #31 
+        BEQ escolher_sensor
 
         @ se botão ainda estiver pressionado, continua em incrementa
         GPIOPinEstado b3
         CMP R1, #0 
-        BEQ incrementa_Sensor 
+        BEQ incrementa_sensor 
 
-        ADD R14, R14, #1
+        ADD R3, R3, #1
+
+        limparDisplay
 
         CMP R13, #0 
         BEQ carrega_situacao
@@ -145,17 +159,22 @@ _start:
         CMP R13, #4
         BEQ carrega_umi_cont
 
-@função que decrementa o numero do sensor a ser utilizado
-    decrementa_Sensor:
+        B escolher_sensor
 
-        CMP R14, #31 
-        BEQ escolhe_Sensor
+    @funcao que decrementa o numero do sensor
+    decrementa_sensor:
 
+        CMP R3, #-1
+        BEQ escolher_sensor 
+
+        @ se botão ainda estiver pressionado, continua em decrementa
         GPIOPinEstado b1
         CMP R1, #0 
-        BEQ decrementa_Sensor
+        BEQ decrementa_sensor
         
-        SUB R14, R14, #1
+        SUB R3, R3, #1
+
+        limparDisplay
 
         CMP R13, #0 
         BEQ carrega_situacao
@@ -172,50 +191,61 @@ _start:
         CMP R13, #4
         BEQ carrega_umi_cont
 
+        B escolher_sensor
+
+    @funcao para escrever na primeira linha do display
     exibicao_lcd:
+
         LDR R11, [R12, R10]
         EscreverCharLCD R11
         ADD R10, R10, #1
         CMP R10, #16
-        BEQ verifica_retorno
+        BEQ intermediario
         B exibicao_lcd
-    
-    verifica_retorno:
-        ADD R15, R15, #1
-        CMP R14, #-1
+
+    @funcao para esvaziar r10 para poder escrever na segunda linha do display e setar a palavra que vai escrever na segunda linha
+    intermediario:
+        mov r10, #0
+        LDR R12, =sensor
+        moveCursorSegundaLinha
+        B exibicao_lcd_segunda_linha
+
+    @funcao para escrever na segunda linha do display
+    exibicao_lcd_segunda_linha:
+        LDR R11, [R12, R10]
+        EscreverCharLCD R11
+        ADD R10, R10, #1
+        CMP R10, #6
+        BEQ escolhe_retorno
+        B exibicao_lcd
+        
+    @verifica para qual label retornar
+    escolhe_retorno:
+        CMP R3, #-1
         BEQ espera
-        CMP R15, #2
-        BEQ escolhe_Sensor
-        B carrega_sensor
+        cursorDeslocaDireita @desvia um digito para escrever o numero do sensor
+        EscreverLCD R3 @escreve o numero do sensor
+        B escolher_sensor
 
     carrega_situacao:
         LDR R12, =situacao
-        limparDisplay
         B exibicao_lcd
 
     carrega_temp_atual:
         LDR R12, =temperatura_atual
-        limparDisplay
         B exibicao_lcd
 
     carrega_umi_atual:
         LDR R12, =umidade_atual
-        limparDisplay
         B exibicao_lcd
 
     carrega_temp_cont:
         LDR R12, =temperatura_cont
-        limparDisplay
         B exibicao_lcd
 
     carrega_umi_cont:
         LDR R12, =umidade_cont
-        limparDisplay
         B exibicao_lcd
-    carrega_sensor:
-        LDR R12, =sensor
-        moveCursorSegundaLinha
-        B exibicao_lcd  
 
     EXIT:
         _end
@@ -226,7 +256,7 @@ _start:
     umidade_atual: .ascii " Umidade Atual  "
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
-    sensor: .ascii "sensor numero - "
+    sensor: .ascii "Sensor"
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
@@ -343,4 +373,3 @@ _start:
         .word 0x10
         .word 0x14
         .word 0x10
-
