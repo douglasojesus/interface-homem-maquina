@@ -3,11 +3,7 @@
 .include "lcd.s"
 
 .global _start
-/*
-======================================================
-	syscall exit
-======================================================
-*/
+
 .macro _end
     MOV R0, #0
     MOV R7, #1
@@ -23,33 +19,25 @@ _start:
 	inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
 
-	MOV R13, #0 
+	MOV R13, #0
 
 	espera:
-	
-		
 
 		MOV R10, #0
 
         GPIOPinEstado b1
         CMP R1, #0 
-        BEQ decrementa 
+        BEQ decrementa
 
 		GPIOPinEstado b3
 		CMP R1, #0
 		BEQ incrementa
 
-        @ se R13 == 0: situação sensor
-		@ se R13 == 1: temperatura atual
-		@ se R13 == 2: umidade atual
-		@ se R13 == 3: temperatura contínua
-		@ se R13 == 4: umidade contínua
-
         /*CMP R13, #0 
-		BEQ carrega_situacao 
+		BEQ carrega_situacao
 
 		CMP R13, #1 
-		BEQ carrega_temp_atual 
+		BEQ carrega_temp_atual
 		
 		CMP R13, #2 
 		BEQ carrega_umi_atual
@@ -66,49 +54,56 @@ _start:
 		b espera
 		
 	incrementa:
-		nanoSleep time5ms, timeZero
-		CMP R13, #4 @ verificar se R13 não é 4
-        BEQ espera @ se for 4, não incrementa
+		nanoSleep time1s, timeZero
+		CMP R13, #4 
+        BEQ espera 
         ADD R13, R13, #1
         B espera
 
 	decrementa:
-		nanoSleep time5ms, timeZero
-		CMP R13, #0 @ verificar se R13 não é 0
-        BEQ espera @ se for 0, não decrementa
+		nanoSleep time1s, timeZero
+		CMP R13, #0 
+        BEQ espera 
         SUB R13, R13, #1
         B espera
 	
 	exibicao_lcd:
-        @ percorre a palavra letra por letra
         LDR R11, [R12, R10]
-        EscreverCharLCD R11 @ escreve a letra no local certo e aumenta o ponteiro +1
-        ADD R10, R10, #1 @ incrementa o r10
-        @ se ja atingiu o tamanho da palavra, vai para espera
-		@ se não, continua exibindo
+        EscreverCharLCD R11
+        ADD R10, R10, #1
         CMP R10, #14
-        BEQ espera 	@ na espera o texto não é limpado, por isso pode voltar
+        BEQ espera
         B exibicao_lcd
 
-    carrega_situacao:
+    /*carrega_situacao:
+		nanoSleep time5ms, timeZero
+		limparDisplay
 		LDR R12, =situacao
 		B exibicao_lcd
 
 	carrega_temp_atual:	
+		nanoSleep time5ms, timeZero
+		limparDisplay
 		LDR R12, =temperatura_atual
 		B exibicao_lcd
 
 	carrega_umi_atual:
+		nanoSleep time5ms, timeZero
+		limparDisplay
 		LDR R12, =umidade_atual
 		B exibicao_lcd
 
 	carrega_temp_cont:
+		nanoSleep time5ms, timeZero
+		limparDisplay
 		LDR R12, =temperatura_cont
 		B exibicao_lcd
 
 	carrega_umi_cont:
+		nanoSleep time5ms, timeZero
+		limparDisplay
 		LDR R12, =umidade_cont
-		B exibicao_lcd
+		B exibicao_lcd*/
 
 	EXIT:
 		_end
@@ -234,3 +229,4 @@ _start:
 		.word 0x10
 		.word 0x14
 		.word 0x10
+
