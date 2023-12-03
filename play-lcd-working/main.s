@@ -37,10 +37,14 @@ _start:
 		
 	incrementa:
 
-		nanoSleep time1s, timeZero
-
 		CMP R13, #4 
-        BEQ espera 
+        BEQ espera
+
+		@ se botão ainda estiver pressionado, continua em incrementa
+		GPIOPinEstado b3
+        CMP R1, #0 
+        BEQ incrementa 
+
         ADD R13, R13, #1
 
 		limparDisplay
@@ -64,10 +68,13 @@ _start:
 
 	decrementa:
 
-		nanoSleep time1s, timeZero
-
 		CMP R13, #0 
         BEQ espera 
+
+		GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ decrementa
+		
         SUB R13, R13, #1
 
 		limparDisplay
@@ -94,7 +101,7 @@ _start:
         LDR R11, [R12, R10]
         EscreverCharLCD R11
         ADD R10, R10, #1
-        CMP R10, #14
+        CMP R10, #16
         BEQ espera
         B exibicao_lcd
 
@@ -122,11 +129,11 @@ _start:
 		_end
 
 .data
-    situacao: .ascii "Situacao Sens."
-    temperatura_atual: .ascii "Temp. Atual   " 
-	umidade_atual: .ascii "Umi. Atual    "
-	temperatura_cont: .ascii "Temp. Continua" 
-	umidade_cont: .ascii "Umi. Continua "
+    situacao: .ascii "Situacao Sensor "
+    temperatura_atual: .ascii " Temperatura A. " 
+	umidade_atual: .ascii " Umidade Atual  "
+	temperatura_cont: .ascii " Temperatura C. " 
+	umidade_cont: .ascii "Umidade Continua"
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
