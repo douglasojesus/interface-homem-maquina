@@ -19,7 +19,7 @@ _start:
 	inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
 
-	MOV R13, #0
+	MOV R13, #-1
 
 	espera:
 
@@ -33,7 +33,19 @@ _start:
 		CMP R1, #0
 		BEQ incrementa
 
-        /*CMP R13, #0 
+		b espera
+		
+	incrementa:
+
+		nanoSleep time1s, timeZero
+
+		CMP R13, #4 
+        BEQ espera 
+        ADD R13, R13, #1
+
+		limparDisplay
+
+		CMP R13, #0 
 		BEQ carrega_situacao
 
 		CMP R13, #1 
@@ -46,28 +58,39 @@ _start:
 		BEQ carrega_temp_cont
 		
 		CMP R13, #4
-		BEQ carrega_umi_cont*/
+		BEQ carrega_umi_cont
 
-		limparDisplay
-		EscreverLCD R13
-
-		b espera
-		
-	incrementa:
-		nanoSleep time1s, timeZero
-		CMP R13, #4 
-        BEQ espera 
-        ADD R13, R13, #1
         B espera
 
 	decrementa:
+
 		nanoSleep time1s, timeZero
+
 		CMP R13, #0 
         BEQ espera 
         SUB R13, R13, #1
+
+		limparDisplay
+
+		CMP R13, #0 
+		BEQ carrega_situacao
+
+		CMP R13, #1 
+		BEQ carrega_temp_atual
+		
+		CMP R13, #2 
+		BEQ carrega_umi_atual
+		
+		CMP R13, #3
+		BEQ carrega_temp_cont
+		
+		CMP R13, #4
+		BEQ carrega_umi_cont
+
         B espera
 	
 	exibicao_lcd:
+
         LDR R11, [R12, R10]
         EscreverCharLCD R11
         ADD R10, R10, #1
@@ -75,35 +98,25 @@ _start:
         BEQ espera
         B exibicao_lcd
 
-    /*carrega_situacao:
-		nanoSleep time5ms, timeZero
-		limparDisplay
+    carrega_situacao:
 		LDR R12, =situacao
 		B exibicao_lcd
 
-	carrega_temp_atual:	
-		nanoSleep time5ms, timeZero
-		limparDisplay
+	carrega_temp_atual:
 		LDR R12, =temperatura_atual
 		B exibicao_lcd
 
 	carrega_umi_atual:
-		nanoSleep time5ms, timeZero
-		limparDisplay
 		LDR R12, =umidade_atual
 		B exibicao_lcd
 
 	carrega_temp_cont:
-		nanoSleep time5ms, timeZero
-		limparDisplay
 		LDR R12, =temperatura_cont
 		B exibicao_lcd
 
 	carrega_umi_cont:
-		nanoSleep time5ms, timeZero
-		limparDisplay
 		LDR R12, =umidade_cont
-		B exibicao_lcd*/
+		B exibicao_lcd
 
 	EXIT:
 		_end
@@ -112,8 +125,8 @@ _start:
     situacao: .ascii "Situacao Sens."
     temperatura_atual: .ascii "Temp. Atual   " 
 	umidade_atual: .ascii "Umi. Atual    "
-	temperatura_cont: .ascii "Temp. Contínua" 
-	umidade_cont: .ascii "Umi. Contínua "
+	temperatura_cont: .ascii "Temp. Continua" 
+	umidade_cont: .ascii "Umi. Continua "
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
@@ -122,6 +135,7 @@ _start:
 	time1s: .word 1  @ 1s
 
 	time1ms: .word 1000000 @ 1ms
+	time500ms: .word 500000000 @500ms
 
 	time850ms: .word 850000000 @850ms
 
