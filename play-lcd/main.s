@@ -20,7 +20,8 @@ _start:
     habilitarSegundaLinha @ liga a segunda linha do display
 
     MOV R13, #-1
-    MOV R6, #-1
+    MOV R6, #0
+    mov r9, #0
 
     @funcao para esperar que o usuario presione algum botao
     espera:
@@ -46,6 +47,7 @@ _start:
         GPIOPinEstado b2
         CMP R1, #0 
         BEQ selecionar_opcao
+        mov r12, #0
         b escolher_sensor
 
     @funcao para verificar 
@@ -135,7 +137,7 @@ _start:
     @funcao que incrementa o numero do sensor
     incrementa_sensor:
 
-        CMP R6, #31 
+        CMP R6, #31
         BEQ escolher_sensor
 
         @ se botão ainda estiver pressionado, continua em incrementa
@@ -144,6 +146,7 @@ _start:
         BEQ incrementa_sensor 
 
         ADD R6, R6, #1
+        ADD R12, R12, #1
 
         B escrever_sensor
         
@@ -159,6 +162,7 @@ _start:
         BEQ decrementa_sensor
         
         SUB R6, R6, #1
+        SUB R12, R12, #1
 
         B escrever_sensor
 
@@ -181,8 +185,19 @@ _start:
         B exibicao_lcd_segunda_linha*/
 
     escrever_sensor:
+        CMP R6, #10
+        BEQ escreverdigito2
+        cursorDeslocaDireita
         EscreverLCD R6
-        B escolher_sensor
+        B escolher_sensor   
+
+    escreverdigito2:
+        mov R6, #0
+        ADD R9, R9, #1
+        moveCursorSegundaLinha
+        EscreverLCD R9
+        EscreverLCD R6
+        B escolher_sensor    
 
     carrega_situacao:
         LDR R12, =situacao
@@ -329,4 +344,3 @@ _start:
         .word 0x10
         .word 0x14
         .word 0x10
-
