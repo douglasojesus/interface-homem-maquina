@@ -153,14 +153,16 @@ _start:
     @funcao que decrementa o numero do sensor
     decrementa_sensor:
 
+        @CMP R6, #0
+        @BEQ escolher_sensor 
         CMP R6, #0
-        BEQ escolher_sensor 
+        BEQ escreverdigito1
 
         @ se botão ainda estiver pressionado, continua em decrementa
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa_sensor
-        
+
         SUB R6, R6, #1
         SUB R12, R12, #1
 
@@ -175,21 +177,23 @@ _start:
         BEQ espera
         B exibicao_lcd
 
-    /*@funcao para escrever na segunda linha do display
-    exibicao_lcd_segunda_linha:
-        LDR R11, [R12, R10]
-        EscreverCharLCD R11
-        ADD R10, R10, #1
-        CMP R10, #16
-        BEQ escolher_sensor
-        B exibicao_lcd_segunda_linha*/
-
     escrever_sensor:
         CMP R6, #10
         BEQ escreverdigito2
         cursorDeslocaDireita
         EscreverLCD R6
         B escolher_sensor   
+
+    escreverdigito1:
+        CMP r9, #0
+        BEQ escolher_sensor
+        SUB R12, R12, #1
+        mov R6, #9
+        SUB R9, R9, #1
+        moveCursorSegundaLinha
+        EscreverLCD R9
+        EscreverLCD R6
+        B escolher_sensor    
 
     escreverdigito2:
         mov R6, #0
