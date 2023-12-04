@@ -20,7 +20,7 @@ _start:
     habilitarSegundaLinha @ liga a segunda linha do display
 
     MOV R13, #-1
-    MOV R3, #-1
+    MOV R6, #-1
 
     @funcao para esperar que o usuario presione algum botao
     espera:
@@ -33,7 +33,7 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ macumba
+        BEQ selecionar_opcao
 
         GPIOPinEstado b3
         CMP R1, #0
@@ -41,22 +41,25 @@ _start:
 
         b espera
     
-    macumba:
+    selecionar_opcao:
         @ se botão ainda estiver pressionado, continua em escolher_sensor
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ macumba
-        b incrementa_sensor
+        BEQ selecionar_opcao
+        b escolher_sensor
 
     @funcao para verificar 
     escolher_sensor:
+        
+        moveCursorSegundaLinha
+
         MOV R10, #0
 
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa_sensor
 
-        GPIOPinEstado b1
+        GPIOPinEstado b2
         CMP R1, #0 
         BEQ escolher_sensor
 
@@ -132,7 +135,7 @@ _start:
     @funcao que incrementa o numero do sensor
     incrementa_sensor:
 
-        CMP R3, #31 
+        CMP R6, #31 
         BEQ escolher_sensor
 
         @ se botão ainda estiver pressionado, continua em incrementa
@@ -140,31 +143,14 @@ _start:
         CMP R1, #0 
         BEQ incrementa_sensor 
 
-        ADD R3, R3, #1
+        ADD R6, R6, #1
 
-        limparDisplay
-
-        CMP R13, #0 
-        BEQ carrega_situacao
-
-        CMP R13, #1 
-        BEQ carrega_temp_atual
+        B escrever_sensor
         
-        CMP R13, #2 
-        BEQ carrega_umi_atual
-        
-        CMP R13, #3
-        BEQ carrega_temp_cont
-        
-        CMP R13, #4
-        BEQ carrega_umi_cont
-
-        B escolher_sensor
-
     @funcao que decrementa o numero do sensor
     decrementa_sensor:
 
-        CMP R3, #-1
+        CMP R6, #0
         BEQ escolher_sensor 
 
         @ se botão ainda estiver pressionado, continua em decrementa
@@ -172,59 +158,30 @@ _start:
         CMP R1, #0 
         BEQ decrementa_sensor
         
-        SUB R3, R3, #1
+        SUB R6, R6, #1
 
-        limparDisplay
-
-        CMP R13, #0 
-        BEQ carrega_situacao
-
-        CMP R13, #1 
-        BEQ carrega_temp_atual
-        
-        CMP R13, #2 
-        BEQ carrega_umi_atual
-        
-        CMP R13, #3
-        BEQ carrega_temp_cont
-        
-        CMP R13, #4
-        BEQ carrega_umi_cont
-
-        B escolher_sensor
+        B escrever_sensor
 
     @funcao para escrever na primeira linha do display
     exibicao_lcd:
-
         LDR R11, [R12, R10]
         EscreverCharLCD R11
         ADD R10, R10, #1
         CMP R10, #16
-        BEQ intermediario
+        BEQ espera
         B exibicao_lcd
 
-    @funcao para esvaziar r10 para poder escrever na segunda linha do display e setar a palavra que vai escrever na segunda linha
-    intermediario:
-        mov r10, #0
-        LDR R12, =sensor
-        moveCursorSegundaLinha
-        B exibicao_lcd_segunda_linha
-
-    @funcao para escrever na segunda linha do display
+    /*@funcao para escrever na segunda linha do display
     exibicao_lcd_segunda_linha:
         LDR R11, [R12, R10]
         EscreverCharLCD R11
         ADD R10, R10, #1
-        CMP R10, #6
-        BEQ escolhe_retorno
-        B exibicao_lcd
-        
-    @verifica para qual label retornar
-    escolhe_retorno:
-        CMP R3, #-1
-        BEQ espera
-        cursorDeslocaDireita @desvia um digito para escrever o numero do sensor
-        EscreverLCD R3 @escreve o numero do sensor
+        CMP R10, #16
+        BEQ escolher_sensor
+        B exibicao_lcd_segunda_linha*/
+
+    escrever_sensor:
+        EscreverLCD R6
         B escolher_sensor
 
     carrega_situacao:
@@ -256,7 +213,6 @@ _start:
     umidade_atual: .ascii " Umidade Atual  "
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
-    sensor: .ascii "Sensor"
 
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
@@ -373,3 +329,4 @@ _start:
         .word 0x10
         .word 0x14
         .word 0x10
+
