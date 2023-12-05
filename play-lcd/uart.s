@@ -34,9 +34,12 @@
     MOV R7, #192 @sys_mmap2
     SVC 0
     MOV R8, R0
-    ADD R8, #0x800 @ endereco base
+    ADD R8, #0xC00 @ endereco base
 .endm
-
+/* 
+.macro configuracao
+.endm
+*/
 .macro UART_RX
     ldr r0, [r8, #UART_RBR]
 .endm
@@ -47,4 +50,5 @@
 .endm
     
 .data
-uartaddr: .word 0x1C28 @endereço base da uart0
+    uartaddr: .word 0x01C28 @endereço base da uart0
+    
