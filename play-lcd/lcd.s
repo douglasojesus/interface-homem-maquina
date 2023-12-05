@@ -137,6 +137,7 @@
     
     GPIOPinAlto d4
     enable
+    .ltorg
 .endm
 
 @ configuraçõe da instrução pra setar a segunda linah do display 
@@ -165,7 +166,6 @@
     GPIOPinBaixo d7
     GPIOPinBaixo d6
     enable
-
 .endm
 
 /*
@@ -193,37 +193,38 @@
     GPIOPinAlto RS
     prefixNumeroDisplay
 
-    @ D4    
-    mov r1, #0b00001      
-    and r1, \valor          @0001 & 0011 -> 0001
-    LDR R0, =d4
-    LDR R7, [R0, #8]
-    BL GPIOPinTurn
+        @ D4    
+        mov r1, #0b00001      
+        and r1, \valor          @0001 & 0011 -> 0001
+        LDR R0, =d4
+        LDR R7, [R0, #8]
+        BL GPIOPinTurn
 
-    @ D5
-    mov r1, #0b00010   
-    and r1, \valor          @ 0010 & 0011 -> 0010
-    lsr r1, #1              @ Desloca o bit 1x para direita  -> 0001
-    LDR R0, =d5
-    LDR R7, [R0, #8]
-    BL GPIOPinTurn
+        @ D5
+        mov r1, #0b00010   
+        and r1, \valor          @ 0010 & 0011 -> 0010
+        lsr r1, #1              @ Desloca o bit 1x para direita  -> 0001
+        LDR R0, =d5
+        LDR R7, [R0, #8]
+        BL GPIOPinTurn
 
-    @ D6
-    mov r1, #0b00100      
-    and r1, \valor          @ 0100 & 0101 -> 0100
-    lsr r1, #2              @ Desloca o bit 2x para direita  -> 0001
-    LDR R0, =d6
-    LDR R7, [R0, #8]
-    BL GPIOPinTurn
+        @ D6
+        mov r1, #0b00100      
+        and r1, \valor          @ 0100 & 0101 -> 0100
+        lsr r1, #2              @ Desloca o bit 2x para direita  -> 0001
+        LDR R0, =d6
+        LDR R7, [R0, #8]
+        BL GPIOPinTurn
 
-    @ D7
-    mov r1, #0b01000      
-    and r1, \valor          @ 01000 & 01000 -> 01000
-    lsr r1, #3              @ Desloca o bit 3x para direita  -> 00001
-    LDR R0, =d7
-    LDR R7, [R0, #8]
-    BL GPIOPinTurn    
-    enable
+        @ D7
+        mov r1, #0b01000      
+        and r1, \valor          @ 01000 & 01000 -> 01000
+        lsr r1, #3              @ Desloca o bit 3x para direita  -> 00001
+        LDR R0, =d7
+        LDR R7, [R0, #8]
+        BL GPIOPinTurn    
+        enable
+
 .endm
 
 
@@ -393,3 +394,4 @@
         CMP R0, #0
         BGT WHILE
 .endm
+

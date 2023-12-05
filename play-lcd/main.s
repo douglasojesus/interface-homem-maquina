@@ -21,7 +21,11 @@ _start:
 
     MOV R13, #-1
     MOV R6, #0
-    mov r9, #0
+    MOV R9, #0
+
+    @R6 é o segundo dígito
+    @R9 é o primeiro dígito
+    @R12 é o índice/guarda o valor de fato
 
     @funcao para esperar que o usuario presione algum botao
     espera:
@@ -47,7 +51,7 @@ _start:
         GPIOPinEstado b2
         CMP R1, #0 
         BEQ selecionar_opcao
-        mov r12, #0
+        MOV R12, #0
         b escolher_sensor
 
     @funcao para verificar 
@@ -73,14 +77,13 @@ _start:
 
     @funcao que incrementa o numero da tela
     incrementa:
-
-        CMP R13, #4 
-        BEQ espera
-
         @ se botão ainda estiver pressionado, continua em incrementa
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa 
+
+        CMP R13, #4 
+        BEQ espera
 
         ADD R13, R13, #1
 
@@ -105,13 +108,12 @@ _start:
 
     @funcao que decrementa o numero da tela
     decrementa:
-
-        CMP R13, #0 
-        BEQ espera 
-
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa
+
+        CMP R13, #0 
+        BEQ espera
         
         SUB R13, R13, #1
 
@@ -136,14 +138,13 @@ _start:
     
     @funcao que incrementa o numero do sensor
     incrementa_sensor:
-
-        CMP R6, #31
-        BEQ escolher_sensor
-
         @ se botão ainda estiver pressionado, continua em incrementa
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa_sensor 
+
+        CMP R12, #32
+        BEQ escolher_sensor
 
         ADD R6, R6, #1
         ADD R12, R12, #1
@@ -152,20 +153,29 @@ _start:
         
     @funcao que decrementa o numero do sensor
     decrementa_sensor:
-
-        @CMP R6, #0
-        @BEQ escolher_sensor 
-        CMP R6, #0
-        BEQ escreverdigito1
-
         @ se botão ainda estiver pressionado, continua em decrementa
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa_sensor
+        
+        CMP R12, #1
+        BEQ escolher_sensor
+
+        @ verifica se o segundo digito é 0
+        CMP R6, #0
+        BEQ Altera_R6
 
         SUB R6, R6, #1
         SUB R12, R12, #1
+        B escrever_sensor
 
+    Altera_R6:
+        @ verifica se o primeiro digito é 0
+        CMP R9, #0
+        BEQ escolher_sensor @ se ambos forem 0, não decrementa
+        MOV R6, #9
+        SUB R9, R9, #1
+        SUB R12, R12, #1
         B escrever_sensor
 
     @funcao para escrever na primeira linha do display
@@ -177,23 +187,21 @@ _start:
         BEQ espera
         B exibicao_lcd
 
+    /*@funcao para escrever na segunda linha do display
+    exibicao_lcd_segunda_linha:
+        LDR R11, [R12, R10]
+        EscreverCharLCD R11
+        ADD R10, R10, #1
+        CMP R10, #16
+        BEQ escolher_sensor
+        B exibicao_lcd_segunda_linha*/
+
     escrever_sensor:
         CMP R6, #10
         BEQ escreverdigito2
-        cursorDeslocaDireita
-        EscreverLCD R6
-        B escolher_sensor   
-
-    escreverdigito1:
-        CMP r9, #0
-        BEQ escolher_sensor
-        SUB R12, R12, #1
-        mov R6, #9
-        SUB R9, R9, #1
-        moveCursorSegundaLinha
         EscreverLCD R9
         EscreverLCD R6
-        B escolher_sensor    
+        B escolher_sensor   
 
     escreverdigito2:
         mov R6, #0
@@ -201,7 +209,7 @@ _start:
         moveCursorSegundaLinha
         EscreverLCD R9
         EscreverLCD R6
-        B escolher_sensor    
+        B escolher_sensor  
 
     carrega_situacao:
         LDR R12, =situacao
@@ -348,3 +356,4 @@ _start:
         .word 0x10
         .word 0x14
         .word 0x10
+
