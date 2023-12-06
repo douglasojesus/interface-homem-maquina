@@ -14,7 +14,6 @@
 .EQU UART_TFL,  0x0080 @nível FIFO de tranmissão uart
 .EQU UART_RFL,  0x0084 @uart_RFL 
 .EQU UART_HALT, 0x00A4 @uart interrompe registro de tx
-.EQU UART3_RST, 0x02D8 @BUS_SOFT_RST_REG4
 
 .macro mapeamento_uart
     @sys_open
@@ -45,14 +44,9 @@ verificar enable
 ativar e desativar fifo e outras interrupcoes
 transmitir thr 
 receber pelo rbr*/
-.macro configuracao
-    LDR R0, [R8, #UART3_RST]
-    MOV R5, #1
-    LSL R5, R5, #19
-    ORR R0, R0, R5
-    STR R0, [R8, #UART3_RST]
+/* .macro configuracaoccu
+.endm*/
 
-.endm
 
 .macro UART_RX
     ldr r0, [r8, #UART_RBR]
@@ -65,3 +59,4 @@ receber pelo rbr*/
     
 .data
     uartaddr: .word 0x01C28 @endereço base da uart0
+    pagelen: .word 0x1000
