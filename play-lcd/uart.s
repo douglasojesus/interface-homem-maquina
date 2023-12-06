@@ -44,8 +44,48 @@ verificar enable
 ativar e desativar fifo e outras interrupcoes
 transmitir thr 
 receber pelo rbr*/
-/* .macro configuracaoccu
-.endm*/
+.macro configuracaouart
+
+    @habilito para escrever no dlh e dll 
+    LDR R0, [R8, #UART_LCR]
+    MOV R5, #0xb1
+    LSL R5, R5, #7
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_LCR]
+    
+    @bits altos do divisor
+    LDR R0, [R8, #UART_DLH]
+    MOV R5, #0xb1111
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_DLH]
+
+    @bits baixos do divisor
+    LDR R0, [R8, #UART_DLL]
+    MOV R5, #0xb1111
+    LSL R5, R5, #2
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_DLL]
+
+    @habilito PLL_24M_POST_DIV
+    LDR R0, [R8, #UART3_LCR]
+    MOV R5, #1
+    LSL R5, R5, #7
+    EOR R0, R0, R5
+    STR R0, [R8, #UART3_LCR]
+
+    @configuro uart para 8bits
+    LDR R0, [R8, #UART_LCR]
+    MOV R5, #0xb11
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_LCR]
+
+    @habilito fifoe
+    LDR R0, [R8, #UART_FCR]
+    MOV R5, #0xb1
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_FCR]
+
+.endm
 
 
 .macro UART_RX
