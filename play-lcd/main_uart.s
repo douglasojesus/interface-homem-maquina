@@ -3,10 +3,9 @@
 .global _start
 
 _start:
-        mapeamento_uart
-        configuracao
-        UART_TX
-  
+        UART_Mapeamento
+        UART_Config
+        UART_tx_byte  
              
 _end:   mov     R0, #0      
         mov     R7, #1      
@@ -15,3 +14,4 @@ _end:   mov     R0, #0
 .data
 
 devMen:   .asciz  "/dev/mem"
+
