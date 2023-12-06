@@ -14,6 +14,7 @@
 .EQU UART_TFL,  0x0080 @nível FIFO de tranmissão uart
 .EQU UART_RFL,  0x0084 @uart_RFL 
 .EQU UART_HALT, 0x00A4 @uart interrompe registro de tx
+.EQU UART3_RST, 0x02D8 @BUS_SOFT_RST_REG4
 
 .macro mapeamento_uart
     @sys_open
@@ -37,18 +38,30 @@
     ADD R8, #0xC00 @ endereco base
 .endm
 /* 
+lcr configurar o tamanho do dado para enviar (0x11 para 8bits)
+ok usar uart_dlh para setar os bits mais significativos do baud rate divisor = (clk/16*9600)    
+ok usar uart_dll para setar os bits menos significativos do baud rate
+verificar enable
+ativar e desativar fifo e outras interrupcoes
+transmitir thr 
+receber pelo rbr*/
 .macro configuracao
+    LDR R0, [R8, #UART3_RST]
+    MOV R5, #1
+    LSL R5, R5, #19
+    ORR R0, R0, R5
+    STR R0, [R8, #UART3_RST]
+
 .endm
-*/
+
 .macro UART_RX
     ldr r0, [r8, #UART_RBR]
 .endm
 
 .macro UART_TX hex
     mov r0, \hex
-    str r0, [r8, UART_THR]
+    str r0, [r8, #UART_THR]
 .endm
     
 .data
     uartaddr: .word 0x01C28 @endereço base da uart0
-    
