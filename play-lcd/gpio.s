@@ -215,3 +215,4 @@ getBitEstado:
     AND R4, R4, R9 @ leitura do bit
     LSR R1, R4, R2  @ desloca o valor lido tornando-o LSB
     BX LR
+
