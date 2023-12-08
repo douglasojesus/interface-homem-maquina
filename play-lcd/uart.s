@@ -36,6 +36,22 @@
     MOV R8, R0
     ADD R8, #0xC00 @ endereco base
 .endm
+
+.macro set_pin_uart tx
+    ldr r0, =\tx
+    ldr r1, [r0]
+    ldr r3, [r0, #4]
+    ldr r2, [r8, r1]
+
+    mov r4, #0b111
+    lsl r4, r3
+    bic r2, r4
+    mov r4, #0b011
+    lsl r4, r3
+    orr r2, r4
+
+    str r2, [r8, r1]
+.endm
 /* 
 lcr configurar o tamanho do dado para enviar (0x11 para 8bits)
 ok usar uart_dlh para setar os bits mais significativos do baud rate divisor = (clk/16*9600)    
@@ -48,40 +64,39 @@ receber pelo rbr*/
 
     @habilito para escrever no dlh e dll 
     LDR R0, [R8, #UART_LCR]
-    MOV R5, #0xb1
+    MOV R5, #0b1
     LSL R5, R5, #7
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
-    
+      
     @bits altos do divisor
     LDR R0, [R8, #UART_DLH]
-    MOV R5, #0xb1111
+    MOV R5, #0b00000001
     ORR R0, R0, R5
     STR R0, [R8, #UART_DLH]
 
     @bits baixos do divisor
     LDR R0, [R8, #UART_DLL]
-    MOV R5, #0xb1111
-    LSL R5, R5, #2
+    MOV R5, #0b11110100
     ORR R0, R0, R5
     STR R0, [R8, #UART_DLL]
 
-    @habilito PLL_24M_POST_DIV
-    LDR R0, [R8, #UART3_LCR]
+    @desabilita o dll e habilita o rbr
+    LDR R0, [R8, #UART_LCR]
     MOV R5, #1
     LSL R5, R5, #7
-    EOR R0, R0, R5
-    STR R0, [R8, #UART3_LCR]
+    BIC R0, R0, R5
+    STR R0, [R8, #UART_LCR]
 
     @configuro uart para 8bits
     LDR R0, [R8, #UART_LCR]
-    MOV R5, #0xb11
+    MOV R5, #0b11
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
 
     @habilito fifoe
     LDR R0, [R8, #UART_FCR]
-    MOV R5, #0xb1
+    MOV R5, #0b1
     ORR R0, R0, R5
     STR R0, [R8, #UART_FCR]
 
@@ -96,7 +111,4 @@ receber pelo rbr*/
     mov r0, \hex
     str r0, [r8, #UART_THR]
 .endm
-    
-.data
-    uartaddr: .word 0x01C28 @endereço base da uart0
-    pagelen: .word 0x1000
+
