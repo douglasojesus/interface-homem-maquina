@@ -32,19 +32,22 @@
     ORR R0, R0, R5
     STR R0, [R8, #UART3_RST]
 
+    /* 
     @habilitar clock PLL_PERIPH0
     LDR R0, [R8, #APB2_CLK_SRC_SEL]
     MOV R5, #1
     LSL R5, R5, #25
     ORR R0, R0, R5
     STR R0, [R8, #APB2_CLK_SRC_SEL]
-   
+    */
+
     @habilito pll_enable
     LDR R0, [R8, #PLL_ENABLE]
     MOV R5, #1
     LSL R5, R5, #31
     ORR R0, R0, R5
     STR R0, [R8, #PLL_ENABLE] 
+    
     
     @habilito PLL_CLK_OUT_EN
     LDR R0, [R8, #PLL_ENABLE]
@@ -53,12 +56,14 @@
     ORR R0, R0, R5
     STR R0, [R8, #PLL_ENABLE]
 
+    /* 
     @desativo PLL_24M_POST_DIV
     LDR R0, [R8, #PLL_ENABLE]
     MOV R5, #1
     LSL R5, R5, #18
-    EOR R0, R0, R5
+    BIC R0, R0, R5
     STR R0, [R8, #PLL_ENABLE]
+    */
 
     @habilito clock na uart3
     LDR R0, [R8, #UART3_GATING]
@@ -69,7 +74,4 @@
 
 .endm
 
-.data
-    .data
-    uartaddr: .word 0x01C20 @endereço base da uart0
-    pagelen: .word 0x1000
+
