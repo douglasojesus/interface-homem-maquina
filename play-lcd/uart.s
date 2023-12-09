@@ -52,6 +52,36 @@
 
     str r2, [r8, r1]
 .endm
+
+/* @mais provavel trocar
+.macro GPIOPinSaida pin
+    LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
+    LDR R1, [R0, #0]    @ offset do registrador de funcao do pino
+    LDR R2, [R0, #4]    @ offset do pino no registrador de funcao (LSB)
+    LDR R5, [R8, R1]     @ conteudo do registrador de dados do pino
+    MOV R0, #0b111       @ mascara para limpar 3 bits
+    LSL R0, R2           @ desloca @111 para posicao do pino no registrador
+    BIC R5, R0           @ limpa os 3 bits da posição
+    MOV R0, #1           @ move 1 para R0
+    LSL R0, R2           @ desloca o bit para a posicao de pino no registrador de funcao
+    ORR R5, R0           @ adiciona o valor 1 na posicao anteriomente deslocada
+    STR R5, [R8, R1]     @ armazena o novo valor do registrador de funcao na memoria
+.endm
+*/
+
+/* 
+.macro GPIOPinUart pin
+    LDR R0, =\pin       @ carrega o endereco de memoria de ~pin~
+    LDR R1, [R0, #0]    @ offset do registrador de funcao do pino
+    LDR R2, [R0, #4]    @ offset do pino no registrador de funcao (LSB)
+    LDR R5, [R8, R1]     @ conteudo do registrador de dados do pino
+    MOV R0, #0b111       @ mascara para limpar 3 bits
+    LSL R0, R2           @ desloca @111 para posicao do pino no registrador de funcao
+    BIC R5, R0           @ limpa os 3 bits da posicao
+    STR R5, [R8, R1]    @ armazena o novo valor do registrador de funcao na memoria
+.endm
+*/
+
 /* 
 lcr configurar o tamanho do dado para enviar (0x11 para 8bits)
 ok usar uart_dlh para setar os bits mais significativos do baud rate divisor = (clk/16*9600)    
@@ -68,7 +98,7 @@ receber pelo rbr*/
     LSL R5, R5, #7
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
-
+      
     @habilito chcfg_at_busy
     LDR R0, [R8, #UART_HALT]
     MOV R5, #0b1
@@ -91,17 +121,17 @@ receber pelo rbr*/
     MOV R5, #0b00000000
     ORR R0, R0, R5
     STR R0, [R8, #UART_DLL]
-
+   
     @ativo change_update 
     LDR R0, [R8, #UART_HALT]
     MOV R5, #0b1
     LSL R5, R5, #2
     ORR R0, R0, R5
     STR R0, [R8, #UART_HALT]
-
+ 
     @desabilita o dll e habilita o rbr
     LDR R0, [R8, #UART_LCR]
-    MOV R5, #1
+    MOV R5, #0b1
     LSL R5, R5, #7
     BIC R0, R0, R5
     STR R0, [R8, #UART_LCR]
@@ -112,7 +142,7 @@ receber pelo rbr*/
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
 
-    @habilito fifo
+    @habilito fifoe
     LDR R0, [R8, #UART_FCR]
     MOV R5, #0b1
     ORR R0, R0, R5
@@ -121,11 +151,11 @@ receber pelo rbr*/
 .endm
 
 .macro UART_RX
-    ldr r0, [r8, #UART_RBR]
+    ldr R9, [r8, #UART_RBR]
 .endm
 
 .macro UART_TX hex
-    mov r0, \hex
-    str r0, [r8, #UART_THR]
+    mov R9, \hex
+    str R9, [r8, #UART_THR]
 .endm
 
