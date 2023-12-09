@@ -1,6 +1,6 @@
 /*
 ======================================================
-        Altera o modo dos pinos conectados
+        Muda o modo dos pinos conectados
         no LCD em modo de saida
 ======================================================
 */
@@ -11,6 +11,19 @@
     GPIOPinSaida d6
     GPIOPinSaida d5
     GPIOPinSaida d4
+.endm
+
+/*
+=========================================================
+Função que recebe um valor para cada pino do display LCD 
+=========================================================
+*/
+.macro setDisplay RS, d7, d6, d5, d4
+    GPIOValor RS, #\RS
+    GPIOValor d7, #\d7
+    GPIOValor d6, #\d6
+    GPIOValor d5, #\d5
+    GPIOValor d4, #\d4
 .endm
 
 /*
@@ -35,87 +48,53 @@
 ======================================================
 */
 .macro inicializacao
-    GPIOPinBaixo RS
-
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 1, 1
     enable
     nanoSleep timeZero, time5ms
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 1, 1
     enable    
     nanoSleep timeZero, time150us
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 1, 1
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 1, 0
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 1, 0
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
 
     enable
 
-    GPIOPinAlto d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
+    setDisplay 0, 1, 0, 0, 0
     enable
 
-    GPIOPinBaixo d7
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 0, 1
     enable
 
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinAlto d6
-    GPIOPinAlto d5
+    setDisplay 0, 0, 1, 1, 0
+    enable
+ 
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
+    setDisplay 0, 1, 1, 1, 0
     enable
 
-    GPIOPinAlto d7
-    GPIOPinAlto d6
-    GPIOPinAlto d5
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
-    enable
-
-    GPIOPinBaixo d7
-    GPIOPinAlto d6
-    GPIOPinAlto d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 1, 1, 0
     enable
 
     .ltorg
@@ -127,45 +106,39 @@
 ======================================================
 */
 .macro limparDisplay
-    GPIOPinBaixo RS
-
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
     
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 0, 1
     enable
-    .ltorg
 .endm
 
-@ configuraçõe da instrução pra setar a segunda linah do display 
-@ a segunda linha está 40 bits a mais que a base da primeira
+/*
+================================================================== 
+ configurações da instrução pra setar a segunda linha do display 
+ a segunda linha está 40 bits a mais que a base da primeira
+==================================================================
+*/
 .macro habilitarSegundaLinha
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 1, 0
     enable
 
-    GPIOPinAlto d7
+    setDisplay 0, 1, 0, 1, 0
     enable
 .endm
 
-@ move o cursor para o inicio da segunda linha
+/*
+=================================================
+move o cursor para o inicio da segunda linha
+=================================================
+*/
 .macro moveCursorSegundaLinha
-    GPIOPinBaixo RS
-
-    GPIOPinAlto d7
-    GPIOPinAlto d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
+    setDisplay 0, 1, 1, 0, 0
     enable
 
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
+    setDisplay 0, 0, 0, 0, 0
     enable
+
 .endm
 
 /*
@@ -176,10 +149,7 @@
 ======================================================
 */
 .macro prefixNumeroDisplay
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinAlto d5
-    GPIOPinAlto d4
+    setDisplay 1, 0, 0, 1, 1
     enable
 .endm
 
@@ -193,38 +163,37 @@
     GPIOPinAlto RS
     prefixNumeroDisplay
 
-        @ D4    
-        mov r1, #0b00001      
-        and r1, \valor          @0001 & 0011 -> 0001
-        LDR R0, =d4
-        LDR R7, [R0, #8]
-        BL GPIOPinTurn
+    @ D4    
+    mov r1, #0b00001      
+    and r1, \valor          @0001 & 0011 -> 0001
+    LDR R0, =d4
+    LDR R7, [R0, #8]
+    BL GPIOPinTurn
 
-        @ D5
-        mov r1, #0b00010   
-        and r1, \valor          @ 0010 & 0011 -> 0010
-        lsr r1, #1              @ Desloca o bit 1x para direita  -> 0001
-        LDR R0, =d5
-        LDR R7, [R0, #8]
-        BL GPIOPinTurn
+    @ D5
+    mov r1, #0b00010   
+    and r1, \valor          @ 0010 & 0011 -> 0010
+    lsr r1, #1              @ Desloca o bit 1x para direita  -> 0001
+    LDR R0, =d5
+    LDR R7, [R0, #8]
+    BL GPIOPinTurn
 
-        @ D6
-        mov r1, #0b00100      
-        and r1, \valor          @ 0100 & 0101 -> 0100
-        lsr r1, #2              @ Desloca o bit 2x para direita  -> 0001
-        LDR R0, =d6
-        LDR R7, [R0, #8]
-        BL GPIOPinTurn
+    @ D6
+    mov r1, #0b00100      
+    and r1, \valor          @ 0100 & 0101 -> 0100
+    lsr r1, #2              @ Desloca o bit 2x para direita  -> 0001
+    LDR R0, =d6
+    LDR R7, [R0, #8]
+    BL GPIOPinTurn
 
-        @ D7
-        mov r1, #0b01000      
-        and r1, \valor          @ 01000 & 01000 -> 01000
-        lsr r1, #3              @ Desloca o bit 3x para direita  -> 00001
-        LDR R0, =d7
-        LDR R7, [R0, #8]
-        BL GPIOPinTurn    
-        enable
-
+    @ D7
+    mov r1, #0b01000      
+    and r1, \valor          @ 01000 & 01000 -> 01000
+    lsr r1, #3              @ Desloca o bit 3x para direita  -> 00001
+    LDR R0, =d7
+    LDR R7, [R0, #8]
+    BL GPIOPinTurn    
+    enable
 .endm
 
 
@@ -235,18 +204,10 @@
 ======================================================
 */
 .macro displayLigado
-    GPIOPinBaixo RS
-    
-    GPIOPinBaixo d7 
-    GPIOPinBaixo d5 
-    GPIOPinBaixo d6 
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinAlto d7
-    GPIOPinAlto d6
-    GPIOPinAlto d5
-    GPIOPinAlto d4
+    setDisplay 0, 1, 1, 1, 1
     enable
 .endm
 
@@ -257,15 +218,10 @@
 ======================================================
 */
 .macro displayDesligado
-    GPIOPinBaixo RS
-    
-    GPIOPinBaixo d7 
-    GPIOPinBaixo d5 
-    GPIOPinBaixo d6 
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPinAlto d7
+    setDisplay 0, 1, 0, 0, 0
     enable
 .endm
 
@@ -277,15 +233,10 @@
 ======================================================
 */
 .macro cursorDeslocaDireita
-    GPIOPinBaixo RS
-
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinAlto d4
+    setDisplay 0, 0, 0, 0, 1
     enable
 
-    GPIOPinAlto d6
+    setDisplay 0, 0, 1, 0, 0
     enable
 .endm
 
@@ -297,15 +248,10 @@
 ======================================================
 */
 .macro returnHome
-    GPIOPinBaixo RS
-
-    GPIOPinBaixo d7
-    GPIOPinBaixo d6
-    GPIOPinBaixo d5
-    GPIOPinBaixo d4
+    setDisplay 0, 0, 0, 0, 0
     enable
 
-    GPIOPina d5
+    setDisplay 0, 0, 0, 1, 0
     enable
 .endm
 
