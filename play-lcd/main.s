@@ -1,6 +1,8 @@
 .include "gpio.s"
 .include "sleep.s"
 .include "lcd.s"
+.include "uart.s"
+.include "ccu.s"
 
 .global _start
 
@@ -12,9 +14,11 @@
 
 _start:
     MapeamentoMemoria
+
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
+    GPIOPinSaida PA9
     setLCDPinsSaida
     inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
@@ -29,6 +33,7 @@ _start:
 
     @funcao para esperar que o usuario presione algum botao
     espera:
+        GPIOPinBaixo PA9
 
         MOV R10, #0
 
@@ -46,6 +51,10 @@ _start:
 
         b espera
     
+    acenderled:
+        GPIOPinAlto PA8
+        b espera
+
     selecionar_opcao:
         @ se botão ainda estiver pressionado, continua em escolher_sensor
         GPIOPinEstado b2
@@ -241,6 +250,7 @@ _start:
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
 
+    uartaddr: .word 0x01C28 @endereço base da uart0
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
@@ -356,4 +366,17 @@ _start:
         .word 0x10
         .word 0x14
         .word 0x10
+
+    uart_rx:
+        .word 0x4
+        .word 0x18
+        .word 0xe
+        .word 0x10 
+
+    uart_tx:
+        .word 0x4
+        .word 0x14
+        .word 0xd
+        .word 0x10
+
 
