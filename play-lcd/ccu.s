@@ -25,12 +25,19 @@
 .endm
 
 .macro configuracaoccu
-    @desativo o enable colocando o bit 19 do endereco em 1
+    /*@desativo o enable colocando o bit 19 do endereco em 1
+    LDR R0, [R8, #UART3_RST]
+    MOV R5, #1
+    LSL R5, R5, #19
+    BIC R0, R0, R5
+    STR R0, [R8, #UART3_RST]
+    
+    @ativo o enable colocando o bit 19 do endereco em 1
     LDR R0, [R8, #UART3_RST]
     MOV R5, #1
     LSL R5, R5, #19
     ORR R0, R0, R5
-    STR R0, [R8, #UART3_RST]
+    STR R0, [R8, #UART3_RST]*/
 
     /* 
     @habilitar clock PLL_PERIPH0
@@ -71,6 +78,20 @@
     LSL R5, R5, #19
     ORR R0, R0, R5
     STR R0, [R8, #UART3_GATING]
+
+    @desativo o enable colocando o bit 19 do endereco em 1
+    LDR R0, [R8, #UART3_RST]
+    MOV R5, #1
+    LSL R5, R5, #19
+    BIC R0, R0, R5
+    STR R0, [R8, #UART3_RST]
+    
+    @ativo o enable colocando o bit 19 do endereco em 1
+    LDR R0, [R8, #UART3_RST]
+    MOV R5, #1
+    LSL R5, R5, #19
+    ORR R0, R0, R5
+    STR R0, [R8, #UART3_RST]
 
 .endm
 
