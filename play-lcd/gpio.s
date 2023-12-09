@@ -114,7 +114,7 @@
                 que representa o pino
 ======================================================
 */
-
+/* 
 FGPIOPinHigh:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -136,6 +136,7 @@ FGPIOPinHigh:
                 que representa o pino
 ======================================================
 */
+/* 
 FGPIOPinLow:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -145,7 +146,7 @@ FGPIOPinLow:
     BIC R5, R4 @ limpa o bit na posicao anteriormente deslocada
     STR R5, [R8, R1] @ armazena o novo conteudo do registrador de dados na memoria
     BX LR
-
+*/
 
 /*
 ======================================================
