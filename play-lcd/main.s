@@ -14,7 +14,6 @@
 
 _start:
     MapeamentoMemoria
-
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
@@ -33,7 +32,6 @@ _start:
 
     @funcao para esperar que o usuario presione algum botao
     espera:
-        GPIOPinBaixo PA9
 
         MOV R10, #0
 
@@ -49,10 +47,6 @@ _start:
         CMP R1, #0
         BEQ incrementa
 
-        b espera
-    
-    acenderled:
-        GPIOPinAlto PA8
         b espera
 
     selecionar_opcao:
@@ -249,30 +243,17 @@ _start:
     umidade_atual: .ascii " Umidade Atual  "
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
-
+    
+    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     uartaddr: .word 0x01C28 @endereço base da uart0
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
-    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
-    
-    time1s: .word 1  @ 1s
-
-    time1ms: .word 1000000 @ 1ms
-    time500ms: .word 500000000 @500ms
-
-    time850ms: .word 850000000 @850ms
-
-    time950ms: .word 950000000 @850ms
-
-    time170ms: .word 170000000 @ 170ms
-
+      
     timeZero: .word 0 @ zero
-   
-    time1d55ms: .word 1500000 @ 1.5ms
-
-    time5ms: .word 5000000 @ 5 ms
-
     time150us: .word 150000 @ 150us
+    time1ms: .word 1000000 @ 1ms
+    time5ms: .word 5000000 @ 5 ms
+    time1s: .word 1  @ 1s
     
     /*
     ======================================================
@@ -286,7 +267,7 @@ _start:
     ======================================================
     */
 
-    @ LED Vermelho
+    @ LED Azul
     PA9:
         .word 0x4
         .word 0x4
@@ -294,7 +275,7 @@ _start:
         .word 0x10
     
 
-    @ LED Azul
+    @ LED Vermelho
     PA8:
         .word 0x4
         .word 0x0
@@ -378,5 +359,4 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
-
 
