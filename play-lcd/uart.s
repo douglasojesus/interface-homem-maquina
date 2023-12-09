@@ -68,18 +68,36 @@ receber pelo rbr*/
     LSL R5, R5, #7
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
-      
+
+    @habilito chcfg_at_busy
+    LDR R0, [R8, #UART_HALT]
+    MOV R5, #0b1
+    LSL R5, R5, #1
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_HALT]
+
     @bits altos do divisor
     LDR R0, [R8, #UART_DLH]
-    MOV R5, #0b00000001
+    MOV R5, #0b11111111
+    BIC R0, R0, R5
+    MOV R5, #0b00010000
     ORR R0, R0, R5
     STR R0, [R8, #UART_DLH]
 
     @bits baixos do divisor
     LDR R0, [R8, #UART_DLL]
-    MOV R5, #0b11110100
+    MOV R5, #0b11111111
+    BIC R0, R0, R5
+    MOV R5, #0b00000000
     ORR R0, R0, R5
     STR R0, [R8, #UART_DLL]
+
+    @ativo change_update 
+    LDR R0, [R8, #UART_HALT]
+    MOV R5, #0b1
+    LSL R5, R5, #2
+    ORR R0, R0, R5
+    STR R0, [R8, #UART_HALT]
 
     @desabilita o dll e habilita o rbr
     LDR R0, [R8, #UART_LCR]
@@ -94,14 +112,13 @@ receber pelo rbr*/
     ORR R0, R0, R5
     STR R0, [R8, #UART_LCR]
 
-    @habilito fifoe
+    @habilito fifo
     LDR R0, [R8, #UART_FCR]
     MOV R5, #0b1
     ORR R0, R0, R5
     STR R0, [R8, #UART_FCR]
 
 .endm
-
 
 .macro UART_RX
     ldr r0, [r8, #UART_RBR]
