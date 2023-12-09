@@ -85,6 +85,29 @@
     STR R3, [R8, R1] @ armazena o novo valor do registrador de dados na memoria
 .endm    
 
+/*
+==============================================================
+        Altera o estado de ~pin~
+        para alto (1) ou baixo (0) a depender do valor passado
+==============================================================
+*/
+.macro GPIOValor pin valor
+    LDR R0, =\pin @ carrega o endereco de ~pin~
+    LDR R2, [R0, #8] @ offset do pino no registrador de dados
+    LDR R1, [R0, #12] @ offset do registrador de dados do pino
+    LDR R5, [R8, R1] @ endereco base + registrador de dados
+    MOV R4, #1 @ move 1 para R4
+    LSL R4, R2 @ desloca o bit para a posicao do pino no registrador de dados
+    CMP \#valor, #0
+    BEQ baixo
+    ORR R3, R5, R4 @ insere 1 na posicao anteriomente deslocada
+    STR R3, [R8, R1] @ armazena o novo valor do registrador de dados na memoria
+    B fim
+    baixo:
+        BIC R3, R5, R4 @ insere 1 na posicao anteriomente deslocada
+        STR R3, [R8, R1] @ armazena o novo valor do registrador de dados na memoria
+    fim:
+.endm
 
 /*
 ======================================================
@@ -215,3 +238,4 @@ getBitEstado:
     AND R4, R4, R9 @ leitura do bit
     LSR R1, R4, R2  @ desloca o valor lido tornando-o LSB
     BX LR
+
