@@ -15,7 +15,6 @@
 
 _start:
     MapeamentoMemoria
-
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
@@ -23,9 +22,11 @@ _start:
     inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
 
-    MOV R13, #-1
+    MOV R13, #0
     MOV R6, #0
     MOV R9, #0
+
+    B carrega_situacao
 
     @R6 é o segundo dígito
     @R9 é o primeiro dígito
@@ -48,12 +49,6 @@ _start:
         CMP R1, #0
         BEQ incrementa
 
-        b espera
-    
-    acenderled:
-        MapeamentoMemoria
-        GPIOPinSaida PA9
-        GPIOPinBaixo PA9
         b espera
 
     selecionar_opcao:
@@ -83,27 +78,11 @@ _start:
         CMP R1, #0
         BEQ incrementa_sensor
 
-        b escolher_sensor
+        b escrever_sensor
 
     @funcao que incrementa o numero da tela
 
     fim:
-
-        /*GPIOPinEstado b2
-        CMP R1, #0 
-        BEQ fim
-
-        GPIOPinEstado b1
-        CMP R1, #0 
-        BEQ _start
-
-        GPIOPinEstado b2
-        CMP R1, #0 
-        BEQ _start
-
-        GPIOPinEstado b3
-        CMP R1, #0
-        BEQ _start*/
 
         mapeamentomemoriaccu
         configuracaoccu
@@ -118,19 +97,20 @@ _start:
 
         nanoSleep time1s timeZero
 
-        UART_RX 
+        UART_RX  
+        
+        MOV R6, R9
+
         UART_RX
 
         nanoSleep time1s timeZero
-
-        MOV R12, R9
 
         catchDigits
 
         MapeamentoMemoria
 
         EscreverLCD R9
-        EscreverLCD R12
+        EscreverLCD R6
 
         b espera
 
@@ -204,7 +184,6 @@ _start:
         CMP R12, #32
         BEQ escolher_sensor
 
-        ADD R6, R6, #1
         ADD R12, R12, #1
 
         B escrever_sensor
@@ -219,21 +198,8 @@ _start:
         CMP R12, #1
         BEQ escolher_sensor
 
-        @ verifica se o segundo digito é 0
-        CMP R6, #0
-        BEQ Altera_R6
-
-        SUB R6, R6, #1
         SUB R12, R12, #1
-        B escrever_sensor
 
-    Altera_R6:
-        @ verifica se o primeiro digito é 0
-        CMP R9, #0
-        BEQ escolher_sensor @ se ambos forem 0, não decrementa
-        MOV R6, #9
-        SUB R9, R9, #1
-        SUB R12, R12, #1
         B escrever_sensor
 
     @funcao para escrever na primeira linha do display
@@ -245,29 +211,12 @@ _start:
         BEQ espera
         B exibicao_lcd
 
-    /*@funcao para escrever na segunda linha do display
-    exibicao_lcd_segunda_linha:
-        LDR R11, [R12, R10]
-        EscreverCharLCD R11
-        ADD R10, R10, #1
-        CMP R10, #16
-        BEQ escolher_sensor
-        B exibicao_lcd_segunda_linha*/
-
     escrever_sensor:
-        CMP R6, #10
-        BEQ escreverdigito2
+        MOV R6, R12
+        catchDigits
         EscreverLCD R9
         EscreverLCD R6
-        B escolher_sensor   
-
-    escreverdigito2:
-        mov R6, #0
-        ADD R9, R9, #1
-        moveCursorSegundaLinha
-        EscreverLCD R9
-        EscreverLCD R6
-        B escolher_sensor  
+        B escolher_sensor    
 
     carrega_situacao:
         LDR R12, =situacao
@@ -427,4 +376,6 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
+
+
 
