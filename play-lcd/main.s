@@ -3,6 +3,7 @@
 .include "lcd.s"
 .include "uart.s"
 .include "ccu.s"
+.include "split.s"
 
 .global _start
 
@@ -14,10 +15,10 @@
 
 _start:
     MapeamentoMemoria
+
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
-    GPIOPinSaida PA9
     setLCDPinsSaida
     inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
@@ -48,6 +49,12 @@ _start:
         BEQ incrementa
 
         b espera
+    
+    acenderled:
+        MapeamentoMemoria
+        GPIOPinSaida PA9
+        GPIOPinBaixo PA9
+        b espera
 
     selecionar_opcao:
         @ se botão ainda estiver pressionado, continua em escolher_sensor
@@ -70,7 +77,7 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ escolher_sensor
+        BEQ fim
 
         GPIOPinEstado b3
         CMP R1, #0
@@ -79,6 +86,54 @@ _start:
         b escolher_sensor
 
     @funcao que incrementa o numero da tela
+
+    fim:
+
+        /*GPIOPinEstado b2
+        CMP R1, #0 
+        BEQ fim
+
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ _start
+
+        GPIOPinEstado b2
+        CMP R1, #0 
+        BEQ _start
+
+        GPIOPinEstado b3
+        CMP R1, #0
+        BEQ _start*/
+
+        mapeamentomemoriaccu
+        configuracaoccu
+        mapeamento_uart
+        configuracaouart
+        set_pin_uart uart_tx
+        set_pin_uart uart_rx
+
+
+        UART_TX #0x01
+        UART_TX #0x0F
+
+        nanoSleep time1s timeZero
+
+        UART_RX 
+        UART_RX
+
+        nanoSleep time1s timeZero
+
+        MOV R12, R9
+
+        catchDigits
+
+        MapeamentoMemoria
+
+        EscreverLCD R9
+        EscreverLCD R12
+
+        b espera
+
     incrementa:
         @ se botão ainda estiver pressionado, continua em incrementa
         GPIOPinEstado b3
@@ -243,17 +298,30 @@ _start:
     umidade_atual: .ascii " Umidade Atual  "
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
-    
-    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
+
     uartaddr: .word 0x01C28 @endereço base da uart0
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
+    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
-      
-    timeZero: .word 0 @ zero
-    time150us: .word 150000 @ 150us
-    time1ms: .word 1000000 @ 1ms
-    time5ms: .word 5000000 @ 5 ms
+    
     time1s: .word 1  @ 1s
+
+    time1ms: .word 1000000 @ 1ms
+    time500ms: .word 500000000 @500ms
+
+    time850ms: .word 850000000 @850ms
+
+    time950ms: .word 950000000 @850ms
+
+    time170ms: .word 170000000 @ 170ms
+
+    timeZero: .word 0 @ zero
+   
+    time1d55ms: .word 1500000 @ 1.5ms
+
+    time5ms: .word 5000000 @ 5 ms
+
+    time150us: .word 150000 @ 150us
     
     /*
     ======================================================
@@ -267,7 +335,7 @@ _start:
     ======================================================
     */
 
-    @ LED Azul
+    @ LED Vermelho
     PA9:
         .word 0x4
         .word 0x4
@@ -275,7 +343,7 @@ _start:
         .word 0x10
     
 
-    @ LED Vermelho
+    @ LED Azul
     PA8:
         .word 0x4
         .word 0x0
