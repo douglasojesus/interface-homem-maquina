@@ -53,10 +53,13 @@ _start:
 
     selecionar_opcao:
         @ se botão ainda estiver pressionado, continua em escolher_sensor
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b2
         CMP R1, #0 
         BEQ selecionar_opcao
-        MOV R12, #0
+        
+        MOV R12, #1
         b escolher_sensor
 
     @funcao para verificar 
@@ -72,7 +75,7 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ fim
+        BEQ ativar_uart
 
         GPIOPinEstado b3
         CMP R1, #0
@@ -80,9 +83,13 @@ _start:
 
         b escrever_sensor
 
-    @funcao que incrementa o numero da tela
+    ativar_uart:
 
-    fim:
+        nanoSleep timeZero time500ms
+
+        GPIOPinEstado b2
+        CMP R1, #0 
+        BEQ ativar_uart
 
         mapeamentomemoriaccu
         configuracaoccu
@@ -91,19 +98,18 @@ _start:
         set_pin_uart uart_tx
         set_pin_uart uart_rx
 
-
-        UART_TX #0x01
-        UART_TX #0x0F
+        UART_TX R13 @ contador que tem o comando a ser executado
+        UART_TX R12 @ contador que tem o endereço do sensor
 
         nanoSleep time1s timeZero
 
         UART_RX  
         
-        MOV R6, R9
+        MOV R6, R9  @ @ r6 = primeiro digito de resposta
 
         UART_RX
 
-        nanoSleep time1s timeZero
+        MOV R11, R9 @ r11 = segundo digito de resposta
 
         catchDigits
 
@@ -112,13 +118,32 @@ _start:
         EscreverLCD R9
         EscreverLCD R6
 
-        b espera
+        b intermediario
+
+    @debouncer
+    intermediario:
+        GPIOPinEstado b2
+        CMP R1, #0
+        BEQ intermediario
+
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ espera
+
+        GPIOPinEstado b3
+        CMP R1, #0
+        BEQ espera
+
+        b intermediario
 
     incrementa:
         @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa 
+        
 
         CMP R13, #4 
         BEQ espera
@@ -146,10 +171,13 @@ _start:
 
     @funcao que decrementa o numero da tela
     decrementa:
+        @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa
-
+        
         CMP R13, #0 
         BEQ espera
         
@@ -177,6 +205,8 @@ _start:
     @funcao que incrementa o numero do sensor
     incrementa_sensor:
         @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa_sensor 
@@ -191,10 +221,12 @@ _start:
     @funcao que decrementa o numero do sensor
     decrementa_sensor:
         @ se botão ainda estiver pressionado, continua em decrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa_sensor
-        
+
         CMP R12, #1
         BEQ escolher_sensor
 
