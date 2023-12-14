@@ -1,8 +1,10 @@
 .include "gpio.s"
 .include "sleep.s"
-.include "lcd.s"
+.include "lcd_config.s"
+.include "lcd_escrita.s"
 .include "uart.s"
 .include "ccu.s"
+.include "split.s"
 
 .global _start
 
@@ -17,14 +19,15 @@ _start:
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
-    GPIOPinSaida PA9
     setLCDPinsSaida
     inicializacao
     habilitarSegundaLinha @ liga a segunda linha do display
 
-    MOV R13, #-1
+    MOV R13, #0
     MOV R6, #0
     MOV R9, #0
+
+    B carrega_situacao
 
     @R6 é o segundo dígito
     @R9 é o primeiro dígito
@@ -51,10 +54,13 @@ _start:
 
     selecionar_opcao:
         @ se botão ainda estiver pressionado, continua em escolher_sensor
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b2
         CMP R1, #0 
         BEQ selecionar_opcao
-        MOV R12, #0
+        
+        MOV R12, #1
         b escolher_sensor
 
     @funcao para verificar 
@@ -70,20 +76,89 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ escolher_sensor
+        BEQ ativar_uart
 
         GPIOPinEstado b3
         CMP R1, #0
         BEQ incrementa_sensor
 
-        b escolher_sensor
+        b escrever_sensor
 
-    @funcao que incrementa o numero da tela
+    ativar_uart:
+
+        nanoSleep timeZero time500ms
+
+        GPIOPinEstado b2
+        CMP R1, #0 
+        BEQ ativar_uart
+
+        mapeamentomemoriaccu
+        configuracaoccu
+        mapeamento_uart
+        configuracaouart
+        set_pin_uart uart_tx
+        set_pin_uart uart_rx
+
+        UART_TX R13 @ contador que tem o comando a ser executado
+        UART_TX R12 @ contador que tem o endereço do sensor
+
+        MOV R13, #0 
+
+        nanoSleep time1s timeZero
+
+        UART_RX  
+        
+        MOV R6, R9  @ r6 = primeiro digito de resposta
+
+        UART_RX
+
+        MOV R11, R9 @ r11 = segundo digito de resposta
+
+        MapeamentoMemoria
+
+        CMP R6, #0x1F
+        BEQ sensor_com_problema
+
+        CMP R6, #0x2F
+        BEQ sensor_inexistente
+
+        CMP R6, #0x3F
+        BEQ requisicao_inexistente
+
+        CMP R6, #0x07
+        BEQ sensor_funcionando
+
+        catchDigits
+        
+
+        EscreverLCD R9
+        EscreverLCD R6
+
+        b intermediario
+
+    intermediario:
+        GPIOPinEstado b2
+        CMP R1, #0
+        BEQ intermediario
+
+        GPIOPinEstado b1
+        CMP R1, #0 
+        BEQ espera
+
+        GPIOPinEstado b3
+        CMP R1, #0
+        BEQ espera
+
+        b intermediario
+
     incrementa:
         @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa 
+        
 
         CMP R13, #4 
         BEQ espera
@@ -111,10 +186,13 @@ _start:
 
     @funcao que decrementa o numero da tela
     decrementa:
+        @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa
-
+        
         CMP R13, #0 
         BEQ espera
         
@@ -142,6 +220,8 @@ _start:
     @funcao que incrementa o numero do sensor
     incrementa_sensor:
         @ se botão ainda estiver pressionado, continua em incrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa_sensor 
@@ -149,7 +229,6 @@ _start:
         CMP R12, #32
         BEQ escolher_sensor
 
-        ADD R6, R6, #1
         ADD R12, R12, #1
 
         B escrever_sensor
@@ -157,28 +236,17 @@ _start:
     @funcao que decrementa o numero do sensor
     decrementa_sensor:
         @ se botão ainda estiver pressionado, continua em decrementa
+        nanoSleep timeZero time500ms
+
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa_sensor
-        
+
         CMP R12, #1
         BEQ escolher_sensor
 
-        @ verifica se o segundo digito é 0
-        CMP R6, #0
-        BEQ Altera_R6
-
-        SUB R6, R6, #1
         SUB R12, R12, #1
-        B escrever_sensor
 
-    Altera_R6:
-        @ verifica se o primeiro digito é 0
-        CMP R9, #0
-        BEQ escolher_sensor @ se ambos forem 0, não decrementa
-        MOV R6, #9
-        SUB R9, R9, #1
-        SUB R12, R12, #1
         B escrever_sensor
 
     @funcao para escrever na primeira linha do display
@@ -190,29 +258,32 @@ _start:
         BEQ espera
         B exibicao_lcd
 
-    /*@funcao para escrever na segunda linha do display
-    exibicao_lcd_segunda_linha:
-        LDR R11, [R12, R10]
-        EscreverCharLCD R11
-        ADD R10, R10, #1
-        CMP R10, #16
-        BEQ escolher_sensor
-        B exibicao_lcd_segunda_linha*/
-
     escrever_sensor:
-        CMP R6, #10
-        BEQ escreverdigito2
+        MOV R6, R12
+        catchDigits
         EscreverLCD R9
         EscreverLCD R6
-        B escolher_sensor   
+        B escolher_sensor    
 
-    escreverdigito2:
-        mov R6, #0
-        ADD R9, R9, #1
-        moveCursorSegundaLinha
-        EscreverLCD R9
-        EscreverLCD R6
-        B escolher_sensor  
+    sensor_com_problema:
+        limparDisplay
+        LDR R12, =problema_sensor
+        B exibicao_lcd
+
+    sensor_inexistente:
+        limparDisplay
+        LDR R12, =inexistente_sensor
+        B exibicao_lcd
+
+    requisicao_inexistente:
+        limparDisplay
+        LDR R12, =inexistente_requisicao
+        B exibicao_lcd
+
+    sensor_funcionando:
+        limparDisplay
+        LDR R12, =funcionando_sensor
+        B exibicao_lcd
 
     carrega_situacao:
         LDR R12, =situacao
@@ -243,17 +314,34 @@ _start:
     umidade_atual: .ascii " Umidade Atual  "
     temperatura_cont: .ascii " Temperatura C. " 
     umidade_cont: .ascii "Umidade Continua"
-    
-    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
+    problema_sensor: .ascii "Sensor com Prob."
+    inexistente_sensor: .ascii "Sen. inexistente"
+    inexistente_requisicao: .ascii "Req. inexistente"
+    funcionando_sensor: .ascii "Sen. funcionando"
+
     uartaddr: .word 0x01C28 @endereço base da uart0
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
+    gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
-      
-    timeZero: .word 0 @ zero
-    time150us: .word 150000 @ 150us
-    time1ms: .word 1000000 @ 1ms
-    time5ms: .word 5000000 @ 5 ms
+    
     time1s: .word 1  @ 1s
+
+    time1ms: .word 1000000 @ 1ms
+    time500ms: .word 500000000 @500ms
+
+    time850ms: .word 850000000 @850ms
+
+    time950ms: .word 950000000 @850ms
+
+    time170ms: .word 170000000 @ 170ms
+
+    timeZero: .word 0 @ zero
+   
+    time1d55ms: .word 1500000 @ 1.5ms
+
+    time5ms: .word 5000000 @ 5 ms
+
+    time150us: .word 150000 @ 150us
     
     /*
     ======================================================
@@ -267,7 +355,7 @@ _start:
     ======================================================
     */
 
-    @ LED Azul
+    @ LED Vermelho
     PA9:
         .word 0x4
         .word 0x4
@@ -275,7 +363,7 @@ _start:
         .word 0x10
     
 
-    @ LED Vermelho
+    @ LED Azul
     PA8:
         .word 0x4
         .word 0x0
@@ -359,4 +447,6 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
+
+
 
