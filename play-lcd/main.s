@@ -1,7 +1,7 @@
 .include "gpio.s"
 .include "sleep.s"
-.include "lcd_config.s"
 .include "lcd_escrita.s"
+.include "lcd_config.s"
 .include "uart.s"
 .include "ccu.s"
 .include "split.s"
@@ -96,8 +96,8 @@ _start:
         configuracaoccu
         mapeamento_uart
         configuracaouart
-        set_pin_uart uart_tx
-        set_pin_uart uart_rx
+        UartPin uart_tx
+        UartPin uart_rx
 
         UART_TX R13 @ contador que tem o comando a ser executado
         UART_TX R12 @ contador que tem o endereço do sensor
@@ -128,13 +128,12 @@ _start:
         CMP R6, #0x07
         BEQ sensor_funcionando
 
-        catchDigits
-        
+        catchDigits    
 
         EscreverLCD R9
         EscreverLCD R6
 
-        b intermediario
+        b intermediario  
 
     intermediario:
         GPIOPinEstado b2
@@ -447,6 +446,4 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
-
-
 
