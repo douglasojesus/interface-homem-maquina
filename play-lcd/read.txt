@@ -1,2 +1,15 @@
 altgerou a ccu para funcionar a uart
 main conta com codigo para continuo, mas ainda nao funciona com asertividade
+
+
+
+@ o foco da apresnetcaao eh ser rapida curta 10 minutos
+ mostrando o produto e o que foi desenvolvido, 
+@ espera que funcionou de alguma forma mostrar testes c
+om video e fotos
+@ rotina de testes precisa ser apresentada na aporesent
+acao e no lab mostra os testes
+@ nao precisa de dificuldades encontradas. precisa func
+ionamento (coisas extras que nao vao ser mostrada no lab). 
+@ ser direto ao ponto. explicar como chegou na solução.
+
