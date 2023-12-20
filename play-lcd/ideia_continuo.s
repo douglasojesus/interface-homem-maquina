@@ -100,19 +100,30 @@ _start:
         UART_TX R13 @ contador que tem o comando a ser executado
         UART_TX R12 @ contador que tem o endereço do sensor
 
-        b continuo
 
+        b continuo
     continuo:
+        nanoSleep time1s time950ms
+        nanoSleep time1s time950ms
 
         UART_RX  
         
         MOV R6, R9  @ r6 = primeiro digito de resposta
 
+        nanoSleep time1s timeZero
+
         UART_RX
 
         MOV R11, R9 @ r11 = segundo digito de resposta
 
-        resetarUart
+        MOV R6, R9  @ r6 = primeiro digito de resposta
+
+        nanoSleep time1s timeZero
+        
+        UART_RX
+
+        MOV R11, R9 @ r11 = segundo digito de resposta
+        
         
         MapeamentoMemoria
 
@@ -139,7 +150,6 @@ _start:
 
         EscreverLCD R9
         EscreverLCD R6
-        .ltorg
         moveCursorSegundaLinha
 
         mapeamentomemoriaccu
@@ -148,6 +158,7 @@ _start:
         configuracaouart
         UartPin uart_tx
         UartPin uart_rx
+        .ltorg
 
         b continuo 
 
@@ -171,7 +182,7 @@ _start:
 
         MapeamentoMemoria
         mov R13, #0
-        b intermediario     
+        b intermediario         
 
     ativar_uart:
 
@@ -535,4 +546,3 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
-        
