@@ -26,41 +26,55 @@
 
 .macro configuracaoccu
 
-    @habilito pll_enable
-    LDR R0, [R8, #PLL_ENABLE]
-    MOV R5, #1
-    LSL R5, R5, #31
-    ORR R0, R0, R5
-    STR R0, [R8, #PLL_ENABLE] 
+ @habilito pll_enable
+ LDR R0, [R8, #PLL_ENABLE]
+ MOV R5, #1
+ LSL R5, R5, #31
+ ORR R0, R0, R5
+ STR R0, [R8, #PLL_ENABLE] 
+ 
+ @habilitar clock PLL_PERIPH0
+ LDR R0, [R8, #APB2_CLK_SRC_SEL]
+ MOV R5, #3
+ LSL R5, R5, #24
+ ORR R0, R0, R5
+ STR R0, [R8, #APB2_CLK_SRC_SEL]
+ 
+ @habilito clock na uart3
+ LDR R0, [R8, #UART3_GATING]
+ MOV R5, #1
+ LSL R5, R5, #19
+ ORR R0, R0, R5
+ STR R0, [R8, #UART3_GATING]
 
-
-    @habilito PLL_CLK_OUT_EN
-    LDR R0, [R8, #PLL_ENABLE]
-    MOV R5, #1
-    LSL R5, R5, #24
-    ORR R0, R0, R5
-    STR R0, [R8, #PLL_ENABLE]
-
-    @habilito clock na uart3
-    LDR R0, [R8, #UART3_GATING]
-    MOV R5, #1
-    LSL R5, R5, #19
-    ORR R0, R0, R5
-    STR R0, [R8, #UART3_GATING]
-
-    @desativo o enable colocando o bit 19 do endereco em 1
-    LDR R0, [R8, #UART3_RST]
-    MOV R5, #1
-    LSL R5, R5, #19
-    BIC R0, R0, R5
-    STR R0, [R8, #UART3_RST]
-
-    @ativo o enable colocando o bit 19 do endereco em 1
-    LDR R0, [R8, #UART3_RST]
-    MOV R5, #1
-    LSL R5, R5, #19
-    ORR R0, R0, R5
-    STR R0, [R8, #UART3_RST]
+ @desativo o enable colocando o bit 19 do endereco em 1
+ LDR R0, [R8, #UART3_RST]
+ MOV R5, #1
+ LSL R5, R5, #19
+ BIC R0, R0, R5
+ STR R0, [R8, #UART3_RST]
+ 
+ @ativo o enable colocando o bit 19 do endereco em 1
+ LDR R0, [R8, #UART3_RST]
+ MOV R5, #1
+ LSL R5, R5, #19
+ ORR R0, R0, R5
+ STR R0, [R8, #UART3_RST]
 
 .endm
 
+.macro resetarUart
+ @desativo o enable colocando o bit 19 do endereco em 1
+ LDR R0, [R8, #UART3_RST]
+ MOV R5, #1
+ LSL R5, R5, #19
+ BIC R0, R0, R5
+ STR R0, [R8, #UART3_RST]
+ 
+ @ativo o enable colocando o bit 19 do endereco em 1
+ LDR R0, [R8, #UART3_RST]
+ MOV R5, #1
+ LSL R5, R5, #19
+ ORR R0, R0, R5
+ STR R0, [R8, #UART3_RST]
+.endm
