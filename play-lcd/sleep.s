@@ -10,4 +10,3 @@
     MOV R7, #162 @ sys_nanosleep
     SVC 0 @ interrupcao
 .endm
-

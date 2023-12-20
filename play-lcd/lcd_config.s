@@ -15,26 +15,6 @@
 
 /*
 ======================================================
- Executa a instrucao de clear do LCD
-======================================================
-*/
-.macro limparDisplay
- GPIOPinBaixo RS
-
- GPIOPinBaixo d7
- GPIOPinBaixo d6
- GPIOPinBaixo d5
- GPIOPinBaixo d4
- enable
- 
- GPIOPinAlto d4
- enable
- .ltorg
-.endm
-
-
-/*
-======================================================
  Da um pulso no pino conectado ao enable (E)
  do display LCD
 ======================================================
@@ -141,6 +121,24 @@
  .ltorg
 .endm
 
+/*
+======================================================
+ Executa a instrucao de clear do LCD
+======================================================
+*/
+.macro limparDisplay
+ GPIOPinBaixo RS
+
+ GPIOPinBaixo d7
+ GPIOPinBaixo d6
+ GPIOPinBaixo d5
+ GPIOPinBaixo d4
+ enable
+ 
+ GPIOPinAlto d4
+ enable
+ .ltorg
+.endm
 
 @ configuraçõe da instrução pra setar a segunda linah do display 
 @ a segunda linha está 40 bits a mais que a base da primeira
@@ -185,7 +183,6 @@
  enable
 .endm
 
-
 /*
 ======================================================
  Liga o display LCD, exibe o cursor e o torna
@@ -211,6 +208,26 @@
 
 /*
 ======================================================
+ Desliga o display LCD
+======================================================
+*/
+.macro displayDesligado
+ GPIOPinBaixo RS
+ 
+ GPIOPinBaixo d7 
+ GPIOPinBaixo d5 
+ GPIOPinBaixo d6 
+ GPIOPinBaixo d4
+ enable
+
+ GPIOPinAlto d7
+ enable
+.endm
+
+
+
+/*
+======================================================
  Desloca o cursor do display LCD para a direita
 ======================================================
 */
@@ -228,3 +245,41 @@
  enable
 .endm
 
+
+/*
+======================================================
+ Executa a instrucao Return Home no display
+ LCD
+======================================================
+*/
+.macro returnHome
+ GPIOPinBaixo RS
+
+ GPIOPinBaixo d7
+ GPIOPinBaixo d6
+ GPIOPinBaixo d5
+ GPIOPinBaixo d4
+ enable
+
+ GPIOPina d5
+ enable
+.endm
+
+/*
+======================================================
+ Seta o cursor do display para uma posicao especifica
+ a partir do inicio.
+
+ ~pos~ tem de estar entre 1 e 32
+======================================================
+*/
+.macro setLCDCursor posicao
+ MOV R0, \posicao
+ returnHome
+ WHILE:
+ cursorDeslocaDireita
+ nanoSleep timeZero, time150us
+ SUB R0, #1
+ CMP R0, #0
+ BGT WHILE
+.endm

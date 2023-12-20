@@ -1,14 +1,10 @@
 .include "gpio.s"
 .include "sleep.s"
-.include "lcd_config.s"
 .include "lcd_escrita.s"
+.include "lcd_config.s"
 .include "uart.s"
 .include "ccu.s"
 .include "split.s"
-
-
-@ reset fifo: 471
-@ reset 
 
 .global _start
 
@@ -80,7 +76,7 @@ _start:
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ ativar_uart
+        BEQ escolhe_opcao
 
         GPIOPinEstado b3
         CMP R1, #0
@@ -88,41 +84,44 @@ _start:
 
         b escrever_sensor
 
-    ativar_uart:
+    escolhe_opcao:
+        cmp r13, #3
+        beq inicio_continuo
+        b ativar_uart    
 
-        @configuração uart
+    inicio_continuo:
         mapeamentomemoriaccu
         configuracaoccu
         mapeamento_uart
         configuracaouart
-        set_pin_uart uart_tx
-        set_pin_uart uart_rx
-
-        nanoSleep timeZero time500ms
-
-        GPIOPinEstado b2
-        CMP R1, #0 
-        BEQ ativar_uart
+        UartPin uart_tx
+        UartPin uart_rx
 
         UART_TX R13 @ contador que tem o comando a ser executado
         UART_TX R12 @ contador que tem o endereço do sensor
 
-        MOV R7, R13 @ tem o comando a ser executado
+        b continuo
 
-        nanoSleep time1s timeZero
-
-        /*CMP R13, #03
-        BEQ continuo
-
-        CMP R13, #04
-        BEQ continuo*/
-
-        MOV R13, #0 @ reseta contador
+    continuo:
 
         UART_RX  
+        
         MOV R6, R9  @ r6 = primeiro digito de resposta
+
         UART_RX
+
         MOV R11, R9 @ r11 = segundo digito de resposta
+
+        resetarUart
+        
+        MapeamentoMemoria
+
+        GPIOPinEstado b3
+        CMP R1, #0 
+        BEQ encerrar_continuo
+
+        cmp R6, #0
+        beq continuo
 
         CMP R6, #0x1F
         BEQ sensor_com_problema
@@ -136,68 +135,94 @@ _start:
         CMP R6, #0x07
         BEQ sensor_funcionando
 
-        catchDigits
-
-        MapeamentoMemoria
+        catchDigits    
 
         EscreverLCD R9
         EscreverLCD R6
+        .ltorg
+        moveCursorSegundaLinha
 
-        b intermediario
-
-    /*continuo:
-
-        @configuração uart
         mapeamentomemoriaccu
         configuracaoccu
         mapeamento_uart
         configuracaouart
-        set_pin_uart uart_tx
-        set_pin_uart uart_rx
+        UartPin uart_tx
+        UartPin uart_rx
 
-        nanoSleep time1s timeZero
-        MOV R13, #0 @ reseta contador
-
-        UART_RX  
-        MOV R6, R9  @ r6 = primeiro digito de resposta
-        UART_RX
-        MOV R11, R9 @ r11 = segundo digito de resposta
-
-        catchDigits
-
-        MapeamentoMemoria
-
-        EscreverLCD R9
-        EscreverLCD R6
-
-        nanoSleep time1s timeZero
-
-        GPIOPinEstado b2
-        CMP R1, #0 
-        BEQ encerrar_continuo
-    
-        b continuo
+        b continuo 
 
     encerrar_continuo:
+
+        mapeamentomemoriaccu
+        configuracaoccu
+        mapeamento_uart
+        configuracaouart
+        UartPin uart_tx
+        UartPin uart_rx
+
+        MOV R13, #5
+        MOV R12, #0x0F
+
+        UART_TX R13
+
+        UART_TX R12
+
+        resetarUart
+
+        MapeamentoMemoria
+        mov R13, #0
+        b intermediario     
+
+    ativar_uart:
+
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b2
         CMP R1, #0 
-        BEQ encerrar_continuo
+        BEQ ativar_uart
 
-        ADD R7, R7, #2 @ se é ativar temp cont, vai desativar temp cont. 
+        mapeamentomemoriaccu
+        configuracaoccu
+        mapeamento_uart
+        configuracaouart
+        UartPin uart_tx
+        UartPin uart_rx
 
-        UART_TX R7
-        UART_TX R12
+        UART_TX R13 @ contador que tem o comando a ser executado
+        UART_TX R12 @ contador que tem o endereço do sensor
 
         nanoSleep time1s timeZero
 
         UART_RX  
+        
         MOV R6, R9  @ r6 = primeiro digito de resposta
+
         UART_RX
+
         MOV R11, R9 @ r11 = segundo digito de resposta
 
-        B _start*/
+        MapeamentoMemoria
+
+        CMP R6, #0x1F
+        BEQ sensor_com_problema
+
+        CMP R6, #0x2F
+        BEQ sensor_inexistente
+
+        CMP R6, #0x3F
+        BEQ requisicao_inexistente
+
+        CMP R6, #0x07
+        BEQ sensor_funcionando
+
+        catchDigits    
+
+        EscreverLCD R9
+        EscreverLCD R6
+
+        mov r13, #0
+
+        b intermediario  
 
     intermediario:
         GPIOPinEstado b2
@@ -510,5 +535,4 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
-
-
+        

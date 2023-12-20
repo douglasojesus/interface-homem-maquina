@@ -6,4 +6,3 @@
     mul r10, r9, r10
     sub r6, r6, r10 @r6= segundo digito
 .endm
-
