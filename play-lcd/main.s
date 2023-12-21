@@ -1,3 +1,4 @@
+/* Diretivas de inclusão */
 .include "gpio.s"
 .include "sleep.s"
 .include "lcd_escrita.s"
@@ -14,8 +15,10 @@
     SVC 0
 .endm
 
+/* Rotina de inicialização */
 _start:
     MapeamentoMemoria
+    /* Definição dos botões */
     GPIOPinEntrada b1 @ botão alongado
     GPIOPinEntrada b2 @ botão do meio
     GPIOPinEntrada b3 @ botão mais a direita antes do espaço
@@ -29,13 +32,12 @@ _start:
 
     B carrega_situacao
 
-    @R6 é o segundo dígito
-    @R9 é o primeiro dígito
-    @R12 é o índice/guarda o valor de fato
+    /* R6 é o segundo dígito */
+    /* R9 é o primeiro dígito */
+    /* R12 é o índice/guarda o valor de fato */
 
-    @funcao para esperar que o usuario presione algum botao
+    /* Função para esperar que o usuário pressione algum botão */
     espera:
-
         MOV R10, #0
 
         GPIOPinEstado b1
@@ -53,19 +55,18 @@ _start:
         b espera
 
     selecionar_opcao:
-        @ se botão ainda estiver pressionado, continua em escolher_sensor
+        /* Se botão ainda estiver pressionado, continua em escolher_sensor */
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b2
         CMP R1, #0 
         BEQ selecionar_opcao
-        
+
         MOV R12, #1
         b escolher_sensor
 
-    @funcao para verificar 
+    /* Função para verificar */
     escolher_sensor:
-        
         moveCursorSegundaLinha
 
         MOV R10, #0
@@ -85,7 +86,6 @@ _start:
         b escrever_sensor
 
     ativar_uart:
-
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b2
@@ -99,20 +99,24 @@ _start:
         UartPin uart_tx
         UartPin uart_rx
 
-        UART_TX R13 @ contador que tem o comando a ser executado
-        UART_TX R12 @ contador que tem o endereço do sensor
+        /* Contador que tem o comando a ser executado */
+        UART_TX R13 
+        /* Contador que tem o endereço do sensor */
+        UART_TX R12
 
         MOV R13, #0 
 
         nanoSleep time1s timeZero
 
-        UART_RX  
-        
-        MOV R6, R9  @ r6 = primeiro digito de resposta
+        UART_RX
+
+        /* r6 = primeiro digito de resposta */
+        MOV R6, R9
 
         UART_RX
 
-        MOV R11, R9 @ r11 = segundo digito de resposta
+        /* r11 = segundo digito de resposta */
+        MOV R11, R9
 
         MapeamentoMemoria
 
@@ -129,8 +133,6 @@ _start:
         BEQ sensor_funcionando
 
         catchDigits
-
-        
 
         EscreverLCD R9
         EscreverLCD R6
@@ -153,13 +155,12 @@ _start:
         b intermediario
 
     incrementa:
-        @ se botão ainda estiver pressionado, continua em incrementa
+        /* Se botão ainda estiver pressionado, continua em incrementa */
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b3
         CMP R1, #0 
         BEQ incrementa 
-        
 
         CMP R13, #4 
         BEQ espera
@@ -173,30 +174,30 @@ _start:
 
         CMP R13, #1 
         BEQ carrega_temp_atual
-        
+
         CMP R13, #2 
         BEQ carrega_umi_atual
-        
+
         CMP R13, #3
         BEQ carrega_temp_cont
-        
+
         CMP R13, #4
         BEQ carrega_umi_cont
 
         B espera
 
-    @funcao que decrementa o numero da tela
+    /* Função que decrementa o numero da tela */
     decrementa:
-        @ se botão ainda estiver pressionado, continua em incrementa
+        /* Se botão ainda estiver pressionado, continua em incrementa */
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b1
         CMP R1, #0 
         BEQ decrementa
-        
+
         CMP R13, #0 
         BEQ espera
-        
+
         SUB R13, R13, #1
 
         limparDisplay
@@ -206,21 +207,21 @@ _start:
 
         CMP R13, #1 
         BEQ carrega_temp_atual
-        
+
         CMP R13, #2 
         BEQ carrega_umi_atual
-        
+
         CMP R13, #3
         BEQ carrega_temp_cont
-        
+
         CMP R13, #4
         BEQ carrega_umi_cont
 
         B espera
-    
-    @funcao que incrementa o numero do sensor
+
+    /* Função que incrementa o numero do sensor */
     incrementa_sensor:
-        @ se botão ainda estiver pressionado, continua em incrementa
+        /* Se botão ainda estiver pressionado, continua em incrementa_sensor */
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b3
@@ -233,10 +234,10 @@ _start:
         ADD R12, R12, #1
 
         B escrever_sensor
-        
-    @funcao que decrementa o numero do sensor
+
+    /* Função que decrementa o numero do sensor */
     decrementa_sensor:
-        @ se botão ainda estiver pressionado, continua em decrementa
+        /* Se botão ainda estiver pressionado, continua em decrementa_sensor */
         nanoSleep timeZero time500ms
 
         GPIOPinEstado b1
@@ -250,7 +251,7 @@ _start:
 
         B escrever_sensor
 
-    @funcao para escrever na primeira linha do display
+    /* Função para escrever na primeira linha do display */
     exibicao_lcd:
         LDR R11, [R12, R10]
         EscreverCharLCD R11
@@ -320,11 +321,11 @@ _start:
     inexistente_requisicao: .ascii "Req. inexistente"
     funcionando_sensor: .ascii "Sen. funcionando"
 
-    uartaddr: .word 0x01C28 @endereço base da uart0
+    uartaddr: .word 0x01C28 @ endereço base da uart0
     fileName: .asciz "/dev/mem" @ caminho do arquivo que representa a memoria RAM
     gpioaddr: .word 0x1C20 @ endereco base GPIO / 4096
     pagelen: .word 0x1000 @ tamanho da pagina
-    
+
     time1s: .word 1  @ 1s
 
     time1ms: .word 1000000 @ 1ms
@@ -337,100 +338,92 @@ _start:
     time170ms: .word 170000000 @ 170ms
 
     timeZero: .word 0 @ zero
-   
+
     time1d55ms: .word 1500000 @ 1.5ms
 
     time5ms: .word 5000000 @ 5 ms
 
     time150us: .word 150000 @ 150us
-    
-    /*
-    ======================================================
-       Todas as labels com o nome de um pino da
-        Orange PI PC Plus contem 4 ~words~
 
-        Word 1: offset do registrador de funcao do pino
-        Word 2: offset do pino no registrador de funcao (LSB)
-        Word 3: offset do pino no registrador de dados
-        Word 3: offset do registrador de dados do pino
-    ======================================================
-    */
+    /* Labels com o nome de um pino da Orange PI PC Plus contêm 4 palavras */
+    /* Word 1: offset do registrador de função do pino */
+    /* Word 2: offset do pino no registrador de função (LSB) */
+    /* Word 3: offset do pino no registrador de dados */
+    /* Word 4: offset do registrador de dados do pino */
 
-    @ LED Vermelho
+    /* LED Vermelho */
     PA9:
         .word 0x4
         .word 0x4
         .word 0x9
         .word 0x10
-    
 
-    @ LED Azul
+    /* LED Azul */
     PA8:
         .word 0x4
         .word 0x0
         .word 0x8
         .word 0x10
         
-    @PG7 - DB7
+    /* PG7 - DB7 */
     d7:
         .word 0xD8
         .word 0x1C
         .word 0x7
         .word 0xE8
 
-    @PG6 - DB6
+    /* PG6 - DB6 */
     d6:
         .word 0xD8
         .word 0x18
         .word 0x6
         .word 0xE8
 
-    @PG9 - DB5
+    /* PG9 - DB5 */
     d5:
         .word 0xDC
         .word 0x4
         .word 0x9
         .word 0xE8
 
-    @PG8 - DB4
+    /* PG8 - DB4 */
     d4:
         .word 0xDC
         .word 0x0
         .word 0x8
         .word 0xE8
-    
-    @PA18 - Enable
+
+    /* PA18 - Enable */
     E:
         .word 0x8
         .word 0x8
         .word 0x12
         .word 0x10
 
-    @PA2 - RS
+    /* PA2 - RS */
     RS:
         .word 0x0
         .word 0x8
         .word 0x2
         .word 0x10
 
-    @RW
-    @GROUND
+    /* RW - GROUND */
 
-    @ botão alongado
+    /* Botão alongado */
     b1:
         .word 0x0
         .word 0x1C
         .word 0x7
         .word 0x10
 
-    @ botão do meio
+    /* Botão do meio */
     b2:
         .word 0x4
         .word 0x8
         .word 0xA
         .word 0x10
 
-    @ botão da esquerda
+    /* Botão da esquerda */
     b3:
         .word 0x8
         .word 0x10
@@ -448,5 +441,3 @@ _start:
         .word 0x14
         .word 0xd
         .word 0x10
-
-

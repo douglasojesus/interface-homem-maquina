@@ -9,5 +9,5 @@ teste:
 	sudo ./main_test
  
 clean:
-	rm -f main.o main main_uart main_test.o main_test ideia_continuo ideia_continuo.o
+	rm -f main.o main main_uart main_test.o main_test ideia_continuo ideia_continuo.o main_test.s main_com_encerramento_cont.s main_test.s ideia_continuo.s
 	

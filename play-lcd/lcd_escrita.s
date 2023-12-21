@@ -1,7 +1,5 @@
 /*
-======================================================
- Escreve um numero no display LCD
-======================================================
+   Escreve um número no display LCD
 */
 .macro EscreverLCD valor
 
@@ -44,15 +42,11 @@
 .endm
 
 
-
-
 /*
-======================================================
- Escreve um caractere no display LCD
+   Escreve um caractere no display LCD
 
- O Hexadecimal, de acordo com a table do LCD
- deve vir do seguinte formato |0x upper lower|
-======================================================
+   O hexadecimal, de acordo com a tabela do LCD,
+   deve vir no seguinte formato |0x upper lower|
 */
 .macro EscreverCharLCD hex
     MOV R9, \hex
@@ -61,7 +55,6 @@
     MOV R2, #7
     BL getBitEstado
     LDR R0, =d7 
-    MOV R6, #0x0f 
 
     LDR R7, [R0, #8]
     BL GPIOPinTurn

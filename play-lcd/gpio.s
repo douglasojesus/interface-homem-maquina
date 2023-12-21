@@ -1,12 +1,8 @@
 /*
-======================================================
- Faz o mapeamento dos GPIO na memória
-
- | Realiza chamadas a open e mmap2
- para o mapeamento dos GPIO |
-======================================================
+   Faz o mapeamento dos GPIO na memória
+   Realiza chamadas a open e mmap2 para o mapeamento dos GPIO
 */
-.macro MapeamentoMemoria
+.macro mapeamentoMemoria
     @sys_open
     LDR R0, =fileName @ R0 = nome do arquivo
     MOV R1, #2 @ O_RDWR (permissao de leitura e escrita pra arquivo)
@@ -28,14 +24,10 @@
     ADD R8, #0x800 @ endereco base
 .endm
 
-
 /*
-======================================================
- Altera o modo de ~pin~
- para entrada
-======================================================
+   Altera o modo de ~pin~ para entrada
 */
-.macro GPIOPinEntrada pin
+.macro gpioPinEntrada pin
     LDR R0, =\pin @ carrega o endereco de memoria de ~pin~
     LDR R1, [R0, #0] @ offset do registrador de funcao do pino
     LDR R2, [R0, #4] @ offset do pino no registrador de funcao (LSB)
@@ -46,14 +38,10 @@
     STR R5, [R8, R1] @ armazena o novo valor do registrador de funcao na memoria
 .endm
 
-
 /*
-======================================================
- Altera o modo de ~pin~
- para saida
-======================================================
+   Altera o modo de ~pin~ para saida
 */
-.macro GPIOPinSaida pin
+.macro gpioPinSaida pin
     LDR R0, =\pin @ carrega o endereco de memoria de ~pin~
     LDR R1, [R0, #0] @ offset do registrador de funcao do pino
     LDR R2, [R0, #4] @ offset do pino no registrador de funcao (LSB)
@@ -67,14 +55,10 @@
     STR R5, [R8, R1] @ armazena o novo valor do registrador de funcao na memoria
 .endm
 
-
 /*
-======================================================
- Altera o estado de ~pin~
- para alto (1)
-======================================================
+   Altera o estado de ~pin~ para alto (1)
 */
-.macro GPIOPinAlto pin
+.macro gpioPinAlto pin
     LDR R0, =\pin @ carrega o endereco de ~pin~
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -86,12 +70,9 @@
 .endm 
 
 /*
-======================================================
- Altera o estado de ~pin~
- para baixo (0)
-======================================================
+   Altera o estado de ~pin~ para baixo (0)
 */
-.macro GPIOPinBaixo pin
+.macro gpioPinBaixo pin
     LDR R0, =\pin
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
@@ -102,18 +83,12 @@
     STR R3, [R8, R1] @ armazena o novo valor do registrador de dados na memoria
 .endm
 
-
 /*
-======================================================
- Altera o estado de ~pin~
- para alto (1)
-
- Parametros:
- R0: endereco da label
- que representa o pino
-======================================================
+   Altera o estado de ~pin~ para alto (1)
+   Parametros:
+   R0: endereco da label
+   que representa o pino
 */
-
 FGPIOPinHigh:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
@@ -124,34 +99,25 @@ FGPIOPinHigh:
     STR R5, [R8, R1] @ armazena o novo conteudo do registrador de dados na memoria
     BX LR
 
-
 /*
-======================================================
- Altera o estado de ~pin~
- para baixo (0)
-
- Parametros:
- R0: endereco da label
- que representa o pino
-======================================================
+   Altera o estado de ~pin~ para baixo (0)
+   Parametros:
+   R0: endereco da label
+   que representa o pino
 */
 FGPIOPinLow:
     LDR R2, [R0, #8] @ offset do pino no registrador de dados
     LDR R1, [R0, #12] @ offset do registrador de dados do pino
     LDR R5, [R8, R1] @ conteudo do registrador de dados
     MOV R4, #1 @ move 1 para R4
-    LSL R4, R2 @ desloca para R4 o que tem em R4 (1) R2 vezes
+    LSL R4, R2 @ desloca para R4 o que tem em R4 (1)
     BIC R5, R4 @ limpa o bit na posicao anteriormente deslocada
-    STR R5, [R8, R1] @ armazena o novo conteudo do registrador de dados na memoria
+    STR R5, [R8, R1] @ armazenando o novo conteudo do registrador de dados na memoria
     BX LR
 
-
 /*
-======================================================
- "Pega" o estado de ~pin~
-
- Devolve em R1 o estado do pino
-======================================================
+   "Pega" o estado de ~pin~
+   Devolve em R1 o estado do pino
 */
 .macro GPIOPinEstado pin
     LDR R0, =\pin
@@ -161,21 +127,17 @@ FGPIOPinLow:
     MOV R4, #1 @ move 1 para R4
     LSL R4, R2 @ desloca o que tem em R4 para R4, R2 vezes
     AND R3, R4 @ leitura do bit
-    LSR R1, R3, R2 @ deslocamento do bit para o LSB
+    LSR R1, R3, R2 @ desloca o valor lido tornando-o LSB
 .endm
 
-
 /*
-======================================================
- Altera o estado de um pino
- ou para BAIXO (0) ou para ALTO (1) com
- base em um valor passado (0 | 1)
-
- Parametros:
- R0: endereco da label que representa o pino
- R1: valor a ser setado no pino
- R7: offset do pino no registrador de dados
-======================================================
+   Altera o estado de um pino
+   ou para BAIXO (0) ou para ALTO (1) com
+   base em um valor passado (0 | 1)
+   Parametros:
+   R0: endereco da label que representa o pino
+   R1: valor a ser setado no pino
+   R7: offset do pino no registrador de dados
 */
 GPIOPinTurn:
     LDR R2, [R0, #12] @ offset do registrador de dados do pino
@@ -195,18 +157,13 @@ pinLow:
     STR R3, [R8, R2] @ armazenando o novo valor do registrador de dados na memoria
     BX LR
 
-
 /*
-======================================================
- "Pega" o estado de um bit de um
- imediato ou não-imediato
-
- Parametros:
- R2: posicao do bit a ser lido
- R9: valor de onde o bit em ~pos~ sera lido
-
- Devolve em R1 o estado do bit correspondente
-======================================================
+   "Pega" o estado de um bit de um
+   imediato ou não-imediato
+   Parametros:
+   R2: posicao do bit a ser lido
+   R9: valor de onde o bit em ~pos~ sera lido
+   Devolve em R1 o estado do bit correspondente
 */
 getBitEstado:
     MOV R5, #1 @ mascara de bit
