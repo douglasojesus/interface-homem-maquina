@@ -374,7 +374,7 @@ Caso o ativar_uart for selecionado, o dado será exibido na linha 2 na terceira 
    - Encerra a execução do programa.
 
 <h1 id="descricao-e-analise-dos-testes" align="center">Descrição e Análise dos Testes e Simulações, Resultados e Discussões</h1>
-<p align="justify">Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. Nesse modo, o  de e após encerrar a leitura e solicitar outra requisição, o sistema exibe o  sensoriamento contínuo anterior.</p>
+<p align="justify">Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. O mesmo é acionado e exibe o primeiro resultado. Depois, a UART não é resetada, o que impede do valor que está sendo recebido pela ESP de ser atualizado na FIFO. O sensoriamento contínuo também não é finalizado. Portanto, qualquer outra requisição que for feita depois da solicitação do contínuo não irá funcionar corretamente, pois o valor que ainda vai estar sendo recebido é o do sensoriamento contínuo.</p>
 
 <p align="justify">No que diz respeito à operação do programa e à interação direta com o usuário. Após enviar o código para a placa, a interação do usuário ocorre inteiramente através de três botões presentes na placa e as opções aparecem individualmente na tela LCD. Os botões laterais permitem ao usuário percorrer entre as opções de uma mesma camada. O botão central permite a seleção da opção que o usuário deseja.</p>
 
@@ -446,11 +446,10 @@ Resultado: Os testes de transmissão contínua de temperatura não forneceram os
 
 Em seguida testou-se a leitura para umidade contínua, selecionando a opção de "Umidade Contínua" e o sensor 15, novamente.
 
+Resultado: Assim como no caso de monitoramento contínuo de temperatura, os testes de transmissão contínua de umidade não alcançaram os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua, visto que não foi possível efetuar o cancelamento do sensoriamento contínuo. Quando testada individualmente, apresentou a mesma característica da temperatura contínua.
 
-Resultado: Assim como no caso de monitoramento contínuo de temperatura, os testes de transmissão contínua de umidade não alcançaram os resultados esperados. Pois,
 
-
-A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações.
+A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações. De acordo com as tentativas feitas pela equipe, quando associava o sensoriamento contínuo com a exibição no display, erros de segmentação de memória eram apresentados. Isso nos permite avaliar que os possíveis problemas estão na alocação de memória inválida e/ou no uso incorreto de registradores.
 
 A dificuldade em atender completamente aos requisitos de transmissão contínua destaca a complexidade da programação em Assembly para a IHM, particularmente quando se trata de manter uma exibição contínua de dados dinâmicos.
 
