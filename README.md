@@ -456,6 +456,11 @@ A falha na transmissão contínua dos dados de temperatura e umidade revela uma 
 
 A dificuldade em atender completamente aos requisitos de transmissão contínua destaca a complexidade da programação em Assembly para a IHM, particularmente quando se trata de manter uma exibição contínua de dados dinâmicos.
 
+Testes feitos em vídeo disponível em:
+
+[![Assista ao vídeo](https://img.youtube.com/vi/PTe_jFINdzw/0.jpg)](https://youtu.be/PTe_jFINdzw?si=wj42PmV2BfBhX9Pb)
+
+
 <h1 id="conclusao" align="center">Conclusão</h1>
 
 Durante a evolução deste projeto, alcançamos com êxito a maioria dos objetivos estabelecidos, culminando na implementação bem-sucedida de uma Interface Homem-Máquina (IHM) em Assembly para o display LCD, substituindo a versão anterior feita em linguagem C. Este resultado não apenas representa a adaptação da lógica de um programa anteriormente desenvolvido em uma linguagem de alto nível para uma linguagem de baixo nível, mas também reflete a aplicação eficaz dos conceitos de arquitetura de computadores transmitidos ao longo do curso pelos docentes.
