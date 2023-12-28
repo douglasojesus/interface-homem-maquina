@@ -187,9 +187,49 @@ Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimen
 
 <h2>MAPEAMENTO GPIO</h2>
 
-<p align="justify">Antes de explicar as macros e funções da GPIO, faz-se necessário entender como ocorre o mapeamento de memória dos pinos para os dispositivos utilizados no sistema. No contexto da Orange Pi, o controle dos pinos GPIO (General Purpose Input/Output) é feito por meio de registradores específicos que ficam localizados em uma parte da memória do próprio dispositivo. Segundo o datasheet da Allwinner referente ao processador quad-core H3, o endereço base desse “banco” de registradores é o  .Uma vez que se tem acesso ao endereço base, pode-se utilizar deslocamentos (off-sets) para acessar e manipular os registradores desejados.
+<p align="justify">Antes de explicar as macros e funções da GPIO, faz-se necessário entender como ocorre o mapeamento de memória e a configuração dos pinos para os dispositivos utilizados no sistema. No contexto da Orange Pi, o controle dos pinos GPIO (General Purpose Input/Output) é feito por meio de registradores específicos que ficam localizados em uma parte da memória do próprio dispositivo. Ao verificar o datasheet da Allwinner referente ao processador quad-core H3, adquirimos o endereço base desse “banco” de registradores.Uma vez que se tem acesso ao endereço base, pode-se utilizar deslocamentos (off-sets) para acessar e manipular os registradores desejados.
 
-Os registradores são compostos, em geral,  de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.</p>
+Os registradores são compostos, em geral, de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.
+
+
+
+
+
+Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.
+
+
+
+
+
+
+Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcionalidade de cada macro e função utilizadas no projeto.
+ 
+
+- MapeamentoMemoria:
+  Realiza a abertura do arquivo correspondente aos GPIOs usando a chamada de sistema sys_open.
+Mapeia a memória física dos GPIOs no espaço de endereçamento virtual do processo usando a chamada de sistema sys_mmap2.
+
+
+- GPIOPinEntrada:
+  Configura um pino GPIO para modo de entrada.
+Isso é feito manipulando os registradores associados ao pino.
+
+- GPIOPinSaida:
+  Configura um pino GPIO para modo de saída.
+Semelhante ao GPIOPinEntrada, manipula os registradores associados ao pino.
+
+- GPIOPinAlto:
+  Define o estado de um pino GPIO como alto (1).
+
+- GPIOPinBaixo:
+  Define o estado de um pino GPIO como baixo (0).
+
+- getBitEstado:
+  Lê o estado atual de um pino GPIO (alto ou baixo) e armazena o resultado em um registrador.
+
+- GPIOPinTurn:
+  Altera o estado de um pino GPIO para alto (1) ou baixo (0) com base em um valor passado como parâmetro, através de outras labels denominadas de pinHigh (para alto) e pinLow (para baixo).
+</p>
 
 
 
