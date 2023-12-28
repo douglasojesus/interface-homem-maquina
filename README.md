@@ -129,9 +129,13 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
 
 <p align="justify">Essas funcionalidades serão exibidas, individualmente, em formato de texto na primeira linha do LCD. Dessa forma, o usuário utiliza os botões laterais para avançar ou retroceder entre as cinco opções, sendo a tela inicial a “situação atual do sensor”. O botão do meio é usado para selecionar uma das funcionalidades apresentadas, avançando para a segunda camada.</p>
 
+![Camada 1](apresentacao/6.png)
+
 <h4>Camada 2 - Escolha do Sensor</h4>   
 
 <p align="justify">Após selecionar uma funcionalidade na primeira camada, o usuário é direcionado para a próxima camada, onde pode escolher um dos 32 sensores disponíveis para aplicar a funcionalidade selecionada anteriormente. O número do sensor aparecerá na segunda linha do display e, assim como na camada anterior,  os botões da esquerda e da direita serão utilizados para percorrer a lista de sensores. Ao apertar o botão do meio, o usuário escolhe o sensor e avança para a terceira camada.</p>
+
+![Camada 2](apresentacao/7.png)
 
 <h4>Camada 3 - Exibição do Resultado</h4>
 
@@ -147,6 +151,8 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
   
 - Valor Y da umidade (atual ou contínua) em %.
 
+![Camada 3](apresentacao/8.png)
+![Camada 3.2](apresentacao/9.png)
 
 <h2>FLUXO DE EXECUÇÃO DO SISTEMA</h2>
 
@@ -311,8 +317,6 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
    - incrementa: incrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
    - decrementa: decrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
 
-![Camada 1](apresentacao/6.png)
-
 - Seleção do sensor (escolher_sensor):
 
 <p align="justify">Depois de selecionado a opção de requisição através de selecionar_opcao e espera de liberação do botão b2, a camada de seleção do sensor é ativada. Nessa branch também é utilizado os botões (b1, b2, b3) para fazer variação do sensor (1 a 32) através do contador (indicado por R12) e seleção do sensor escolhido, ativando a uart.</p>
@@ -321,18 +325,10 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
    - incrementa_sensor: incrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
    - decrementa_sensor: decrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
 
-![Camada 2](apresentacao/7.png)
-
-Caso o ativar_uart for selecionado, o dado será exibido na linha 2 na terceira camada.
-
-![Camada 3](apresentacao/8.png)
-
 - Intermediário (intermediario):
 
    - Aguarda a liberação do botão b2.
    - Retorna para a espera se b1 ou b3 for pressionado.
-
-![Camada 3.2](apresentacao/9.png)
 
 - Incremento (incrementa):
 
