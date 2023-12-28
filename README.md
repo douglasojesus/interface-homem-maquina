@@ -243,10 +243,10 @@ Falando mais especificamente sobre a implementação em Assembly:
 
 - configuracaoccu:
   A macro feita para configurar a CCU, executa as seguintes tarefas em sequência, são elas:
-Habilita a saída do PLL_ENABLE por meio do registro PLL_PERIPH0_CTRL_REG;
-Ativa um clock específico do APB2_CLK_SRC_SEL através do registro APB2_CLK_SRC_SEL;
-Habilita o clock para a UART3 usando o UART3_GATING por meio do registro BUS_CLK_GATING_REG3;
-Por fim, ativa e desativa o sinal de reset UART3_RST através do registro BUS_SOFT_RST_REG4.
+	- Habilita a saída do PLL_ENABLE por meio do registro PLL_PERIPH0_CTRL_REG;
+	- Ativa um clock específico do APB2_CLK_SRC_SEL através do registro APB2_CLK_SRC_SEL;
+	- Habilita o clock para a UART3 usando o UART3_GATING por meio do registro BUS_CLK_GATING_REG3;
+	- Por fim, ativa e desativa o sinal de reset UART3_RST através do registro BUS_SOFT_RST_REG4.
 
 - resetarUart:
   Macro criada para resetar a UART3, que, por padrão, limpa os FIFOs. Essa implementação utiliza o registro BUS_SOFT_RST_REG4. Através de um deslocamento adequado, é possível alterar o bit UART3_RST para o nível lógico baixo e, posteriormente, retorná-lo ao alto. Isso conclui a função de reset da UART3.
