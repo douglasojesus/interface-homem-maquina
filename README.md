@@ -139,7 +139,7 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
 
 <h4>Camada 3 - Exibição do Resultado</h4>
 
-<p align="justify">Na terceira camada, após escolher um sensor, o resultado da funcionalidade selecionada é exibido na linha inferior do display. Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser:</p> 
+<p align="justify">Na terceira camada, após escolher um sensor, o resultado da funcionalidade de temperatura e umidade selecionada é exibido na linha inferior do display, enquanto os resultados textuais (sobre o funcionamento ou não do sensor e os erros apresentados) são apresentados na linha superior do display. Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser:</p> 
 
 - Sensor funcionando;
   
@@ -347,7 +347,7 @@ Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do d
 
 <p align="justify">Depois de selecionado a opção de requisição através de selecionar_opcao e espera de liberação do botão b2, a camada de seleção do sensor é ativada. Nessa branch também é utilizado os botões (b1, b2, b3) para fazer variação do sensor (1 a 32) através do contador (indicado por R12) e seleção do sensor escolhido, ativando a uart.</p>
 
-   - ativar_uart: inicializa a comunicação UART, aguarda a reposta e a processa e atualza o display com o resultado.
+   - ativar_uart: inicializa a comunicação UART, aguarda a reposta e a processa e atualiza o display com o resultado.
    - incrementa_sensor: incrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
    - decrementa_sensor: decrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
 
