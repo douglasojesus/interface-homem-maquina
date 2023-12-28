@@ -176,12 +176,7 @@ A comunicação serial UART é um aspecto vital para a interação com o sistema
 O fluxograma abaixo ilustra a organização desse conjunto de procedimentos.
 
 
-
-
-
-
-
-
+![FLUXO DE EXECUÇÃO DO SISTEMA](apresentacao/FluxoDeExecucao.png)
 
 Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimento do projeto.
 
@@ -191,20 +186,14 @@ Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimen
 
 Os registradores são compostos, em geral, de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.
 
-
-
-
+![MAPEAMENTO GPIO](apresentacao/ExemploRegistradorModoDeOperacao.png)
 
 Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.
 
-
-
-
-
+![MAPEAMENTO GPIO](apresentacao/ExemploRegistradorEstados.png)
 
 Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcionalidade de cada macro e função utilizadas no projeto.
  
-
 - MapeamentoMemoria:
   Realiza a abertura do arquivo correspondente aos GPIOs usando a chamada de sistema sys_open.
 Mapeia a memória física dos GPIOs no espaço de endereçamento virtual do processo usando a chamada de sistema sys_mmap2.
@@ -233,17 +222,12 @@ Semelhante ao GPIOPinEntrada, manipula os registradores associados ao pino.
 
 
 
-
 <p align="justify">Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.</p>
-
 
 
 
 Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcionalidade de cada macro e função utilizadas no projeto.
  
-
-
-
 
 
 <h2>CCU (unidade de controle de relógio)</h2>
@@ -336,7 +320,9 @@ Após esses 3 passos, o display está pronto para realizar quaisquer instruçõe
 - EscreverLCD: macro que através de outras macros e de uma valor binário atribuído, realiza operações bitwise para obter os 4 bits menos significativos e passar esse dados para o display a fim de escrever um número de acordo com a tabela Ascii.
   
 - EscreverCharLCD: semelhante com a macro de EscreverLCD, só que nela temos que obter e atribuir os valores através de outras macros e com operações bitwise os 4 bits mais significativos e depois os 4 bits menos significativos com base no valor binário atribuído.
-  
+
+![DISPLAY LCD](apresentacao/TabelaComVariacoesDeCaracteresDisplay.png)
+
 Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do datasheet, cujo o link se encontra no tópico de bibliografia.
 
 <h2>MAIN</h2>
