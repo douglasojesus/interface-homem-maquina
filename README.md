@@ -20,7 +20,7 @@ Projeto produzido a ser avaliado pela disciplina de M.I Sistemas Digitais da Uni
   <li><a href="#desenvolvimento"> <b>Desenvolvimento e Descrição em Alto Nível</b> </a> </li>
   <li><a href="#descricao-e-analise-dos-testes"> <b>Descrição e Análise dos Testes e Simulações, Resultados e Discussões</b> </a></li>
   <li><a href="#conclusao"> <b>Conclusão</b> </a></li>
-  <li><a href="#referencias"> <b>Referências</b> </a></li>
+  <li><a href="#bibliografia"> <b>Bibliografia</b> </a></li>
   <li><a href="#script-de-compilacao"> <b>Uso do proejto</b> </a></li>
 </ul>
 
@@ -164,14 +164,14 @@ O primeiro passo consiste em mapear a memória das IOUT da Orange Pi PC PLUS. At
 - Configuração dos pinos (entrada, saída, alto ou baixo): 
 Após o mapeamento da memória das IOUT, é essencial configurar os pinos da Orange Pi para atuarem como entradas ou saídas, dependendo das necessidades do sistema. Isso pode ser alcançado através da manipulação de registradores específicos ou instruções de configuração de pinos presentes no manual da placa.
 
-- Mapeamento e configuração da UART: 
-A comunicação serial UART é um aspecto vital para a interação com o sistema. Isso requer o mapeamento dos registradores de comunicação UART na Orange Pi PC PLUS e a configuração de velocidade de comunicação, formato de dados e outros parâmetros para garantir uma comunicação estável e confiável.
-
 - Inicialização do display LCD: 
 Para habilitar o display LCD,necessita-se de um procedimento de inicialização que envolve a identificação do controlador do display, configuração dos parâmetros de comunicação e inicialização dos registros necessários para o correto funcionamento dos pinos atrelados ao display.
 
 - Exibição do menu do sistema no display por de rotinas no código: 
-Finalmente, a exibição do sistema no display LCD é realizada por meio de rotinas específicas desenvolvidas para controlar e manipular o conteúdo a ser exibido. Isso ocorre através do código, onde o estado em que o sistema se encontra e as ações realizadas por ele, são praticamente pré-definidas.
+A exibição do sistema no display LCD é realizada por meio de rotinas específicas desenvolvidas para controlar e manipular o conteúdo a ser exibido. Isso ocorre através do código, onde o estado em que o sistema se encontra e as ações realizadas por ele, são praticamente pré-definidas.
+
+- Mapeamento e configuração da UART: 
+A comunicação serial UART é um aspecto vital para a interação com o sistema. Isso requer o mapeamento dos registradores de comunicação UART na Orange Pi PC PLUS e a configuração de velocidade de comunicação, formato de dados e outros parâmetros para garantir uma comunicação estável e confiável. Esse mapeamento e configuração da UART são feitos através de subrotinas no código. 
 
 O fluxograma abaixo ilustra a organização desse conjunto de procedimentos.
 
@@ -337,7 +337,7 @@ Após esses 3 passos, o display está pronto para realizar quaisquer instruçõe
   
 - EscreverCharLCD: semelhante com a macro de EscreverLCD, só que nela temos que obter e atribuir os valores através de outras macros e com operações bitwise os 4 bits mais significativos e depois os 4 bits menos significativos com base no valor binário atribuído.
   
-Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do datasheet.
+Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do datasheet, cujo o link se encontra no tópico de bibliografia.
 
 <h2>MAIN</h2>
 
@@ -532,7 +532,11 @@ Testes feitos em vídeo disponível em:
 
 <p align="justify">Por fim, acredita-se que esse projeto evidenciou de forma clara a relevância da linguagem Assembly em contextos que exigem recursos limitados de hardware, como é o caso do SBC Orange Pi. Através da experiência adquirida ao desenvolver a IHM em Assembly, fortalecemos os conhecimentos teóricos sobre arquitetura de computadores e ampliamos nossa habilidade para solucionar desafios práticos relacionados à programação de baixo nível.</p>
 
-<h1 id="referencias" align="center">Referências</h1>
+<h1 id="bibliografia" align="center">Bibliografia</h1>
+
+- Datasheet display LCD: https://www.sparkfun.com/datasheets/LCD/HD44780.pdf, acessado em 12 de 2023;
+  
+- Datasheet Allwinner H3: https://linux-sunxi.org/images/4/4b/Allwinner_H3_Datasheet_V1.2.pdf, acessado em 12 de 2023.
 
 <h1 id="script-de-compilacao" align="center">Uso do projeto</h1> 
 
