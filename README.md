@@ -436,6 +436,7 @@ Verificação da opção de umidade atual;
 Verificação da opção de temperatura contínua;
 Verificação da opção de umidade contínua;
 
+O sensor DHT11 na ESP estava pinado no endereço 0x0F, portanto os testes acima foram realizados em um endereço de sensor não conectado (inexistente) e no endereço 0x0F. Por fim, foi efetuado o teste de desconexão do sensor DHT11 do endereço 0x0F apresentado em [vídeo](https://youtu.be/PTe_jFINdzw?si=wj42PmV2BfBhX9Pb).
 
 
 
