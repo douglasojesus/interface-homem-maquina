@@ -45,9 +45,9 @@ Nesse cenário, o projeto a seguir descreve a criação de uma Interface Homem-M
 
 <h1 id="requisitos" align="center">Objetivos e Requisitos do problema</h1> 
 
-O desenvolvimento deste projeto propõe a criação de uma camada de abstração para o hardware através de uma interface para o usuário utilizando um Single Board Computer (SBC) Orange Pi PC PLUS, linguagem Assembly e um Display LCD HD44780. Este projeto é uma extensão do Problema 01, onde implementamos a comunicação serial com o sensor DHT11 usando UART e interagimos com o computador através do terminal de comando. 
+<p align="justify">O desenvolvimento deste projeto propõe a criação de uma camada de abstração para o hardware através de uma interface para o usuário utilizando um Single Board Computer (SBC) Orange Pi PC PLUS, linguagem Assembly e um Display LCD HD44780. Este projeto é uma extensão do Problema 01, onde implementamos a comunicação serial com o sensor DHT11 usando UART e interagimos com o computador através do terminal de comando. 
 
-Portanto, o principal propósito desse trabalho é capacitar o discente a programar em Assembly para o processador ARM, compreender e aplicar o conjunto de instruções específicas da arquitetura, manipular e mapear a memória do dispositivo, além de avaliar o desempenho do código resultante por meio de medidas que refletem o comportamento da execução no sistema. Para isso, necessita-se cumprir dois requisitos básicos:
+Portanto, o principal propósito desse trabalho é capacitar o discente a programar em Assembly para o processador ARM, compreender e aplicar o conjunto de instruções específicas da arquitetura, manipular e mapear a memória do dispositivo, além de avaliar o desempenho do código resultante por meio de medidas que refletem o comportamento da execução no sistema. Para isso, necessita-se cumprir dois requisitos básicos:</p>
 
 - 📝O código deve ser escrito em Assembly;
 - 📝 O sistema só poderá utilizar os componentes disponíveis no protótipo;
@@ -64,7 +64,7 @@ Portanto, o principal propósito desse trabalho é capacitar o discente a progra
 
 <h2>SBC Orange Pi PC PLUS</h2>
 
-A Orange Pi PC Plus é uma Single-Board Computer (SBC), projetada para oferecer funcionalidade semelhante a um computador em um formato compacto e de baixo custo. Ela é frequentemente utilizada em projetos de prototipagem, automação residencial, servidores de mídia, sistemas de vigilância, entre outros, devido à sua versatilidade, tamanho compacto e custo acessível, além de suporte a diferentes sistemas operacionais e recursos de conectividade. Dentre suas principais especificações, têm-se:
+<p align="justify">A Orange Pi PC Plus é uma Single-Board Computer (SBC), projetada para oferecer funcionalidade semelhante a um computador em um formato compacto e de baixo custo. Ela é frequentemente utilizada em projetos de prototipagem, automação residencial, servidores de mídia, sistemas de vigilância, entre outros, devido à sua versatilidade, tamanho compacto e custo acessível, além de suporte a diferentes sistemas operacionais e recursos de conectividade. Dentre suas principais especificações, têm-se:</p>
 
 <h3>Hardware acoplado</h3>
 
@@ -92,18 +92,18 @@ A Orange Pi PC Plus é uma Single-Board Computer (SBC), projetada para oferecer 
 
 <h2>Assembly Linguagem</h2>
 
-A linguagem Assembly, ou linguagem de montagem, é uma linguagem de baixo nível que se encontra muito próxima da linguagem de máquina, representando instruções diretamente compreensíveis pelo processador. Ela é específica para a arquitetura do processador em questão e consiste em um conjunto de códigos mnemônicos que representam operações básicas executadas pela CPU. A linguagem Assembly permite um controle direto sobre o hardware do sistema. Cada instrução corresponde a uma operação específica no nível do processador, como movimentação de dados, operações aritméticas, controle de fluxo, entre outras.
+<p align="justify">A linguagem Assembly, ou linguagem de montagem, é uma linguagem de baixo nível que se encontra muito próxima da linguagem de máquina, representando instruções diretamente compreensíveis pelo processador. Ela é específica para a arquitetura do processador em questão e consiste em um conjunto de códigos mnemônicos que representam operações básicas executadas pela CPU. A linguagem Assembly permite um controle direto sobre o hardware do sistema. Cada instrução corresponde a uma operação específica no nível do processador, como movimentação de dados, operações aritméticas, controle de fluxo, entre outras.
 
-A sua aplicação é principalmente produtiva em situações onde é necessário um controle preciso sobre o hardware para otimização de código, como em sistemas embarcados, drivers de dispositivos e algumas partes críticas de softwares que exigem desempenho máximo. Em sistemas embarcados, onde a eficiência de recursos é crucial, a linguagem Assembly é empregada para programar microcontroladores e SBCs (Single-Board Computers) devido ao maior controle e gerenciamento de recursos sobre o hardware.
+A sua aplicação é principalmente produtiva em situações onde é necessário um controle preciso sobre o hardware para otimização de código, como em sistemas embarcados, drivers de dispositivos e algumas partes críticas de softwares que exigem desempenho máximo. Em sistemas embarcados, onde a eficiência de recursos é crucial, a linguagem Assembly é empregada para programar microcontroladores e SBCs (Single-Board Computers) devido ao maior controle e gerenciamento de recursos sobre o hardware.</p>
 
 
 <h2>Tela LCD HD44780</h2>
 
-O display LCD HD44780 é um display de caracteres amplamente utilizado em projetos eletrônicos e sistemas embarcados devido à sua facilidade de uso e versatilidade. Ele oferece uma interface capaz de exibir texto alfanumérico, caracteres especiais e símbolos predefinidos. Vale ressaltar que cada caractere é formado por uma matriz de pixels. 
+<p align="justify">O display LCD HD44780 é um display de caracteres amplamente utilizado em projetos eletrônicos e sistemas embarcados devido à sua facilidade de uso e versatilidade. Ele oferece uma interface capaz de exibir texto alfanumérico, caracteres especiais e símbolos predefinidos. Vale ressaltar que cada caractere é formado por uma matriz de pixels. 
 
 O display utiliza tecnologia de cristal líquido (LCD - Liquid Crystal Display) para exibir informações e consiste em uma matriz de caracteres organizados em linhas e colunas, nesse caso 16x2( duas linhas e 16 colunas).
 
-O HD44780 é um controlador de display integrado que simplifica a interface entre o display e o microcontrolador, facilitando a comunicação. Ele normalmente opera com uma interface paralela, o que significa que requer várias linhas de dados para transmitir informações. Essas linhas são usadas para enviar comandos e dados ao display, como caracteres para serem exibidos, instruções de controle, entre outros.
+O HD44780 é um controlador de display integrado que simplifica a interface entre o display e o microcontrolador, facilitando a comunicação. Ele normalmente opera com uma interface paralela, o que significa que requer várias linhas de dados para transmitir informações. Essas linhas são usadas para enviar comandos e dados ao display, como caracteres para serem exibidos, instruções de controle, entre outros.</p>
 
 <h1 id="desenvolvimento" align="center">Desenvolvimento e Descrição em Alto Nível</h1>
 
@@ -269,6 +269,66 @@ Para a implementação em Assembly, precisamos fazer algumas configurações par
 
 <h2>MAIN</h2>
 
+O arquivo "main.s" é responsável por conectar todos os módulos dos sistemas e apresentar a interface para o usuário. 
+
+fluxo de execução do código. Você pode usar essa descrição para criar um fluxograma manualmente ou usando ferramentas específicas.
+
+Inicialização:
+
+Realiza a configuração inicial de pinos GPIO, LCD, UART e outros componentes.
+Configuração de registradores e endereços de memória.
+Loop Principal (_start):
+
+Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
+Espera (espera):
+
+Aguarda o usuário pressionar um botão (b1, b2, b3).
+Selecione opção se o botão b2 for pressionado.
+Seleção de Opção (selecionar_opcao):
+
+Aguarda a liberação do botão b2.
+Inicializa a comunicação UART.
+Aguarda a resposta da UART e processa a resposta.
+Atualiza o display LCD com o resultado.
+Intermediário (intermediario):
+
+Aguarda a liberação de botões (b1, b2, b3).
+Retorna para o início do loop principal (_start) se b1 for pressionado.
+Retorna para a espera se b3 for pressionado.
+Incremento (incrementa):
+
+Aguarda a liberação do botão b3.
+Incrementa o índice R13.
+Limpa o display e executa a função associada ao índice.
+Decremento (decrementa):
+
+Aguarda a liberação do botão b1.
+Decrementa o índice R13.
+Limpa o display e executa a função associada ao índice.
+Incremento do Sensor (incrementa_sensor):
+
+Aguarda a liberação do botão b3.
+Incrementa o índice R12 (sensor).
+Escreve o sensor no display e volta para a escolha do sensor.
+Decremento do Sensor (decrementa_sensor):
+
+Aguarda a liberação do botão b1.
+Decrementa o índice R12 (sensor).
+Escreve o sensor no display e volta para a escolha do sensor.
+Escrever Sensor (escrever_sensor):
+
+Captura os dígitos do sensor.
+Escreve o sensor no display e retorna à escolha do sensor.
+Tratamento de Exceções (sensor_com_problema, sensor_inexistente, requisicao_inexistente, sensor_funcionando):
+
+Limpa o display.
+Carrega a mensagem correspondente.
+Exibe a mensagem no display.
+Saída (EXIT):
+
+Encerra a execução do programa.
+Lembre-se de que o código contém várias chamadas de funções (catchDigits, moveCursorSegundaLinha, limparDisplay, etc.) que podem ter impacto no fluxo de execução. Certifique-se de entender essas sub-rotinas para obter um fluxograma mais preciso.
+
 <h1 id="descricao-e-analise-dos-testes" align="center">Descrição e Análise dos Testes e Simulações, Resultados e Discussões</h1>
 Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. Nesse modo, o  de e após encerrar a leitura e solicitar outra requisição, o sistema exibe o  sensoriamento contínuo anterior.
 
@@ -356,13 +416,17 @@ A dificuldade em atender completamente aos requisitos de transmissão contínua 
 
 Durante a evolução deste projeto, alcançamos com êxito a maioria dos objetivos estabelecidos, culminando na implementação bem-sucedida de uma Interface Homem-Máquina (IHM) em Assembly para o display LCD, substituindo a versão anterior feita em linguagem C. Este resultado não apenas representa a adaptação da lógica de um programa anteriormente desenvolvido em uma linguagem de alto nível para uma linguagem de baixo nível, mas também reflete a aplicação eficaz dos conceitos de arquitetura de computadores transmitidos ao longo do curso pelos docentes.
 
-Ademais, o domínio da programação em Assembly para o processador ARM, aliado à análise minuciosa da arquitetura e seus recursos, assim como a compreensão do mapeamento de memória e do funcionamento do display, permitiu não apenas a transição da lógica do software, mas também uma avaliação criteriosa do desempenho do código gerado. Essa capacidade de avaliar o comportamento da execução no sistema resultou não apenas em uma solução funcional, mas também na otimização do desempenho para atender aos requisitos de eficiência do sistema.
+Ademais, o domínio da programação em Assembly para a Orange Pi All Winner, aliado à análise minuciosa da arquitetura e seus recursos, assim como a compreensão do mapeamento de memória e do funcionamento do display, permitiu não apenas a transição da lógica do software, mas também uma avaliação criteriosa do desempenho do código gerado. A experiência de codificar em Assembly proporcionou um entendimento mais profundo do funcionamento interno dos dispositivos, capacitando-nos a moldar o comportamento do sistema de acordo com nossos requisitos específicos.
 
-Enfim, acredita-se que esse projeto evidenciou de forma clara a relevância da linguagem Assembly em contextos que exigem recursos limitados de hardware, como é o caso do SBC Orange Pi. Através da experiência adquirida ao desenvolver a IHM em Assembly, fortalecemos os conhecimentos teóricos sobre arquitetura de computadores e ampliamos nossa habilidade para solucionar desafios práticos relacionados à programação de baixo nível.
+Com a implementação da comunicação UART e a utilização de uma ESP com DHT11, conseguimos criar uma interação eficiente entre diferentes dispositivos, promovendo a coleta e transmissão de dados entre eles. Este é um testemunho do poder e flexibilidade da linguagem Assembly quando aplicada à manipulação direta do hardware.
+
+Ao configurar o LCD Hitachi e orquestrar todo o processo de execução, desde a coleta de dados do sensor até a exibição da situação atual, temperatura e umidade, alcançamos um controle preciso sobre o sistema. No entanto, é importante reconhecer que alguns desafios persistem, como a implementação contínua da leitura de temperatura e umidade.
+
+Por fim, acredita-se que esse projeto evidenciou de forma clara a relevância da linguagem Assembly em contextos que exigem recursos limitados de hardware, como é o caso do SBC Orange Pi. Através da experiência adquirida ao desenvolver a IHM em Assembly, fortalecemos os conhecimentos teóricos sobre arquitetura de computadores e ampliamos nossa habilidade para solucionar desafios práticos relacionados à programação de baixo nível.
 
 <h1 id="referencias" align="center">Referências</h1>
 
-<h1 id="script-de-compilacao" align="center">Uso do proejto</h1> 
+<h1 id="script-de-compilacao" align="center">Uso do projeto</h1> 
 
 1. **Compilação:**
    - Certifique-se de ter um ambiente de desenvolvimento Assembly configurado para a Orange Pi.
