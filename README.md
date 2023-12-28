@@ -232,7 +232,7 @@ Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcion
 
 <h2>CCU (unidade de controle de relógio)</h2>
 
-<p align="justify">A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial, sendo que ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.</p>
+<p align="justify">A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial. Ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.</p>
 
 <p align="justify">Esses sistemas embarcados são equipados com hardware especializado, como a CCU, que facilita a administração dos sinais de relógio enviados a outros dispositivos. A configuração da taxa de transmissão pode ser realizada através da CPU, permitindo a modificação de dados em registradores específicos por meio do barramento do sistema, seguindo princípios semelhantes aos aplicados em outros dispositivos como a Raspberry Pi.</p>
 
@@ -439,12 +439,7 @@ Verificação da opção de umidade contínua;
 O sensor DHT11 na ESP estava pinado no endereço 0x0F, portanto os testes acima foram realizados em um endereço de sensor não conectado (inexistente) e no endereço 0x0F. Por fim, foi efetuado o teste de desconexão do sensor DHT11 do endereço 0x0F apresentado em [vídeo](https://youtu.be/PTe_jFINdzw?si=wj42PmV2BfBhX9Pb).
 
 
-
 Segue abaixo os resultados desses testes.
-
-
-
-
 
 
 Verificação do Funcionamento do Sensor
@@ -452,19 +447,23 @@ Verificação do Funcionamento do Sensor
 
 Um dos testes iniciais foi direcionado para assegurar o funcionamento correto do sensor selecionado e a resposta do sistema quando solicitamos essa opção. Para isso, primeiro selecionamos a opção de “Situacao Sensor” (tela inicial) com o botão do meio, em seguida usamos o botão lateral para avançarmos até o sensor 15 (sensor funcionando) e pressionamos mais uma vez o botão central.
 
-
+![teste_1](testes/testes_descritos/26.png)
+![teste_1](testes/testes_descritos/27.png)
 
 Resultado: Os resultados deste teste indicaram que o sensor estava operando conforme o esperado e, portanto, a resposta que aparece no display é "Sen. funcionando".
 
-
+![teste_1](testes/testes_descritos/28.png)
+![teste_1](testes/testes_descritos/29.png)
 
 Em seguida, testou-se a condição de selecionar um sensor que não estava ligado ao sistema. Nesse caso, o sensor selecionado foi o sensor 1.
 
-
-
+![teste_1](testes/testes_descritos/22.png)
+![teste_1](testes/testes_descritos/23.png)
 
 Resultado: Os resultados deste teste indicaram que o sensor não estava operando. Assim, a resposta que aparece no display é "Sen. inexistente".
 
+![teste_1](testes/testes_descritos/24.png)
+![teste_1](testes/testes_descritos/25.png)
 
 Exigência da Temperatura Atual e Umidade Atual
 
@@ -472,16 +471,23 @@ Outro conjunto de testes foi realizado para solicitar a leitura instantânea da 
 
 O primeiro teste foi com relação a temperatura atual. Primeiro, utiliza-se os botões laterais para selecionar a função de “Temperatura A.”. Em seguida, seleciona-se novamente o sensor que estava operando (sensor 15). 
 
+![teste_1](testes/testes_descritos/30.png)
+![teste_1](testes/testes_descritos/31.png)
 
+Resultado: A interface foi capaz de requisitar e exibir com sucesso os valores de temperatura atual provenientes do sensor. Nesse caso, a temperatura ambiente era de  aproximadamente 20 °C, assim como indicado na tela do display.
 
-
-Resultado: A interface foi capaz de requisitar e exibir com sucesso os valores de temperatura atual provenientes do sensor. Nesse caso, a temperatura ambiente era de  aproximadamente 21 °C, assim como indicado na tela do display.
+![teste_1](testes/testes_descritos/32.png)
+![teste_1](testes/testes_descritos/33.png)
 
 O segundo teste desta seção foi com o requerimento da umidade atual. O procedimento é parecido, mas nesse caso, seleciona-se a opção de "Umidade Atual " na primeira camada e em seguida o mesmo sensor 15.
 
+![teste_1](testes/testes_descritos/34.png)
+![teste_1](testes/testes_descritos/35.png)
 
 Resultado: O sistema faz a leitura correta da umidade atual e exibe no display de forma adequada. Nesse caso, a umidade ambiente era de aproximadamente 40%.
 
+![teste_1](testes/testes_descritos/36.png)
+![teste_1](testes/testes_descritos/37.png)
 
 Exigência de Temperatura Contínua e Umidade Contínua
 
@@ -489,14 +495,19 @@ Além das leituras pontuais, foram conduzidos testes para exigir uma transmissã
 
 O primeiro teste para o monitoramento contínuo foi com relação a temperatura. Para isso, selecionou-se a opção de " Temperatura C. " através dos botões. Em seguida selecionou o sensor 15, que estava conectado ao sistema e funcionando. 
 
+![teste_1](testes/testes_descritos/temp_continua_req.png)
 
+Resultado: O valor exibido no display LCD foi de 19° C. Entretanto, os testes de transmissão contínua de temperatura não forneceram os resultados esperados, pois o sensoriamento contínuo não é encerrado após o retorno para a branch de espera. 
 
-Resultado: Os testes de transmissão contínua de temperatura não forneceram os resultados esperados. A interface em Assembly não foi capaz de manter a transmissão contínua de dados, resultando em falhas na exibição constante de informações de temperatura.
+![teste_1](testes/testes_descritos/temp_continua_res.png)
 
 Em seguida testou-se a leitura para umidade contínua, selecionando a opção de "Umidade Contínua" e o sensor 15, novamente.
 
-Resultado: Assim como no caso de monitoramento contínuo de temperatura, os testes de transmissão contínua de umidade não alcançaram os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua, visto que não foi possível efetuar o cancelamento do sensoriamento contínuo. Quando testada individualmente, apresentou a mesma característica da temperatura contínua.
+![teste_1](testes/testes_descritos/umi_continua_req.png)
 
+Resultado: O valor exibido no display LCD continuou sendo de 19° C, mostrando que o sensoriamento não foi interrompido. Portanto, o teste de transmissão contínua de umidade também não alcançou os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua. Quando testada individualmente, apresentou a mesma característica da temperatura contínua.
+
+![teste_1](testes/testes_descritos/temp_continua_res.png)
 
 A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações. De acordo com as tentativas feitas pela equipe, quando associava o sensoriamento contínuo com a exibição no display, erros de segmentação de memória eram apresentados. Isso nos permite avaliar que os possíveis problemas estão na alocação de memória inválida e/ou no uso incorreto de registradores.
 
