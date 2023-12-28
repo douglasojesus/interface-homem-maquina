@@ -109,7 +109,7 @@ O HD44780 é um controlador de display integrado que simplifica a interface entr
 
 <h2>DESCRIÇÃO E PRÉ-ELABORAÇÃO DO MENU INTERATIVO EM ALTO NÍVEL</h2>
 
-A primeira etapa para a criação desse sistema foi a projeção do seu funcionamento em alto nível. Dessa forma, decidiu-se que o menu interativo que será exibido no display LCD possui três camadas principais. Essas camadas representam as opções de interação que o usuário possui com o sistema. A navegação entre essas camadas ocorre através da interação do usuário com botões acoplados ao sistema.
+<p align="justify">A primeira etapa para a criação desse sistema foi a projeção do seu funcionamento em alto nível. Dessa forma, decidiu-se que o menu interativo que será exibido no display LCD possui três camadas principais. Essas camadas representam as opções de interação que o usuário possui com o sistema. A navegação entre essas camadas ocorre através da interação do usuário com botões acoplados ao sistema.</p>
 
 <h3>Fluxo de navegação da interface:</h3>
 
@@ -127,15 +127,15 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
   
 - Monitoramento Contínuo de Umidade. 
 
-Essas funcionalidades serão exibidas, individualmente, em formato de texto na primeira linha do LCD. Dessa forma, o usuário utiliza os botões laterais para avançar ou retroceder entre as cinco opções, sendo a tela inicial a “situação atual do sensor”. O botão do meio é usado para selecionar uma das funcionalidades apresentadas, avançando para a segunda camada.
+<p align="justify">Essas funcionalidades serão exibidas, individualmente, em formato de texto na primeira linha do LCD. Dessa forma, o usuário utiliza os botões laterais para avançar ou retroceder entre as cinco opções, sendo a tela inicial a “situação atual do sensor”. O botão do meio é usado para selecionar uma das funcionalidades apresentadas, avançando para a segunda camada.</p>
 
 <h4>Camada 2 - Escolha do Sensor</h4>   
 
-Após selecionar uma funcionalidade na primeira camada, o usuário é direcionado para a próxima camada, onde pode escolher um dos 32 sensores disponíveis para aplicar a funcionalidade selecionada anteriormente. O número do sensor aparecerá na segunda linha do display e, assim como na camada anterior,  os botões da esquerda e da direita serão utilizados para percorrer a lista de sensores. Ao apertar o botão do meio, o usuário escolhe o sensor e avança para a terceira camada.
+<p align="justify">Após selecionar uma funcionalidade na primeira camada, o usuário é direcionado para a próxima camada, onde pode escolher um dos 32 sensores disponíveis para aplicar a funcionalidade selecionada anteriormente. O número do sensor aparecerá na segunda linha do display e, assim como na camada anterior,  os botões da esquerda e da direita serão utilizados para percorrer a lista de sensores. Ao apertar o botão do meio, o usuário escolhe o sensor e avança para a terceira camada.</p>
 
 <h4>Camada 3 - Exibição do Resultado</h4>
 
-Na terceira camada, após escolher um sensor, o resultado da funcionalidade selecionada é exibido na linha inferior do display. Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser: 
+<p align="justify">Na terceira camada, após escolher um sensor, o resultado da funcionalidade selecionada é exibido na linha inferior do display. Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser:</p> 
 
 - Sensor funcionando;
   
@@ -181,14 +181,14 @@ Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimen
 
 <h2>MAPEAMENTO GPIO</h2>
 
-Antes de explicar as macros e funções da GPIO, faz-se necessário entender como ocorre o mapeamento de memória dos pinos para os dispositivos utilizados no sistema. No contexto da Orange Pi, o controle dos pinos GPIO (General Purpose Input/Output) é feito por meio de registradores específicos que ficam localizados em uma parte da memória do próprio dispositivo. Segundo o datasheet da Allwinner referente ao processador quad-core H3, o endereço base desse “banco” de registradores é o  .Uma vez que se tem acesso ao endereço base, pode-se utilizar deslocamentos (off-sets) para acessar e manipular os registradores desejados.
+<p align="justify">Antes de explicar as macros e funções da GPIO, faz-se necessário entender como ocorre o mapeamento de memória dos pinos para os dispositivos utilizados no sistema. No contexto da Orange Pi, o controle dos pinos GPIO (General Purpose Input/Output) é feito por meio de registradores específicos que ficam localizados em uma parte da memória do próprio dispositivo. Segundo o datasheet da Allwinner referente ao processador quad-core H3, o endereço base desse “banco” de registradores é o  .Uma vez que se tem acesso ao endereço base, pode-se utilizar deslocamentos (off-sets) para acessar e manipular os registradores desejados.
 
-Os registradores são compostos, em geral,  de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.
-
-
+Os registradores são compostos, em geral,  de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.</p>
 
 
-Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.
+
+
+<p align="justify">Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.</p>
 
 
 
@@ -202,9 +202,9 @@ Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcion
 
 <h2>CCU (unidade de controle de relógio)</h2>
 
-A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial. Ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.
+<p align="justify">A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial. Ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.
 
-Esses sistemas embarcados são equipados com hardware especializado, como a CCU, que facilita a administração dos sinais de relógio enviados a outros dispositivos. A configuração da taxa de transmissão pode ser realizada através da CPU, permitindo a modificação de dados em registradores específicos por meio do barramento do sistema, seguindo princípios semelhantes aos aplicados em outros dispositivos como a Raspberry Pi.
+Esses sistemas embarcados são equipados com hardware especializado, como a CCU, que facilita a administração dos sinais de relógio enviados a outros dispositivos. A configuração da taxa de transmissão pode ser realizada através da CPU, permitindo a modificação de dados em registradores específicos por meio do barramento do sistema, seguindo princípios semelhantes aos aplicados em outros dispositivos como a Raspberry Pi.</p>
 
 Falando mais especificamente sobre a implementação em Assembly:
 
@@ -269,65 +269,71 @@ Para a implementação em Assembly, precisamos fazer algumas configurações par
 
 <h2>MAIN</h2>
 
-O arquivo "main.s" é responsável por conectar todos os módulos dos sistemas e apresentar a interface para o usuário. 
+O arquivo "main.s" é responsável por conectar todos os módulos do sistema e apresentar a interface para o usuário. As principais funcionalidades incluem a escolha e exibição do estado de diferentes sensores, comunicação UART para obter dados específicos, manipulação de contadores e tratamento de exceções.
 
-fluxo de execução do código. Você pode usar essa descrição para criar um fluxograma manualmente ou usando ferramentas específicas.
+Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa.
 
-Inicialização:
-
-Realiza a configuração inicial de pinos GPIO, LCD, UART e outros componentes.
-Configuração de registradores e endereços de memória.
-Loop Principal (_start):
+- Loop Principal (_start):
 
 Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
-Espera (espera):
 
-Aguarda o usuário pressionar um botão (b1, b2, b3).
-Selecione opção se o botão b2 for pressionado.
-Seleção de Opção (selecionar_opcao):
+- O programa então entra na branch espera, aguardando a interação do usuário por meio de três botões (b1, b2, b3). Dependendo do botão pressionado, diferentes ações são realizadas.
 
-Aguarda a liberação do botão b2.
-Inicializa a comunicação UART.
-Aguarda a resposta da UART e processa a resposta.
-Atualiza o display LCD com o resultado.
-Intermediário (intermediario):
+   - selecionar_opcao: configura uma opção específica (indicada por R12) e chama a função escolher_sensor.
+   - incrementa: incrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
+   - decrementa: decrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
 
-Aguarda a liberação de botões (b1, b2, b3).
-Retorna para o início do loop principal (_start) se b1 for pressionado.
-Retorna para a espera se b3 for pressionado.
-Incremento (incrementa):
+- Seleção do sensor (escolher_sensor):
 
-Aguarda a liberação do botão b3.
-Incrementa o índice R13.
-Limpa o display e executa a função associada ao índice.
-Decremento (decrementa):
+Depois de selecionado a opção de requisição através de selecionar_opcao e espera de liberação do botão b2, a camada de seleção do sensor é ativada. Nessa branch também é utilizado os botões (b1, b2, b3) para fazer variação do sensor (1 a 32) através do contador (indicado por R12) e seleção do sensor escolhido, ativando a uart.
 
-Aguarda a liberação do botão b1.
-Decrementa o índice R13.
-Limpa o display e executa a função associada ao índice.
-Incremento do Sensor (incrementa_sensor):
+   - ativar_uart: inicializa a comunicação UART, aguarda a reposta e a processa e atualza o display com o resultado.
+   - incrementa_sensor: incrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
+   - decrementa_sensor: decrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
 
-Aguarda a liberação do botão b3.
-Incrementa o índice R12 (sensor).
-Escreve o sensor no display e volta para a escolha do sensor.
-Decremento do Sensor (decrementa_sensor):
+- Intermediário (intermediario):
 
-Aguarda a liberação do botão b1.
-Decrementa o índice R12 (sensor).
-Escreve o sensor no display e volta para a escolha do sensor.
-Escrever Sensor (escrever_sensor):
+   - Aguarda a liberação do botão b2.
+   - Retorna para a espera se b1 ou b3 for pressionado.
 
-Captura os dígitos do sensor.
-Escreve o sensor no display e retorna à escolha do sensor.
-Tratamento de Exceções (sensor_com_problema, sensor_inexistente, requisicao_inexistente, sensor_funcionando):
+- Incremento (incrementa):
 
-Limpa o display.
-Carrega a mensagem correspondente.
-Exibe a mensagem no display.
-Saída (EXIT):
+   - Aguarda a liberação do botão b3.
+   - Incrementa o índice R13.
+   - Limpa o display e executa a função associada ao índice.
 
-Encerra a execução do programa.
-Lembre-se de que o código contém várias chamadas de funções (catchDigits, moveCursorSegundaLinha, limparDisplay, etc.) que podem ter impacto no fluxo de execução. Certifique-se de entender essas sub-rotinas para obter um fluxograma mais preciso.
+- Decremento (decrementa):
+
+   - Aguarda a liberação do botão b1.
+   - Decrementa o índice R13.
+   - Limpa o display e executa a função associada ao índice.
+
+- Incremento do Sensor (incrementa_sensor):
+
+   - Aguarda a liberação do botão b3.
+   - Incrementa o índice R12 (sensor).
+   - Escreve o sensor no display e volta para a escolha do sensor.
+
+- Decremento do Sensor (decrementa_sensor):
+
+   - Aguarda a liberação do botão b1.
+   - Decrementa o índice R12 (sensor).
+   - Escreve o sensor no display e volta para a escolha do sensor.
+
+- Escrever Sensor (escrever_sensor):
+
+   - Captura os dígitos do sensor.
+   - Escreve o sensor no display e retorna à escolha do sensor.
+
+- Tratamento de Exceções (sensor_com_problema, sensor_inexistente, requisicao_inexistente, sensor_funcionando):
+
+   - Limpa o display.
+   - Carrega a mensagem correspondente.
+   - Exibe a mensagem no display.
+
+- Saída (EXIT):
+
+   - Encerra a execução do programa.
 
 <h1 id="descricao-e-analise-dos-testes" align="center">Descrição e Análise dos Testes e Simulações, Resultados e Discussões</h1>
 Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. Nesse modo, o  de e após encerrar a leitura e solicitar outra requisição, o sistema exibe o  sensoriamento contínuo anterior.
