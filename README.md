@@ -409,6 +409,32 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
 
    - Encerra a execução do programa.
 
+
+Esta seção do código contém definições de rótulos que representam endereços de registradores relacionados a diversos aspectos do hardware da Orange Pi PC Plus. 
+
+- Strings: usadas para exibir os caracteres no display LCD.
+   - situacao: .ascii "Situacao Sensor "
+   - temperatura_atual: .ascii " Temperatura A. " 
+   - umidade_atual: .ascii " Umidade Atual  "
+   - temperatura_cont: .ascii " Temperatura C. " 
+   - umidade_cont: .ascii "Umidade Continua"
+   - problema_sensor: .ascii "Sensor com Prob."
+   - inexistente_sensor: .ascii "Sen. inexistente"
+   - inexistente_requisicao: .ascii "Req. inexistente"
+   - funcionando_sensor: .ascii "Sen. funcionando"
+
+- Constantes de tempo: usadas para atrasar o fluxo de execução.
+   - time1s: .word 1  @ 1s
+   - time1ms: .word 1000000 @ 1ms
+   - time500ms: .word 500000000 @500ms
+   - time850ms: .word 850000000 @850ms
+   - time950ms: .word 950000000 @850ms
+   - time170ms: .word 170000000 @ 170ms
+   - timeZero: .word 0 @ zero
+   - time1d55ms: .word 1500000 @ 1.5ms
+   - time5ms: .word 5000000 @ 5 ms
+   - time150us: .word 150000 @ 150us
+
 <h1 id="descricao-e-analise-dos-testes" align="center">Descrição e Análise dos Testes e Simulações, Resultados e Discussões</h1>
 <p align="justify">Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. O mesmo é acionado e exibe o primeiro resultado. Depois, a UART não é resetada, o que impede do valor que está sendo recebido pela ESP de ser atualizado na FIFO. O sensoriamento contínuo também não é finalizado. Portanto, qualquer outra requisição que for feita depois da solicitação do contínuo não irá funcionar corretamente, pois o valor que ainda vai estar sendo recebido é o do sensoriamento contínuo.</p>
 
