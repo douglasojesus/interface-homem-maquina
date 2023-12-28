@@ -267,6 +267,32 @@ Para a implementação em Assembly, precisamos fazer algumas configurações par
 
 <h2>DISPLAY LCD</h2>
 
+Antes de tudo, devemos deixar claro que para que possamos utilizar o nosso display LCD é necessário mapear os pinos que serão utilizados tais como RS, E, D7, D6, D5 e D4 com seus respectivos offsets contidos no datasheet da placa. Tendo feito isso, devemos realizar os seguintes passos:
+
+- Setar todos os pinos para o modo de saída através da macro setLCDPinsSaida.
+  
+- Criar uma macro enable que realiza um pulso no pino de enable (E) para que o display possa captar os valores atribuídos aos demais pinos.
+
+  
+- Inicializar o display LCD no modo de 4 bits com base nas instruções abaixo descritas no datasheet.
+
+
+Após esses 3 passos, o display está pronto para realizar quaisquer instruções/escrita de dados, tais como:
+
+- limparDisplay: macro responsável por executar uma instrução para limpar todo o display.
+  
+- habilitarSegundaLinha: macro cuja instrução habilita a segunda linha para escrita.
+  
+- moveCursorSegundaLinha: macro com instrução capaz de mover o cursor para o início da segunda linha para que possamos escrever caracteres a partir dela.
+  
+- prefixNumeroDisplay: macro que atribui os 4 bits mais significativos da macro de escreverLCD.
+  
+- EscreverLCD: macro que através de outras macros e de uma valor binário atribuído, realiza operações bitwise para obter os 4 bits menos significativos e passar esse dados para o display a fim de escrever um número de acordo com a tabela Ascii.
+  
+- EscreverCharLCD: semelhante com a macro de EscreverLCD, só que nela temos que obter e atribuir os valores através de outras macros e com operações bitwise os 4 bits mais significativos e depois os 4 bits menos significativos com base no valor binário atribuído.
+  
+Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do datasheet.
+
 <h2>MAIN</h2>
 
 O arquivo "main.s" é responsável por conectar todos os módulos do sistema e apresentar a interface para o usuário. As principais funcionalidades incluem a escolha e exibição do estado de diferentes sensores, comunicação UART para obter dados específicos, manipulação de contadores e tratamento de exceções.
@@ -429,11 +455,6 @@ Resultado: Assim como no caso de monitoramento contínuo de temperatura, os test
 A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações.
 
 A dificuldade em atender completamente aos requisitos de transmissão contínua destaca a complexidade da programação em Assembly para a IHM, particularmente quando se trata de manter uma exibição contínua de dados dinâmicos.
-
-Teste feito em vídeo disponível em:
-
-[![Assista ao vídeo](https://img.youtube.com/vi/PTe_jFINdzw/0.jpg)](https://youtu.be/PTe_jFINdzw?si=wj42PmV2BfBhX9Pb)
-
 
 <h1 id="conclusao" align="center">Conclusão</h1>
 
