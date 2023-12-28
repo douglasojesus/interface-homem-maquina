@@ -202,9 +202,9 @@ Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcion
 
 <h2>CCU (unidade de controle de relógio)</h2>
 
-<p align="justify">A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial. Ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.
+<p align="justify">A maioria dos dispositivos, incluindo a CPU, são concebidos como máquinas de estado, onde a transição de estados é impulsionada pelo sinal de relógio. Em alguns casos, um único sinal de relógio pode ser suficiente, mas em sistemas mais complexos, como a Orange Pi PC Plus e outros sistemas embarcados, a Unidade de Controle de Relógio (CCU) desempenha um papel crucial. Ela permite a gestão de sinais de relógio distintos para garantir o funcionamento adequado de diferentes componentes.</p>
 
-Esses sistemas embarcados são equipados com hardware especializado, como a CCU, que facilita a administração dos sinais de relógio enviados a outros dispositivos. A configuração da taxa de transmissão pode ser realizada através da CPU, permitindo a modificação de dados em registradores específicos por meio do barramento do sistema, seguindo princípios semelhantes aos aplicados em outros dispositivos como a Raspberry Pi.</p>
+<p align="justify">Esses sistemas embarcados são equipados com hardware especializado, como a CCU, que facilita a administração dos sinais de relógio enviados a outros dispositivos. A configuração da taxa de transmissão pode ser realizada através da CPU, permitindo a modificação de dados em registradores específicos por meio do barramento do sistema, seguindo princípios semelhantes aos aplicados em outros dispositivos como a Raspberry Pi.</p>
 
 Falando mais especificamente sobre a implementação em Assembly:
 
@@ -295,9 +295,9 @@ Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do d
 
 <h2>MAIN</h2>
 
-O arquivo "main.s" é responsável por conectar todos os módulos do sistema e apresentar a interface para o usuário. As principais funcionalidades incluem a escolha e exibição do estado de diferentes sensores, comunicação UART para obter dados específicos, manipulação de contadores e tratamento de exceções.
+<p align="justify">O arquivo "main.s" é responsável por conectar todos os módulos do sistema e apresentar a interface para o usuário. As principais funcionalidades incluem a escolha e exibição do estado de diferentes sensores, comunicação UART para obter dados específicos, manipulação de contadores e tratamento de exceções.</p>
 
-Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa.
+<p align="justify">Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa.</p>
 
 ![Fluxo de execução da main.s](apresentacao/fluxo_main.png)
 
@@ -315,7 +315,7 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
 
 - Seleção do sensor (escolher_sensor):
 
-Depois de selecionado a opção de requisição através de selecionar_opcao e espera de liberação do botão b2, a camada de seleção do sensor é ativada. Nessa branch também é utilizado os botões (b1, b2, b3) para fazer variação do sensor (1 a 32) através do contador (indicado por R12) e seleção do sensor escolhido, ativando a uart.
+<p align="justify">Depois de selecionado a opção de requisição através de selecionar_opcao e espera de liberação do botão b2, a camada de seleção do sensor é ativada. Nessa branch também é utilizado os botões (b1, b2, b3) para fazer variação do sensor (1 a 32) através do contador (indicado por R12) e seleção do sensor escolhido, ativando a uart.</p>
 
    - ativar_uart: inicializa a comunicação UART, aguarda a reposta e a processa e atualza o display com o resultado.
    - incrementa_sensor: incrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
@@ -374,13 +374,11 @@ Caso o ativar_uart for selecionado, o dado será exibido na linha 2 na terceira 
    - Encerra a execução do programa.
 
 <h1 id="descricao-e-analise-dos-testes" align="center">Descrição e Análise dos Testes e Simulações, Resultados e Discussões</h1>
-Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. Nesse modo, o  de e após encerrar a leitura e solicitar outra requisição, o sistema exibe o  sensoriamento contínuo anterior.
+<p align="justify">Na etapa final do projeto proposto, obteve-se excelentes resultados conforme as especificações desejadas, o sistema realiza a leitura e entrega precisa dos dados solicitados e a interface desenvolvida cumpre diretamente com seu papel interativo e ilustrativo, assim proporcionando uma melhor tomada de decisão por parte do usuário que a opera. Contudo, destaca-se um problema durante a ativação do sensoriamento contínuo. Nesse modo, o  de e após encerrar a leitura e solicitar outra requisição, o sistema exibe o  sensoriamento contínuo anterior.</p>
 
+<p align="justify">No que diz respeito à operação do programa e à interação direta com o usuário. Após enviar o código para a placa, a interação do usuário ocorre inteiramente através de três botões presentes na placa e as opções aparecem individualmente na tela LCD. Os botões laterais permitem ao usuário percorrer entre as opções de uma mesma camada. O botão central permite a seleção da opção que o usuário deseja.</p>
 
-No que diz respeito à operação do programa e à interação direta com o usuário. Após enviar o código para a placa, a interação do usuário ocorre inteiramente através de três botões presentes na placa e as opções aparecem individualmente na tela LCD. Os botões laterais permitem ao usuário percorrer entre as opções de uma mesma camada. O botão central permite a seleção da opção que o usuário deseja.
-
-Dessa forma, tem-se o seguinte fluxo, onde o usuário primeiro escolhe uma opção dentre as cinco possíveis (Situação Atual do Sensor, Temperatura Atual, Umidade Atual, Monitoramento Contínuo de Temperatura e Monitoramento Contínuo de Umidade) 
-e depois escolhe um sensor, dentre os 32 suportados pelo sistema. O resultado aparecerá na linha de baixo do display. Para retornar à tela inicial, pressiona-se o botão do meio.
+<p align="justify">Dessa forma, tem-se o seguinte fluxo, onde o usuário primeiro escolhe uma opção dentre as cinco possíveis (Situação Atual do Sensor, Temperatura Atual, Umidade Atual, Monitoramento Contínuo de Temperatura e Monitoramento Contínuo de Umidade) e depois escolhe um sensor, dentre os 32 suportados pelo sistema. O resultado aparecerá na linha de baixo do display. Para retornar à tela inicial, pressiona-se o botão do meio. </p>
 
 Para garantir a funcionalidade da interface do display LCD, foram produzidos os seguintes testes essenciais para verificar a integridade da interface desenvolvida e a entrega precisa dos dados lidos pelo sensor:
 
@@ -463,15 +461,15 @@ Testes feitos em vídeo disponível em:
 
 <h1 id="conclusao" align="center">Conclusão</h1>
 
-Durante a evolução deste projeto, alcançamos com êxito a maioria dos objetivos estabelecidos, culminando na implementação bem-sucedida de uma Interface Homem-Máquina (IHM) em Assembly para o display LCD, substituindo a versão anterior feita em linguagem C. Este resultado não apenas representa a adaptação da lógica de um programa anteriormente desenvolvido em uma linguagem de alto nível para uma linguagem de baixo nível, mas também reflete a aplicação eficaz dos conceitos de arquitetura de computadores transmitidos ao longo do curso pelos docentes.
+<p align="justify">Durante a evolução deste projeto, alcançamos com êxito a maioria dos objetivos estabelecidos, culminando na implementação bem-sucedida de uma Interface Homem-Máquina (IHM) em Assembly para o display LCD, substituindo a versão anterior feita em linguagem C. Este resultado não apenas representa a adaptação da lógica de um programa anteriormente desenvolvido em uma linguagem de alto nível para uma linguagem de baixo nível, mas também reflete a aplicação eficaz dos conceitos de arquitetura de computadores transmitidos ao longo do curso pelos docentes.</p>
 
-Ademais, o domínio da programação em Assembly para a Orange Pi All Winner, aliado à análise minuciosa da arquitetura e seus recursos, assim como a compreensão do mapeamento de memória e do funcionamento do display, permitiu não apenas a transição da lógica do software, mas também uma avaliação criteriosa do desempenho do código gerado. A experiência de codificar em Assembly proporcionou um entendimento mais profundo do funcionamento interno dos dispositivos, capacitando-nos a moldar o comportamento do sistema de acordo com nossos requisitos específicos.
+<p align="justify">Ademais, o domínio da programação em Assembly para a Orange Pi All Winner, aliado à análise minuciosa da arquitetura e seus recursos, assim como a compreensão do mapeamento de memória e do funcionamento do display, permitiu não apenas a transição da lógica do software, mas também uma avaliação criteriosa do desempenho do código gerado. A experiência de codificar em Assembly proporcionou um entendimento mais profundo do funcionamento interno dos dispositivos, capacitando-nos a moldar o comportamento do sistema de acordo com nossos requisitos específicos.</p>
 
-Com a implementação da comunicação UART e a utilização de uma ESP com DHT11, conseguimos criar uma interação eficiente entre diferentes dispositivos, promovendo a coleta e transmissão de dados entre eles. Este é um testemunho do poder e flexibilidade da linguagem Assembly quando aplicada à manipulação direta do hardware.
+<p align="justify">Com a implementação da comunicação UART e a utilização de uma ESP com DHT11, conseguimos criar uma interação eficiente entre diferentes dispositivos, promovendo a coleta e transmissão de dados entre eles. Este é um testemunho do poder e flexibilidade da linguagem Assembly quando aplicada à manipulação direta do hardware.</p>
 
-Ao configurar o LCD Hitachi e orquestrar todo o processo de execução, desde a coleta de dados do sensor até a exibição da situação atual, temperatura e umidade, alcançamos um controle preciso sobre o sistema. No entanto, é importante reconhecer que alguns desafios persistem, como a implementação contínua da leitura de temperatura e umidade.
+<p align="justify">Ao configurar o LCD Hitachi e orquestrar todo o processo de execução, desde a coleta de dados do sensor até a exibição da situação atual, temperatura e umidade, alcançamos um controle preciso sobre o sistema. No entanto, é importante reconhecer que alguns desafios persistem, como a implementação contínua da leitura de temperatura e umidade.</p>
 
-Por fim, acredita-se que esse projeto evidenciou de forma clara a relevância da linguagem Assembly em contextos que exigem recursos limitados de hardware, como é o caso do SBC Orange Pi. Através da experiência adquirida ao desenvolver a IHM em Assembly, fortalecemos os conhecimentos teóricos sobre arquitetura de computadores e ampliamos nossa habilidade para solucionar desafios práticos relacionados à programação de baixo nível.
+<p align="justify">Por fim, acredita-se que esse projeto evidenciou de forma clara a relevância da linguagem Assembly em contextos que exigem recursos limitados de hardware, como é o caso do SBC Orange Pi. Através da experiência adquirida ao desenvolver a IHM em Assembly, fortalecemos os conhecimentos teóricos sobre arquitetura de computadores e ampliamos nossa habilidade para solucionar desafios práticos relacionados à programação de baixo nível.</p>
 
 <h1 id="referencias" align="center">Referências</h1>
 
