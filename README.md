@@ -273,6 +273,8 @@ O arquivo "main.s" é responsável por conectar todos os módulos do sistema e a
 
 Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa.
 
+![Fluxo de execução da main.s](apresentacao/fluxo_main.png)
+
 - Loop Principal (_start):
 
 Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
@@ -283,8 +285,7 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
    - incrementa: incrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
    - decrementa: decrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
 
-![Camada 1](apresentacao/6.png){:width=400}
-
+![Camada 1](apresentacao/6.png)
 
 - Seleção do sensor (escolher_sensor):
 
@@ -294,10 +295,18 @@ Depois de selecionado a opção de requisição através de selecionar_opcao e e
    - incrementa_sensor: incrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
    - decrementa_sensor: decrementa o contador (indicada por R12) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 1 a 32).
 
+![Camada 2](apresentacao/7.png)
+
+Caso o ativar_uart for selecionado, o dado será exibido na linha 2 na terceira camada.
+
+![Camada 3](apresentacao/8.png)
+
 - Intermediário (intermediario):
 
    - Aguarda a liberação do botão b2.
    - Retorna para a espera se b1 ou b3 for pressionado.
+
+![Camada 3.2](apresentacao/9.png)
 
 - Incremento (incrementa):
 
