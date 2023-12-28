@@ -335,7 +335,7 @@ Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do d
 
 - Loop Principal (_start):
 
-Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
+   - Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
 
 - O programa então entra na branch espera, aguardando a interação do usuário por meio de três botões (b1, b2, b3). Dependendo do botão pressionado, diferentes ações são realizadas.
 
