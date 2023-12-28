@@ -283,7 +283,7 @@ Inicializa registradores (R6, R9, R13) e chama a sub-rotina carrega_situacao.
    - incrementa: incrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
    - decrementa: decrementa o contador (indicada por R13) e desvia para a opção de exibição de acordo com o valor do contador (que vai de 0 a 4).
 
-![Camada 1](INTERFACE-HOMEM-MAQUINA/apresentacao/6.png)
+![Camada 1](apresentacao/6.png)
 
 
 - Seleção do sensor (escolher_sensor):
