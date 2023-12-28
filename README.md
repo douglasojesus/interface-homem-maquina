@@ -21,7 +21,7 @@ Projeto produzido a ser avaliado pela disciplina de M.I Sistemas Digitais da Uni
   <li><a href="#descricao-e-analise-dos-testes"> <b>Descrição e Análise dos Testes e Simulações, Resultados e Discussões</b> </a></li>
   <li><a href="#conclusao"> <b>Conclusão</b> </a></li>
   <li><a href="#bibliografia"> <b>Bibliografia</b> </a></li>
-  <li><a href="#script-de-compilacao"> <b>Uso do proejto</b> </a></li>
+  <li><a href="#script-de-compilacao"> <b>Uso do projeto</b> </a></li>
 </ul>
 
 
