@@ -266,7 +266,9 @@ Os principais elementos da comunicação UART incluem:
 
 - Bits de Dados: Representa a quantidade de bits usados para transmitir cada caractere. Pode variar de 5 a 9 bits.
 
-Para a implementação em Assembly, precisamos fazer algumas configurações para que a transmissão e recepção ocorram de maneira adequada, dentre elas setar o divisor e especificar a recepção e transmissão de dados para ser de byte em byte, etc. Falando agora de maneira mais especifica sobre as macros implementadas em Assembly, temos:
+Para a implementação em Assembly, precisamos fazer algumas configurações para que a transmissão e recepção ocorram de maneira adequada, dentre elas setar o divisor e especificar a recepção e transmissão de dados para ser de byte em byte, etc. 
+
+Falando agora de maneira mais especifica sobre as macros implementadas em Assembly, temos:
 
 - mapeamento_uart:
    Macro desenvolvida para mapear uma região específica da memória, muito semelhante ao mapeamento de memória do GPIO. No entanto, difere apenas no seu endereço base (0x01C28).
