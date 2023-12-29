@@ -305,6 +305,8 @@ Antes de tudo, devemos deixar claro que para que possamos utilizar o nosso displ
   
 - Inicializar o display LCD no modo de 4 bits com base nas instruções abaixo descritas no datasheet.
 
+![DISPLAY LCD](apresentacao/InicializacaoDisplay.png)
+
 Após esses 3 passos, o display está pronto para realizar quaisquer instruções/escrita de dados, tais como:
 
 - limparDisplay: macro responsável por executar uma instrução para limpar todo o display.
@@ -322,11 +324,13 @@ Antes de explicar para que serve os macros de escreverLCD e escreverCharLCD, dev
 
 Para elucidar, tomemos o caractere "E" como exemplo. Para exibir esse caractere no display, é necessário enviar inicialmente o valor correspondente ao caractere na tabela ASCII, que, neste caso, é 69, para a DDRAM. Isso permite que o controlador de exibição encontre no CGRAM quais pontos da matriz deverão ser acionados.
 
+![DISPLAY LCD](apresentacao/TabelaComVariacoesDeCaracteresDisplay.png)
+
 - EscreverLCD: macro que através de outras macros e de uma valor binário atribuído, realiza operações bitwise para obter os 4 bits menos significativos e passar esse dados para o display a fim de escrever um número de acordo com a tabela Ascii.
   
 - EscreverCharLCD: semelhante com a macro de EscreverLCD, só que nela temos que obter e atribuir os valores através de outras macros e com operações bitwise os 4 bits mais significativos e depois os 4 bits menos significativos com base no valor binário atribuído.
 
-![DISPLAY LCD](apresentacao/TabelaComVariacoesDeCaracteresDisplay.png)
+
 
 Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do datasheet, cujo o link se encontra no tópico de bibliografia.
 
