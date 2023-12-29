@@ -64,7 +64,7 @@ Portanto, o principal propósito desse trabalho é capacitar o discente a progra
 
 <h2>SBC Orange Pi PC PLUS</h2>
 
-<p align="justify">A Orange Pi PC Plus é uma Single-Board Computer (SBC), projetada para oferecer funcionalidade semelhante a um computador em um formato compacto e de baixo custo. Ela é frequentemente utilizada em projetos de prototipagem, automação residencial, servidores de mídia, sistemas de vigilância, entre outros, devido à sua versatilidade, tamanho compacto e custo acessível, além de suporte a diferentes sistemas operacionais e recursos de conectividade. Dentre suas principais especificações, têm-se:</p>
+<p align="justify">A Orange Pi PC Plus é uma Single-Board Computer (SBC), projetada para oferecer funcionalidade semelhante a um computador em um formato compacto e de baixo custo. Ela é frequentemente utilizada em projetos de prototipagem, automação residencial, servidores de mídia, sistemas de vigilância, entre outros, devido à sua versatilidade, tamanho compacto e custo acessível, além de suporte a diferentes sistemas operacionais e recursos de conectividade (Figura 1). Dentre suas principais especificações, têm-se:</p>
 
 <h3>Hardware acoplado</h3>
 
@@ -90,6 +90,12 @@ Portanto, o principal propósito desse trabalho é capacitar o discente a progra
   
 - Suporte a Vídeo: Capaz de reproduzir vídeos em alta definição (HD) e suporta formatos de vídeo populares.
 
+<p align="center">
+  <img src="apresentacao/orangepi.jpeg" alt="Figura 1.">
+</p>
+
+<p align="center">Figura 1. Orange Pi PC PLUS e seus dispositivos.</p>
+
 <h2>Assembly Linguagem</h2>
 
 <p align="justify">A linguagem Assembly, ou linguagem de montagem, é uma linguagem de baixo nível que se encontra muito próxima da linguagem de máquina, representando instruções diretamente compreensíveis pelo processador. Ela é específica para a arquitetura do processador em questão e consiste em um conjunto de códigos mnemônicos que representam operações básicas executadas pela CPU. A linguagem Assembly permite um controle direto sobre o hardware do sistema. Cada instrução corresponde a uma operação específica no nível do processador, como movimentação de dados, operações aritméticas, controle de fluxo, entre outras.
@@ -99,9 +105,17 @@ A sua aplicação é principalmente produtiva em situações onde é necessário
 
 <h2>Tela LCD HD44780</h2>
 
-<p align="justify">O display LCD HD44780 é um display de caracteres amplamente utilizado em projetos eletrônicos e sistemas embarcados devido à sua facilidade de uso e versatilidade. Ele oferece uma interface capaz de exibir texto alfanumérico, caracteres especiais e símbolos predefinidos. Vale ressaltar que cada caractere é formado por uma matriz de pixels. 
+<p align="justify">O display LCD HD44780 é um display de caracteres amplamente utilizado em projetos eletrônicos e sistemas embarcados devido à sua facilidade de uso e versatilidade (Figura 2). Ele oferece uma interface capaz de exibir texto alfanumérico, caracteres especiais e símbolos predefinidos. Vale ressaltar que cada caractere é formado por uma matriz de pixels. 
 
 O display utiliza tecnologia de cristal líquido (LCD - Liquid Crystal Display) para exibir informações e consiste em uma matriz de caracteres organizados em linhas e colunas, nesse caso 16x2( duas linhas e 16 colunas).
+
+<p align="center">
+  <img src="apresentacao/display.jpeg" alt="Figura 2">
+</p>
+
+<p align="center">Figura 2. Display LCD HD44780.</p>
+
+
 
 O HD44780 é um controlador de display integrado que simplifica a interface entre o display e o microcontrolador, facilitando a comunicação. Ele normalmente opera com uma interface paralela, o que significa que requer várias linhas de dados para transmitir informações. Essas linhas são usadas para enviar comandos e dados ao display, como caracteres para serem exibidos, instruções de controle, entre outros.</p>
 
@@ -127,19 +141,27 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
   
 - Monitoramento Contínuo de Umidade. 
 
-<p align="justify">Essas funcionalidades serão exibidas, individualmente, em formato de texto na primeira linha do LCD. Dessa forma, o usuário utiliza os botões laterais para avançar ou retroceder entre as cinco opções, sendo a tela inicial a “situação atual do sensor”. O botão do meio é usado para selecionar uma das funcionalidades apresentadas, avançando para a segunda camada.</p>
+<p align="justify">Essas funcionalidades serão exibidas, individualmente, em formato de texto na primeira linha do LCD. Dessa forma, o usuário utiliza os botões laterais para avançar ou retroceder entre as cinco opções, sendo a tela inicial a “situação atual do sensor” (Figura 3). O botão do meio é usado para selecionar uma das funcionalidades apresentadas, avançando para a segunda camada.</p>
 
-![Camada 1](apresentacao/6.png)
+<p align="center">
+  <img src="apresentacao/6.png" alt="Figura 3">
+</p>
+<p align="center">Figura 3. Diagrama referente a primeira camada do sistema.</p>
+
 
 <h4>Camada 2 - Escolha do Sensor</h4>   
 
-<p align="justify">Após selecionar uma funcionalidade na primeira camada, o usuário é direcionado para a próxima camada, onde pode escolher um dos 32 sensores disponíveis para aplicar a funcionalidade selecionada anteriormente. O número do sensor aparecerá na segunda linha do display e, assim como na camada anterior,  os botões da esquerda e da direita serão utilizados para percorrer a lista de sensores. Ao apertar o botão do meio, o usuário escolhe o sensor e avança para a terceira camada.</p>
+<p align="justify">Após selecionar uma funcionalidade na primeira camada, o usuário é direcionado para a próxima camada, onde pode escolher um dos 32 sensores disponíveis para aplicar a funcionalidade selecionada anteriormente. O número do sensor aparecerá na segunda linha do display e, assim como na camada anterior,  os botões da esquerda e da direita serão utilizados para percorrer a lista de sensores (Figura 4). Ao apertar o botão do meio, o usuário escolhe o sensor e avança para a terceira camada.</p>
 
-![Camada 2](apresentacao/7.png)
+<p align="center">
+  <img src="apresentacao/7.png" alt="Figura 4">
+</p>
+<p align="center">Figura 4. Diagrama referente a segunda camada do sistema.</p>
+
 
 <h4>Camada 3 - Exibição do Resultado</h4>
 
-<p align="justify">Na terceira camada, após escolher um sensor, o resultado da funcionalidade de temperatura e umidade selecionada é exibido na linha inferior do display, enquanto os resultados textuais (sobre o funcionamento ou não do sensor e os erros apresentados) são apresentados na linha superior do display. Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser:</p> 
+<p align="justify">Na terceira camada, após escolher um sensor, o resultado da funcionalidade de temperatura e umidade selecionada é exibido na linha inferior do display, enquanto os resultados textuais (sobre o funcionamento ou não do sensor e os erros apresentados) são apresentados na linha superior do display (Figura 5 e Figura 6). Essa camada apresenta os dados ou informações correspondentes à funcionalidade e ao sensor selecionados, podendo ser:</p> 
 
 - Sensor funcionando;
   
@@ -151,8 +173,16 @@ O usuário inicialmente é apresentado com opções de funcionalidades do sistem
   
 - Valor Y da umidade (atual ou contínua) em %.
 
-![Camada 3](apresentacao/8.png)
-![Camada 3.2](apresentacao/9.png)
+<p align="center">
+  <img src="apresentacao/8.png" alt="Figura 5">
+</p>
+<p align="center">Figura 5. Funcionamento da terceira camada do sistema (exibição dos dados).</p>
+
+<p align="center">
+  <img src="apresentacao/9.png" alt="Figura 6">
+</p>
+<p align="center">Figura 6. Como retornar a tela inicial do sistema a partir da terceira camada.</p>
+
 
 <h2>FLUXO DE EXECUÇÃO DO SISTEMA</h2>
 
@@ -173,10 +203,13 @@ A exibição do sistema no display LCD é realizada por meio de rotinas específ
 - Mapeamento e configuração da UART: 
 A comunicação serial UART é um aspecto vital para a interação com o sistema. Isso requer o mapeamento dos registradores de comunicação UART na Orange Pi PC PLUS e a configuração de velocidade de comunicação, formato de dados e outros parâmetros para garantir uma comunicação estável e confiável. Esse mapeamento e configuração da UART são feitos através de subrotinas no código. 
 
-O fluxograma abaixo ilustra a organização desse conjunto de procedimentos.
+O fluxograma abaixo (Figura 7) ilustra a organização desse conjunto de procedimentos.
 
+<p align="center">
+  <img src="apresentacao/FluxoDeExecucao.png" alt="Figura 7">
+</p>
+<p align="center">Figura 7. Fluxograma do conjunto de procedimentos padrões para a execução do sistema.</p>
 
-![FLUXO DE EXECUÇÃO DO SISTEMA](apresentacao/FluxoDeExecucao.png)
 
 Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimento do projeto.
 
@@ -184,13 +217,21 @@ Todas etapas serão discutidas nas subseções abaixo referente ao desenvolvimen
 
 <p align="justify">Antes de explicar as macros e funções da GPIO, faz-se necessário entender como ocorre o mapeamento de memória e a configuração dos pinos para os dispositivos utilizados no sistema. No contexto da Orange Pi, o controle dos pinos GPIO (General Purpose Input/Output) é feito por meio de registradores específicos que ficam localizados em uma parte da memória do próprio dispositivo. Ao verificar o datasheet da Allwinner referente ao processador quad-core H3, adquirimos o endereço base desse “banco” de registradores.Uma vez que se tem acesso ao endereço base, pode-se utilizar deslocamentos (off-sets) para acessar e manipular os registradores desejados.
 
-Os registradores são compostos, em geral, de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto.
+Os registradores são compostos, em geral, de 32 bits. No caso dos registros usados para a configuração dos pinos como entrada e saída, possui-se uma subdivisão onde cada conjunto de 3 bits representa um pino GPIO. Dessa forma, os 3 bits específicos dentro desses conjuntos são usados para configurar se o pino será usado como entrada, saída, desabilitado, e outras opções, conforme necessário para o projeto (Figura 8).
 
-![MAPEAMENTO GPIO](apresentacao/ExemploRegistradorModoDeOperacao.png)
+<p align="center">
+  <img src="apresentacao/ExemploRegistradorModoDeOperacao.png" alt="Figura 8">
+</p>
+<p align="center">Figura 8. Exemplo ilustrativo de um dos registradores que alteram o modo de operação do pino.</p>
 
-Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.
 
-![MAPEAMENTO GPIO](apresentacao/ExemploRegistradorEstados.png)
+Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador (Figura 9).
+
+<p align="center">
+  <img src="apresentacao/ExemploRegistradorEstados.png" alt="Figura 9">
+</p>
+<p align="center">Figura 9. Exemplo ilustrativo de um dos registradores que alteram o estado do pino.</p>
+
 
 Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcionalidade de cada macro e função utilizadas no projeto.
  
@@ -303,9 +344,13 @@ Antes de tudo, devemos deixar claro que para que possamos utilizar o nosso displ
   
 - Criar uma macro enable que realiza um pulso no pino de enable (E) para que o display possa captar os valores atribuídos aos demais pinos.
   
-- Inicializar o display LCD no modo de 4 bits com base nas instruções abaixo descritas no datasheet.
+- Inicializar o display LCD no modo de 4 bits com base nas instruções abaixo descritas no datasheet (Figura 10).
 
-![DISPLAY LCD](apresentacao/InicializacaoDisplay.png)
+<p align="center">
+  <img src="apresentacao/InicializacaoDisplay.png" alt="Figura 10">
+</p>
+<p align="center">Figura 10. Passos para a inicialização do display segundo o datasheet.</p>
+
 
 Após esses 3 passos, o display está pronto para realizar quaisquer instruções/escrita de dados, tais como:
 
@@ -322,9 +367,13 @@ Antes de explicar para que serve os macros de escreverLCD e escreverCharLCD, dev
    - DDRAM (Data Display Random Access Memory): representa o buffer de dados do display. Em cada posição do visor, há uma correspondente localização na DDRAM, sendo que o byte carregado nessa área de memória controla qual caractere será exibido.
    - CGROM (Character Graphics Read only Memory): esta ROM integra o microcontrolador responsável pela exibição no LCD, contendo todos os padrões dos caracteres em uma matriz de pontos de 5 x 7.
 
-Para elucidar, tomemos o caractere "E" como exemplo. Para exibir esse caractere no display, é necessário enviar inicialmente o valor correspondente ao caractere na tabela ASCII, que, neste caso, é 69, para a DDRAM. Isso permite que o controlador de exibição encontre no CGRAM quais pontos da matriz deverão ser acionados.
+Para elucidar, tomemos o caractere "E" como exemplo. Para exibir esse caractere no display, é necessário enviar inicialmente o valor correspondente ao caractere na tabela ASCII (Figura 11), que, neste caso, é 69, para a DDRAM. Isso permite que o controlador de exibição encontre no CGRAM quais pontos da matriz deverão ser acionados.
 
-![DISPLAY LCD](apresentacao/TabelaComVariacoesDeCaracteresDisplay.png)
+<p align="center">
+  <img src="apresentacao/TabelaComVariacoesDeCaracteresDisplay.png" alt="Figura 11">
+</p>
+<p align="center">Figura 11. Tabela com as variações de caracteres disponíveis para uso no display.</p>
+
 
 - EscreverLCD: macro que através de outras macros e de uma valor binário atribuído, realiza operações bitwise para obter os 4 bits menos significativos e passar esse dados para o display a fim de escrever um número de acordo com a tabela Ascii.
   
@@ -338,9 +387,13 @@ Vale ressaltar que todas as macros foram criadas com base nos dados obtidos do d
 
 <p align="justify">O arquivo "main.s" é responsável por conectar todos os módulos do sistema e apresentar a interface para o usuário. As principais funcionalidades incluem a escolha e exibição do estado de diferentes sensores, comunicação UART para obter dados específicos, manipulação de contadores e tratamento de exceções.</p>
 
-<p align="justify">Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa.</p>
+<p align="justify">Ele começa com diretivas de inclusão que trazem implementações específicas de funções (GPIO, sleep, LCD, UART, CCU) e macros. Em seguida, há uma rotina de inicialização marcada por _start. Esta rotina configura a memória, define pinos GPIO como entradas e saídas, inicia o LCD e prepara variáveis para controlar o estado do programa (Figura 12).</p>
 
-![Fluxo de execução da main.s](apresentacao/fluxo_main.png)
+<p align="center">
+  <img src="apresentacao/fluxo_main.png" alt="Figura 12">
+</p>
+<p align="center">Figura 12. Fluxo de funcionamento dos elementos presentes no módulo principal (main).</p>
+
 
 - Loop Principal (_start):
 
@@ -431,69 +484,148 @@ Segue abaixo os resultados desses testes.
 Verificação do Funcionamento do Sensor
 
 
-Um dos testes iniciais foi direcionado para assegurar o funcionamento correto do sensor selecionado e a resposta do sistema quando solicitamos essa opção. Para isso, primeiro selecionamos a opção de “Situacao Sensor” (tela inicial) com o botão do meio, em seguida usamos o botão lateral para avançarmos até o sensor 15 (sensor funcionando) e pressionamos mais uma vez o botão central.
+Um dos testes iniciais foi direcionado para assegurar o funcionamento correto do sensor selecionado e a resposta do sistema quando solicitamos essa opção. Para isso, primeiro selecionamos a opção de “Situacao Sensor” (tela inicial) com o botão do meio, em seguida usamos o botão lateral para avançarmos até o sensor 15 (sensor funcionando) e pressionamos mais uma vez o botão central (Figura 13 e Figura 14).
 
-![teste_1](testes/testes_descritos/26.png)
-![teste_1](testes/testes_descritos/27.png)
+<p align="center">
+  <img src="testes/testes_descritos/26.png" alt="Figura 13">
+</p>
+<p align="center">Figura 13. Teste no ociloscópio de envio do requerimento correspondente a "situação do sensor" via UART ao sensor 15.</p>
 
-Resultado: Os resultados deste teste indicaram que o sensor estava operando conforme o esperado e, portanto, a resposta que aparece no display é "Sen. funcionando".
+<p align="center">
+  <img src="testes/testes_descritos/27.png" alt="Figura 14">
+</p>
+<p align="center">Figura 14. Interface da placa após selecionar a opção de "situação sensor" e prestes a selecionar o sensor 15.</p>
 
-![teste_1](testes/testes_descritos/28.png)
-![teste_1](testes/testes_descritos/29.png)
+Resultado: Os resultados deste teste indicaram que o sensor estava operando conforme o esperado e, portanto, a resposta que aparece no display é "Sen. funcionando" (Figura 15 e Figura 16).
 
-Em seguida, testou-se a condição de selecionar um sensor que não estava ligado ao sistema. Nesse caso, o sensor selecionado foi o sensor 1.
+<p align="center">
+  <img src="testes/testes_descritos/28.png" alt="Figura 15">
+</p>
+<p align="center">Figura 15. Resultado no ociloscópio após o requerimento correspondente a "situação do sensor" via UART do sensor 15.</p>
 
-![teste_1](testes/testes_descritos/22.png)
-![teste_1](testes/testes_descritos/23.png)
+<p align="center">
+  <img src="testes/testes_descritos/29.png" alt="Figura 16">
+</p>
+<p align="center">Figura 16. Interface da placa indicando que o sensor 15 está funcionando.</p>
 
-Resultado: Os resultados deste teste indicaram que o sensor não estava operando. Assim, a resposta que aparece no display é "Sen. inexistente".
 
-![teste_1](testes/testes_descritos/24.png)
-![teste_1](testes/testes_descritos/25.png)
+Em seguida, testou-se a condição de selecionar um sensor que não estava ligado ao sistema. Nesse caso, o sensor selecionado foi o sensor 1 (Figura 17 e Figura 18).
+<p align="center">
+  <img src="testes/testes_descritos/22.png" alt="Figura 17">
+</p>
+<p align="center">Figura 17. Teste no ociloscópio de envio do requerimento correspondente a "situação do sensor" via UART ao sensor 1.</p>
+
+<p align="center">
+  <img src="testes/testes_descritos/23.png" alt="Figura 18">
+</p>
+<p align="center">Figura 18. Interface da placa após selecionar a opção de "situação sensor" e prestes a selecionar o sensor 1.</p>
+
+
+Resultado: Os resultados deste teste indicaram que o sensor não estava operando. Assim, a resposta que aparece no display é "Sen. inexistente" (Figura 19 e Figura 20).
+
+
+<p align="center">
+  <img src="testes/testes_descritos/24.png" alt="Figura 19">
+</p>
+<p align="center">Figura 19. Resultado no ociloscópio após o requerimento correspondente a "situação do sensor" via UART do sensor 1.</p>
+
+<p align="center">
+  <img src="testes/testes_descritos/25.png" alt="Figura 20">
+</p>
+<p align="center">Figura 20. Interface da placa indicando que o sensor 1 não está conectado ao sistema (sensor inexistente).</p>
+
 
 Exigência da Temperatura Atual e Umidade Atual
 
 Outro conjunto de testes foi realizado para solicitar a leitura instantânea da temperatura e umidade atual do ambiente. Esses testes tinham como objetivo verificar a precisão e a prontidão com que a interface apresenta essas informações.
 
-O primeiro teste foi com relação a temperatura atual. Primeiro, utiliza-se os botões laterais para selecionar a função de “Temperatura A.”. Em seguida, seleciona-se novamente o sensor que estava operando (sensor 15). 
+O primeiro teste foi com relação a temperatura atual. Primeiro, utiliza-se os botões laterais para selecionar a função de “Temperatura A.”. Em seguida, seleciona-se novamente o sensor que estava operando (sensor 15) (Figura 21 e Figura 22).
 
-![teste_1](testes/testes_descritos/30.png)
-![teste_1](testes/testes_descritos/31.png)
+<p align="center">
+  <img src="testes/testes_descritos/30.png" alt="Figura 21">
+</p>
+<p align="center">Figura 21. Teste no ociloscópio de envio do requerimento correspondente a "temperatura atual" via UART ao sensor 15.</p>
 
-Resultado: A interface foi capaz de requisitar e exibir com sucesso os valores de temperatura atual provenientes do sensor. Nesse caso, a temperatura ambiente era de  aproximadamente 20 °C, assim como indicado na tela do display.
+<p align="center">
+  <img src="testes/testes_descritos/31.png" alt="Figura 22">
+</p>
+<p align="center">Figura 22. Interface da placa após selecionar a opção de "temperatura atual" e prestes a selecionar o sensor 15.</p>
 
-![teste_1](testes/testes_descritos/32.png)
-![teste_1](testes/testes_descritos/33.png)
 
-O segundo teste desta seção foi com o requerimento da umidade atual. O procedimento é parecido, mas nesse caso, seleciona-se a opção de "Umidade Atual " na primeira camada e em seguida o mesmo sensor 15.
 
-![teste_1](testes/testes_descritos/34.png)
-![teste_1](testes/testes_descritos/35.png)
+Resultado: A interface foi capaz de requisitar e exibir com sucesso os valores de temperatura atual provenientes do sensor. Nesse caso, a temperatura ambiente era de  aproximadamente 20 °C, assim como indicado na tela do display (Figura 23 e Figura 24).
 
-Resultado: O sistema faz a leitura correta da umidade atual e exibe no display de forma adequada. Nesse caso, a umidade ambiente era de aproximadamente 40%.
+<p align="center">
+  <img src="testes/testes_descritos/32.png" alt="Figura 23">
+</p>
+<p align="center">Figura 23. Resultado no ociloscópio após o requerimento correspondente a "temperatura atual" via UART do sensor 15.</p>
 
-![teste_1](testes/testes_descritos/36.png)
-![teste_1](testes/testes_descritos/37.png)
+<p align="center">
+  <img src="testes/testes_descritos/33.png" alt="Figura 24">
+</p>
+<p align="center">Figura 24. Interface da placa indicando a temperatura atual do ambiente (20°C).</p>
+
+
+O segundo teste desta seção foi com o requerimento da umidade atual. O procedimento é parecido, mas nesse caso, seleciona-se a opção de "Umidade Atual " na primeira camada e em seguida o mesmo sensor 15 (Figura 25 e Figura 26).
+
+<p align="center">
+  <img src="testes/testes_descritos/34.png" alt="Figura 25">
+</p>
+<p align="center">Figura 25. Teste no ociloscópio de envio do requerimento correspondente a "umidade atual" via UART ao sensor 15.</p>
+
+<p align="center">
+  <img src="testes/testes_descritos/35.png" alt="Figura 26">
+</p>
+<p align="center">Figura 26. Interface da placa após selecionar a opção de "umidade atual" e prestes a selecionar o sensor 15.</p>
+
+
+Resultado: O sistema faz a leitura correta da umidade atual e exibe no display de forma adequada. Nesse caso, a umidade ambiente era de aproximadamente 40% (Figura 27 e Figura 28).
+
+<p align="center">
+  <img src="testes/testes_descritos/36.png" alt="Figura 27">
+</p>
+<p align="center">Figura 27. Resultado no ociloscópio após o requerimento correspondente a "umidade atual" via UART do sensor 15.</p>
+
+<p align="center">
+  <img src="testes/testes_descritos/37.png" alt="Figura 28">
+</p>
+<p align="center">Figura 28. Interface da placa indicando a umidade atual do ambiente (40%).</p>
+
 
 Exigência de Temperatura Contínua e Umidade Contínua
 
 Além das leituras pontuais, foram conduzidos testes para exigir uma transmissão contínua de dados de temperatura e umidade. Este teste foi elaborado para avaliar a capacidade da interface em receber e exibir dados constantes ao longo do tempo.
 
-O primeiro teste para o monitoramento contínuo foi com relação a temperatura. Para isso, selecionou-se a opção de " Temperatura C. " através dos botões. Em seguida selecionou o sensor 15, que estava conectado ao sistema e funcionando. 
+O primeiro teste para o monitoramento contínuo foi com relação a temperatura. Para isso, selecionou-se a opção de " Temperatura C. " através dos botões. Em seguida selecionou o sensor 15, que estava conectado ao sistema e funcionando (Figura 29). 
 
-![teste_1](testes/testes_descritos/temp_continua_req.png)
+<p align="center">
+  <img src="testes/testes_descritos/temp_continua_req.png" alt="Figura 29">
+</p>
+<p align="center">Figura 29. Interface da placa após selecionar a opção de "temperatura continua" e prestes a selecionar o sensor 15.</p>
 
-Resultado: O valor exibido no display LCD foi de 19° C. Entretanto, os testes de transmissão contínua de temperatura não forneceram os resultados esperados, pois o sensoriamento contínuo não é encerrado após o retorno para a branch de espera. 
 
-![teste_1](testes/testes_descritos/temp_continua_res.png)
+Resultado: O valor exibido no display LCD foi de 19° C. Entretanto, os testes de transmissão contínua de temperatura não forneceram os resultados esperados, pois o sensoriamento contínuo não é encerrado após o retorno para a branch de espera (Figura 30).
 
-Em seguida testou-se a leitura para umidade contínua, selecionando a opção de "Umidade Contínua" e o sensor 15, novamente.
+<p align="center">
+  <img src="testes/testes_descritos/temp_continua_res.png" alt="Figura 30">
+</p>
+<p align="center">Figura 30. Interface da placa indicando a temperatura do ambiente (19°C).</p>
 
-![teste_1](testes/testes_descritos/umi_continua_req.png)
+Em seguida testou-se a leitura para umidade contínua, selecionando a opção de "Umidade Contínua" e o sensor 15, novamente (Figura 31).
 
-Resultado: O valor exibido no display LCD continuou sendo de 19° C, mostrando que o sensoriamento não foi interrompido. Portanto, o teste de transmissão contínua de umidade também não alcançou os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua. Quando testada individualmente, apresentou a mesma característica da temperatura contínua.
+<p align="center">
+  <img src="testes/testes_descritos/umi_continua_req.png" alt="Figura 31">
+</p>
+<p align="center">Figura 31. Interface da placa após selecionar a opção de "umidade continua" e prestes a selecionar o sensor 15.</p>
 
-![teste_1](testes/testes_descritos/temp_continua_res.png)
+
+Resultado: O valor exibido no display LCD continuou sendo de 19° C, mostrando que o sensoriamento não foi interrompido. Portanto, o teste de transmissão contínua de umidade também não alcançou os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua. Quando testada individualmente, apresentou a mesma característica da temperatura contínua (Figura 32).
+
+<p align="center">
+  <img src="testes/testes_descritos/temp_continua_res.png" alt="Figura 32">
+</p>
+<p align="center">Figura 32. Interface da placa permanece indicando a temperatura do ambiente (19°C), indicando que o sensoriamento anterior não foi interrompido.</p>
+
 
 A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações. De acordo com as tentativas feitas pela equipe, quando associava o sensoriamento contínuo com a exibição no display, erros de segmentação de memória eram apresentados. Isso nos permite avaliar que os possíveis problemas estão na alocação de memória inválida e/ou no uso incorreto de registradores.
 
