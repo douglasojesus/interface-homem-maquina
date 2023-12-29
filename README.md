@@ -535,21 +535,6 @@ Testes feitos em vídeo disponível em:
 4. **Interaja com o Sistema:**
    - Utilize os botões ou dispositivos de entrada conectados para interagir com a interface do usuário no Display LCD.
 
-### Uso do Projeto
-
-1. **Compilação:**
-   - Certifique-se de ter um ambiente de desenvolvimento Assembly configurado para a Orange Pi.
-   - Compile o projeto usando o assembler adequado para a sua plataforma.
-
-2. **Carregamento na Orange Pi:**
-   - Carregue o binário gerado na Orange Pi.
-
-3. **Execução:**
-   - Execute o programa principal (`main.s`) na Orange Pi.
-
-4. **Interaja com o Sistema:**
-   - Utilize os botões ou dispositivos de entrada conectados para interagir com a interface do usuário no Display LCD.
-
 ### Observações Importantes
 
 - **Configuração dos Pinos:**
