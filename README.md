@@ -619,12 +619,7 @@ Em seguida testou-se a leitura para umidade contínua, selecionando a opção de
 <p align="center">Figura 31. Interface da placa após selecionar a opção de "umidade continua" e prestes a selecionar o sensor 15.</p>
 
 
-Resultado: O valor exibido no display LCD continuou sendo de 19° C, mostrando que o sensoriamento não foi interrompido. Portanto, o teste de transmissão contínua de umidade também não alcançou os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua. Quando testada individualmente, apresentou a mesma característica da temperatura contínua (Figura 32).
-
-<p align="center">
-  <img src="testes/testes_descritos/temp_continua_res.png" alt="Figura 32">
-</p>
-<p align="center">Figura 32. Interface da placa permanece indicando a temperatura do ambiente (19°C), indicando que o sensoriamento anterior não foi interrompido.</p>
+Resultado: O valor exibido no display LCD continuou sendo de 19° C, mostrando que o sensoriamento não foi interrompido. Portanto, o teste de transmissão contínua de umidade também não alcançou os resultados esperados, pois os dados apresentados ainda eram da temperatura contínua. Quando testada individualmente, apresentou a mesma característica da temperatura contínua.
 
 
 A falha na transmissão contínua dos dados de temperatura e umidade revela uma limitação na implementação da interface em Assembly para o SBC Orange Pi. Esta limitação pode ser atribuída a possíveis desafios na manipulação contínua dos dados provenientes do sensor, levando a interrupções ou problemas na exibição contínua das informações. De acordo com as tentativas feitas pela equipe, quando associava o sensoriamento contínuo com a exibição no display, erros de segmentação de memória eram apresentados. Isso nos permite avaliar que os possíveis problemas estão na alocação de memória inválida e/ou no uso incorreto de registradores.
