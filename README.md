@@ -225,9 +225,7 @@ Semelhante ao GPIOPinEntrada, manipula os registradores associados ao pino.
 <p align="justify">Os registros referentes ao controle de estado da GPIO  funcionam de maneira diferente. Os bits dos registradores de controle de estado são manipulados para definir o estado de cada pino individualmente, podendo ser configurados como alto (1) ou baixo (0) conforme a necessidade do projeto. Ou seja, cada pino está atrelado a um bit do registrador.</p>
 
 
-
 Uma vez que se esclarece o mapeamento dos pinos GPIO, pode-se explicar a funcionalidade de cada macro e função utilizadas no projeto.
- 
 
 
 <h2>CCU (unidade de controle de relógio)</h2>
@@ -268,13 +266,13 @@ Os principais elementos da comunicação UART incluem:
 
 - Bits de Dados: Representa a quantidade de bits usados para transmitir cada caractere. Pode variar de 5 a 9 bits.
 
-Para a implementação em Assembly, precisamos fazer algumas configurações para que a transmissão e recepção ocorram de maneira adequada, dentre elas setar o divisor e especificar a recepção e transmissão de dados para ser de byte em byte, etc.
+Para a implementação em Assembly, precisamos fazer algumas configurações para que a transmissão e recepção ocorram de maneira adequada, dentre elas setar o divisor e especificar a recepção e transmissão de dados para ser de byte em byte, etc. Falando agora de maneira mais especifica sobre as macros implementadas em Assembly, temos:
 
 - mapeamento_uart:
    Macro desenvolvida para mapear uma região específica da memória, muito semelhante ao mapeamento de memória do GPIO. No entanto, difere apenas no seu endereço base (0x01C28).
 
 - UartPin:
-   Macro feita para setar uart_tx e uart_rx como saída e entrada, muito similar às funções de gpioPinEntrada e gpioPinSaida do GPIO, difere apenas o seu endereço base e deslocamento.
+   Macro feita para setar uart_tx e uart_rx como saída ou entrada, muito similar às funções de gpioPinEntrada e gpioPinSaida do GPIO, difere apenas o seu endereço base e deslocamento.
 
 - configuracaouart:
    A macro desenvolvida para configurar segue os seguintes passos, sendo eles:
