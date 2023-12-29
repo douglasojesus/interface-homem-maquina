@@ -297,15 +297,15 @@ Para a implementação em Assembly, precisamos fazer algumas configurações par
 
 <h2>DISPLAY LCD</h2>
 
+DISPLAY LCD
+
 Antes de tudo, devemos deixar claro que para que possamos utilizar o nosso display LCD é necessário mapear os pinos que serão utilizados tais como RS, E, D7, D6, D5 e D4 com seus respectivos offsets contidos no datasheet da placa. Tendo feito isso, devemos realizar os seguintes passos:
 
 - Setar todos os pinos para o modo de saída através da macro setLCDPinsSaida.
   
 - Criar uma macro enable que realiza um pulso no pino de enable (E) para que o display possa captar os valores atribuídos aos demais pinos.
-
   
 - Inicializar o display LCD no modo de 4 bits com base nas instruções abaixo descritas no datasheet.
-
 
 Após esses 3 passos, o display está pronto para realizar quaisquer instruções/escrita de dados, tais como:
 
@@ -316,7 +316,14 @@ Após esses 3 passos, o display está pronto para realizar quaisquer instruçõe
 - moveCursorSegundaLinha: macro com instrução capaz de mover o cursor para o início da segunda linha para que possamos escrever caracteres a partir dela.
   
 - prefixNumeroDisplay: macro que atribui os 4 bits mais significativos da macro de escreverLCD.
-  
+
+Antes de explicar para que serve os macros de escreverLCD e escreverCharLCD, devemos mencionar 2 módulos de memória utilizados, a DDRAM e a CGROM.
+
+   - DDRAM (Data Display Random Access Memory): representa o buffer de dados do display. Em cada posição do visor, há uma correspondente localização na DDRAM, sendo que o byte carregado nessa área de memória controla qual caractere será exibido.
+   - CGROM (Character Graphics Read only Memory): esta ROM integra o microcontrolador responsável pela exibição no LCD, contendo todos os padrões dos caracteres em uma matriz de pontos de 5 x 7.
+
+Para elucidar, tomemos o caractere "E" como exemplo. Para exibir esse caractere no display, é necessário enviar inicialmente o valor correspondente ao caractere na tabela ASCII, que, neste caso, é 69, para a DDRAM. Isso permite que o controlador de exibição encontre no CGRAM quais pontos da matriz deverão ser acionados.
+
 - EscreverLCD: macro que através de outras macros e de uma valor binário atribuído, realiza operações bitwise para obter os 4 bits menos significativos e passar esse dados para o display a fim de escrever um número de acordo com a tabela Ascii.
   
 - EscreverCharLCD: semelhante com a macro de EscreverLCD, só que nela temos que obter e atribuir os valores através de outras macros e com operações bitwise os 4 bits mais significativos e depois os 4 bits menos significativos com base no valor binário atribuído.
